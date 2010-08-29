@@ -67,6 +67,15 @@ class PPI_Helper {
 	static function getDispatcher() {
 		return self::getObjectFromRegistry('PPI_Dispatch');
 	}
+	
+	/**
+	 * Get the dispatcher object
+	 *
+	 * @return object
+	 */
+	static function getInput() {
+		return self::getObjectFromRegistry('PPI_Input');
+	}
 
 	/**
 	 * Get the session object

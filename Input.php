@@ -12,13 +12,6 @@
 class PPI_Input {
 	private $aArguments;
 
-	/**
-	 * The current set instance for the singleton interface
-	 *
-	 * @var PPI_Input
-	 */
-	private static $_instance = null;
-
 	function __construct() {
 		$sUrl = $_SERVER['REQUEST_URI'];
 		$this->aArguments = explode ('/', $sUrl);

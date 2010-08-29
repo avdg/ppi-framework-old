@@ -291,13 +291,12 @@ abstract class PPI_Model extends PPI_Base {
 	 * @throws PDO_Exception
 	 * @return integer
 	 */
-	function putRecord(array $p_aRecord, $p_aOptions = array()) {
+	function putRecord(array $p_aRecord) {
 		// If the primary key is found, its an update
-		if (isset($p_aRecord[$this->sTableIndex]) && $p_aRecord[$this->sTableIndex] !== null
-				&& (!isset($p_aOptions['insert_override']) || $p_aOptions['insert_override'] === false)) {
-
+		if (isset($p_aRecord[$this->sTableIndex]) && $p_aRecord[$this->sTableIndex] !== null) {
 			$this->update($p_aRecord, $this->sTableIndex . ' = ' . $p_aRecord[$this->sTableIndex]);
 			return $p_aRecord[$this->sTableIndex];
+			 
 		// No primary key found its an insert
 		} else {
 			return $this->insert($p_aRecord);

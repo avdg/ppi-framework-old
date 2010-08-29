@@ -17,8 +17,6 @@ class PPI_Dispatch extends PPI_Input {
 	private $_methodName 			= '';
 	private $_pluginController		= false;
 	private $_controllerInstance;
-    private static $_instance = null;
-
 
     /**
      * Identify and store the appropriate Controller and Methods to dispatch at a later time when calling dispatch()

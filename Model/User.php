@@ -32,7 +32,7 @@ class PPI_Model_User extends APP_Model_Application {
 	}
 
 	// ----------------------- User Register ---------------------
-	function putRecord($aData) {
+	function putRecord(array $aData) {
 		$oConfig = PPI_Helper::getConfig();
 		// If its an insert
 		if(!array_key_exists($this->_iTableIndex, $aData)) {

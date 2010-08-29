@@ -12,8 +12,8 @@ class PPI_Controller extends PPI_View {
 	protected $_input = null;
 
 	function __construct ($p_preloadModels = array(), $p_ControllerType = PPI_CONTROLLER) {
-		$this->_input = PPI_Input::getInstance();
-		$this->oInput = PPI_Input::getInstance();
+		$this->_input = PPI_Helper::getInput();
+		$this->oInput = $this->_input; // Legacy Code
 	}
 
     /**

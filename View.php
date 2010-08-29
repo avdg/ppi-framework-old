@@ -129,7 +129,7 @@ class PPI_View {
 			'isLoggedIn'      => !empty($authData),
 			'config'          => $oConfig,
 			'request'         => $request,			
-			'input'           => PPI_Input::getInstance(),
+			'input'           => PPI_Helper::getInput(),
 			'authInfo'        => $authData,
 			'baseUrl'         => $oConfig->system->base_url,
 			'fullUrl'         => PPI_Helper::getFullUrl(),

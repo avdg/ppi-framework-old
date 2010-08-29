@@ -17,20 +17,6 @@ class PPI_Base {
 	function __construct($p_aArguments = "") {
 	}
 
-	/**
-	 * Singleton Interface in order to return models
-	 * @param string $modelName
-	 */
-	public static function getInstance($className) {
-		if(!array_key_exists($className, $oBase->_instances)) {
-			spl_autoload_extensions('.php');
-			spl_autoload($className);
-			$this->_instances[$className] = new $className();
-			return $this->_instances[$className];
-		}
-		return $this->_instances[$className];
-	}
-
 	public static function registerAutoload() {
 		spl_autoload_register(array('PPI_Base', 'autoload'));
 	}
@@ -93,10 +79,11 @@ class PPI_Base {
 			exit;
 		}
 
+		$dispatch = new PPI_Dispatch();
 		// Set the dispatch object in the registry for future use.
-		PPI_Registry::getInstance()->set('PPI_Dispatch', new PPI_Dispatch());
+		PPI_Registry::getInstance()->set('PPI_Dispatch', $dispatch);
 
 		// Locate the controller, load the controller/method, and dispatch it !
-		PPI_Dispatch::getInstance()->dispatch();
+		$dispatch->dispatch();
 	}
 }

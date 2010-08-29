@@ -75,7 +75,7 @@ class PPI_Controller_User extends APP_Controller_Application {
 			// Which form are we submitting from? Is it the step1, or step2 ?
 
 			// We are in step 2
-			if(PPI_Model_Session::getInstance()->namespaceGet('recover_user_id') !== null) {
+			if(PPI_Session::getInstance()->get('recover_user_id') !== null) {
 
 				// Lets grab userid from the session and take in the NEW password the user entered.
 				// Update the users record and fire them off to the login page.
@@ -122,7 +122,7 @@ class PPI_Controller_User extends APP_Controller_Application {
 				$oUser->putRecord(array('recover_code' => '', $sPrimaryKey => $aUser[$sPrimaryKey]));
 
 				// Set the looked up userID in the session so when they submit the "new password" form, we know who they are and can update their password.
-				PPI_Model_Session::getInstance()->namespaceSet('recover_user_id', $aUser['id']);
+				PPI_Session::getInstance()->set('recover_user_id', $aUser['id']);
 
 
 				// Show them the enter new password screen

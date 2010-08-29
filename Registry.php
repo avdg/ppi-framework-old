@@ -25,42 +25,6 @@ class PPI_Registry extends ArrayObject  {
     public function __construct($array = array(), $flags = parent::ARRAY_AS_PROPS) {
         parent::__construct($array, $flags);
     }    
-    
-    
-    /**
-     * Retrieves the default instance of the registry, if it doesn't exist then we create it.
-     *
-     * @return PPI_Registry
-     */
-    public static function getInstance() {
-        if (self::$_instance === null) {
-            self::init();
-        }
-        return self::$_instance;
-    }
-
-    /**
-     * Set the default registry instance to a specified instance.
-     *
-     * @param PPI_Registry $registry An object instance of type PPI_Registry
-     * @return void
-     * @throws PPI_Exception if registry is already initialized.
-     */
-    public static function setInstance(PPI_Registry $registry) {
-        if (self::$_instance !== null) {
-            throw new PPI_Exception('Registry is already initialized');
-        }
-        self::$_instance = $registry;
-    }
-
-    /**
-     * Initialize the default registry instance.
-     *
-     * @return void
-     */
-    protected static function init() {
-        self::setInstance(new PPI_Registry());
-    }
 
     /**
      * getter method, basically same as offsetGet().

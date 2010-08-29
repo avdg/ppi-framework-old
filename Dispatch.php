@@ -19,36 +19,6 @@ class PPI_Dispatch extends PPI_Input {
 	private $_controllerInstance;
     private static $_instance = null;
 
-    /**
-     * Create the instance
-     * @return void
-     */
-    protected static function init() {
-        self::setInstance(new PPI_Dispatch());
-    }
-
-    /**
-     * Set the current instance of PPI_Dispatch
-     *
-     * @param PPI_Dispatch $instance The instance object
-     */
-    public static function setInstance(PPI_Dispatch $instance) {
-        if (self::$_instance !== null) {
-            throw new PPI_Exception('Dispatcher is already initialised');
-        }
-        self::$_instance = $instance;
-    }
-
-    /**
-     * Obtains the current set instance if it doesn't exist then it will make it
-     * @return PPI_Dispatch
-     */
-    public static function getInstance() {
-        if (self::$_instance === null) {
-            self::init();
-        }
-        return self::$_instance;
-    }
 
     /**
      * Identify and store the appropriate Controller and Methods to dispatch at a later time when calling dispatch()

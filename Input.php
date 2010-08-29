@@ -24,42 +24,6 @@ class PPI_Input {
 		$this->aArguments = explode ('/', $sUrl);
 	}
 
-
-    /**
-     * Retrieves the default instance of the input model, if it doesn't exist then we create it.
-     *
-     * @return PPI_Input
-     */
-    public static function getInstance() {
-        if (self::$_instance === null) {
-            self::init();
-        }
-        return self::$_instance;
-    }
-
-    /**
-     * Set the default PPI_Input instance to a specified instance.
-     *
-     * @param PPI_Input $input An object instance of type PPI_Input
-     * @return void
-     * @throws PPI_Exception if PPI_Input is already initialized.
-     */
-    public static function setInstance(PPI_Input $input) {
-        if (self::$_instance !== null) {
-            throw new PPI_Exception('PPI_Input is already initialized');
-        }
-        self::$_instance = $input;
-    }
-
-    /**
-     * Initialize the default PPI_Input instance.
-     *
-     * @return void
-     */
-    protected static function init() {
-        self::setInstance(new PPI_Input());
-    }
-
 	/**
 	 * Obtain a url segments value pair by specifying the key.
 	 * eg: /key/val/key2/val2 - by specifying key, you get val, by specifying key2, you get val2.

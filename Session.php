@@ -49,40 +49,6 @@ class PPI_Session {
     }
 
     /**
-     * The initialise function to create the instance
-     * @return void
-     */
-    protected static function init() {
-        self::setInstance(new PPI_Session());
-    }
-
-    /**
-     * The function used to initially set the instance
-     *
-     * @param PPI_Model_Session $instance
-     * @throws PPI_Exception
-     * @return void
-     */
-    static function setInstance(PPI_Session $instance) {
-        if (self::$_instance !== null) {
-            throw new PPI_Exception('PPI_Model_Session is already initialised');
-        }
-        self::$_instance = $instance;
-    }
-
-    /**
-     * Obtain the instance if it exists, if not create it
-     *
-     * @return PPI_Model_Session
-     */
-    static function getInstance() {
-        if (self::$_instance === null) {
-            self::init();
-        }
-        return self::$_instance;
-    }
-
-    /**
 	 * Set the authentication information for the current user
 	 *
 	 * @param array $aData The data to be set
@@ -132,15 +98,6 @@ class PPI_Session {
 				unset($_SESSION[$this->_sessionName][$p_sNamespace][$p_sName]);
 			}
 		}
-	}
-
-	/**
-	 * Get a namespace from the session
-	 * @param string $p_sNamespace
-	 * @return mixed The Namespace Data
-	 */
-	function namespaceGet($p_sNamespace, $p_mDefault = null) {
-		return $this->get($p_sNamespace, $p_mDefault);
 	}
 
 	/**

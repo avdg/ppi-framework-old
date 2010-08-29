@@ -1,5 +1,4 @@
 <?php
-
 class PPI_Helper {
 	
     private static $_instance = null;	
@@ -25,7 +24,7 @@ class PPI_Helper {
             throw new PPI_Exception('PPI_Helper is already initialised');
         }
         self::$_instance = $instance;
-    }    
+    }
     
     /**
      * Obtain the instance if it exists, if not create it
@@ -45,11 +44,9 @@ class PPI_Helper {
 	 * @return mixed
 	 */
 	function arrayTrim($input){
-		 
     	if (!is_array($input)) {
 	        return trim($input);
     	}
- 
 	    return array_map(array($this, 'arrayTrim'), $input);
 	}      	
 
@@ -59,7 +56,7 @@ class PPI_Helper {
 	 * @return object
 	 */
 	static function getConfig() {
-		return PPI_Registry::getInstance()->get('PPI_Config');
+		return self::getObjectFromRegistry('PPI_Config');
 	}
 
 	/**
@@ -68,7 +65,7 @@ class PPI_Helper {
 	 * @return object
 	 */
 	static function getDispatcher() {
-		return PPI_Registry::getInstance()->get('PPI_Dispatch');
+		return self::getObjectFromRegistry('PPI_Dispatch');
 	}
 
 	/**
@@ -77,7 +74,33 @@ class PPI_Helper {
 	 * @return object
 	 */
 	static function getSession() {
-		return PPI_Session::getInstance();
+		return self::getObjectFromRegistry('PPI_Session');
+	}
+	
+	/**
+	 * Get the router object
+	 *
+	 * @return object
+	 */
+	static function getRouter() {
+		return self::getObjectFromRegistry('PPI_Router');
+	}
+	
+	/**
+	 * Get the router object
+	 *
+	 * @return object
+	 */
+	static function getSecurity() {
+		return self::getObjectFromRegistry('PPI_Security');
+	}	
+	
+	static function getObjectFromRegistry($p_sClass) {
+		$registry = PPI_Registry::getInstance();
+		if(!$registry->exists($p_sClass)) {
+			$registry->set($p_sClass, new $p_sClass());
+		}
+		return $registry->get($p_sClass);		
 	}
 
 	/**

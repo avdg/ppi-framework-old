@@ -138,7 +138,7 @@ class PPI_Controller_User extends APP_Controller_Application {
 
 
 		// Load our view
-		$this->loadSmarty($sTemplate, array(
+		$this->load($sTemplate, array(
 			'failuremsg'  => $this->oInput->get('failuremsg'),
 			'successmsg'  => $this->oInput->get('successmsg'),
 			'formBuilder' => $oForm->getRenderInformation()
@@ -176,7 +176,7 @@ class PPI_Controller_User extends APP_Controller_Application {
 		$this->addJavascript('jquery-validate/jquery.validate.min.js');
 
 		// show our registration page
-		$this->loadSmarty('user/register', array('formBuilder' => $oForm->getRenderInformation()));
+		$this->load('user/register', array('formBuilder' => $oForm->getRenderInformation()));
 
 	}
 

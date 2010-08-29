@@ -126,7 +126,7 @@ class PPI_Model_User extends APP_Model_Application {
 	 * Log the user out. Wipe all the session data
 	 */
 	function logout() {
-		$this->getSession()->namespaceUnsetAll();
+		$this->getSession()->removeAll();
 	}
 
 	/**

@@ -66,15 +66,6 @@ if(version_compare(PHP_VERSION, '5.3.0', '<')) {
 	set_magic_quotes_runtime(0); // Kill magic quotes
 }
 
-// TODO: Make sure smarty is not mandatory but options and if it's in use then we check writable
-// TODO: Move this into the smarty template handler instead of framework load
-// Make sure smarty is writeable
-/*
-if(!is_writable(SMARTYPATH)) {
-	throw new PPI_Exception('Smarty Directory is not writable: '.SMARTYPATH);
-}
-*/
-
 // If there are no site types defined in the bootstrap then let the developer know about it
 if(!isset($siteTypes) || (is_array($siteTypes) && empty($siteTypes))) {
 	die('Unable to find your site in the bootstrap file. Please add a site and its type to your index.php file.');
@@ -88,7 +79,7 @@ if(!isset($siteTypes[$sHostName])) {
 
 // ------------ ERROR LEVEL CHECKING --------------
 if($siteTypes[$sHostName] == 'development') {
-	error_reporting(E_ALL);
+	error_reporting(-1);
 	ini_set('display_errors', 'On');
 } else {
 	error_reporting(0);

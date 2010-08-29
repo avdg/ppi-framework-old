@@ -61,7 +61,6 @@ class PPI_Dispatch extends PPI_Input {
 		$sProtocol  = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
 		$sFullUrl   = $sProtocol . '://' . str_replace('www.', '', $_SERVER['HTTP_HOST']) . $_SERVER['REQUEST_URI'];
         $sBaseUrl   = $oConfig->system->base_url;
-
         // Identify if the baseurl is not contained within the full current url, then it's misconfigured.
         if(stripos($sFullUrl, $sBaseUrl) === false) {
     		PPI_Exception::show_404();
@@ -93,7 +92,7 @@ class PPI_Dispatch extends PPI_Input {
 
 		$oConfig  = PPI_Helper::getConfig();
 		$sFileName = $this->getControllerFileName();
-		$this->_controllerUrl = $sFileName;
+		$this->_controllerUrl = $sFileName;		
 		if(class_exists($sFileName)) {
 			$oController = new $sFileName();
 			$sMethod     = parent::get($this->getControllerName());

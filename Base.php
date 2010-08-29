@@ -53,6 +53,7 @@ class PPI_Base {
 			require_once ($file);
 		}
 	}
+	
 	static function setErrorHandlers($p_sErrorHandler = null, $p_sExceptionHandler = null) {
 		if($p_sErrorHandler !== null) {
 			set_error_handler($p_sErrorHandler, E_ALL);
@@ -83,6 +84,7 @@ class PPI_Base {
 				session_name($oConfig->system->sessionNamespace);
 			}
 			session_start();
+			PPI_Registry::getInstance()->set('PPI_Session', new PPI_Session());
 		}
 
 		// ---------------- CHECK FOR MAINTENANCE MODE ------------------
@@ -92,7 +94,7 @@ class PPI_Base {
 		}
 
 		// Set the dispatch object in the registry for future use.
-		PPI_Registry::getInstance()->set('PPI_Dispatch', PPI_Dispatch::getInstance());
+		PPI_Registry::getInstance()->set('PPI_Dispatch', new PPI_Dispatch());
 
 		// Locate the controller, load the controller/method, and dispatch it !
 		PPI_Dispatch::getInstance()->dispatch();

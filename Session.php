@@ -114,37 +114,8 @@ class PPI_Session {
 		return $p_bUseArray === true ? $aAuthData : (object) $aAuthData;
 	}
 
-	/**
-	 * Erase all session information
-	 * @todo Investigate why we can't just unset $_SESSION[$this->_sessionName]
-	 * @return void
-	 */
-	function namespaceUnsetAll() {
-		$this->unsetAll();
-	}
-
-
-
-	/**
-	 * Check if a namespace exists in $_SESSION
-	 * @param string $p_sNamespace
-	 * @return boolean
-	 */
-	function namespaceExists($p_sNamespace) {
-		return $this->exists($p_sNamespace);
-	}
-
 	function exists($p_sNamespace) {
 		return array_key_exists($p_sNamespace, $_SESSION[$this->_sessionName]);
-	}
-
-	/**
-	 * Unset the namespace from $this->_namespaces and from $_SESSIOn
-	 * @param string $p_sNamespace
-	 * @return void
-	 */
-	function namespaceUnset($p_sNamespace, $p_sName = null) {
-		$this->remove($p_sNamespace, $p_sName);
 	}
 	
 	function removeAll() {
@@ -180,12 +151,9 @@ class PPI_Session {
 	 * @return mixed
 	 */
 	function get($p_sNamespace, $p_mDefault = null) {
-		return ($this->namespaceExists($p_sNamespace)) ? $_SESSION[$this->_sessionName][$p_sNamespace] : $p_mDefault;
+		return ($this->exists($p_sNamespace)) ? $_SESSION[$this->_sessionName][$p_sNamespace] : $p_mDefault;
 	}
-	
-	function namespaceSet($p_sNamespace, $p_mData = true) {
-		$this->set($p_sNamespace, $p_mData);
-	}
+
 
 	/**
 	 * Set data into the session

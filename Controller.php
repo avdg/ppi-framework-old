@@ -187,7 +187,7 @@ class PPI_Controller {
 	}
 	
 	protected function stripPost($p_sPrefix) {
-		return $this->_input->stripPost($p_sPrefix)
+		return $this->_input->stripPost($p_sPrefix);
 	}
 
 }

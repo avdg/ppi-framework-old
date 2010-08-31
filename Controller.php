@@ -8,20 +8,10 @@ class PPI_Controller {
 
 	protected $_input = null;
 
-	function __construct ($p_preloadModels = array(), $p_ControllerType = PPI_CONTROLLER) {
+	function __construct () {
 		$this->_input = PPI_Helper::getInput();
 		$this->_view  = new PPI_View();
 		$this->oInput = $this->_input; // Legacy Code
-	}
-
-    /**
-     * Perform redirect to internal framework url. Optionally redirect to external host
-     * @param string $p_sURL Optional param for where to redirect to
-     * @param boolean $p_bPrependBase Default is true. If true will prepend the framework's base Url. 
-     * 									If false will redirect to absolute external url.
-     */
-	protected function _redirect($p_sURL="", $p_bPrependBase = true) {
-		$this->redirect($p_sURL, $p_bPrependBase);
 	}
 
 	/**
@@ -178,6 +168,26 @@ class PPI_Controller {
 	protected function getAuthData($p_bUseArray = true) {
 		$authData = $this->getSession()->getAuthData();
 		return $p_bUseArray ? $authData : (object) $authData;
+	}
+	
+	protected function get($p_sVar, $p_mDefault = null) {
+		return $this->_input->get($p_sVar, $p_mDefault);
+	}
+	
+	protected function post($p_sVar = null, $p_mDefault = null) {
+		return $this->_input->post($p_sVar, $p_mDefault);
+	}	
+	
+	protected function hasPost($p_sKey) {
+		return $this->_input->hasPost($p_sKey);
+	}
+	
+	protected function isPost() {
+		return $this->_input->isPost();
+	}
+	
+	protected function stripPost($p_sPrefix) {
+		return $this->_input->stripPost($p_sPrefix)
 	}
 
 }

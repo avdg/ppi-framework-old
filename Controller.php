@@ -1,26 +1,17 @@
 <?php
-
-/**
+	/**
 	 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 	 * @copyright (c) Digiflex Development Team 2008
-	 * @version 1.0
 	 * @author Paul Dragoonis <dragoonis@php.net>
-	 * @since Version 1.0
 	 */
-class PPI_Controller extends PPI_View {
+class PPI_Controller {
 
 	protected $_input = null;
 
 	function __construct ($p_preloadModels = array(), $p_ControllerType = PPI_CONTROLLER) {
 		$this->_input = PPI_Helper::getInput();
+		$this->_view  = new PPI_View();
 		$this->oInput = $this->_input; // Legacy Code
-	}
-
-    /**
-     * In progress. Functions made but not active
-     */
-	function checkAuth() {
-		var_dump(PPI_Acl::getInstance()->hasAccess(false, false, false, true));
 	}
 
     /**
@@ -51,19 +42,45 @@ class PPI_Controller extends PPI_View {
 			throw new PPI_Exception('Unable to redirect to '.$sUrl.'. Headers already sent');
 		}
 	}
-
-
-    protected function _setFlashMessage($p_sMessage, $p_bSuccess = true) {
-        $this->setFlashMessage($p_sMessage, $p_bSuccess);
+	
+	protected function load($p_tplFile, $p_tplParams = array()) {
+		$this->_view->load($p_tplFile, $p_tplParams);
+	}
+	
+	protected function loadSmarty($p_tplFile, $p_tplParams = array()) {
+		$this->_view->loadsmarty($p_tplFile, $p_tplParams);
+	}
+	
+    /**
+     * PPI_View::addStylesheet()
+     * Append to the list of stylesheets to be included
+     * @param mixed $p_mStylesheet This can be an existing array of stylesheets or a string.
+     * @return void
+     */
+    protected function addStylesheet($p_mStylesheet) {
+        $this->_view->addStylesheet($p_mStylesheet);
     }
 
-    protected function _getFlashMessage() {
-        $this->getFlashMessage();
+    /**
+     * PPI_View::addJavascript()
+     * Append to the list of javascript files to be included
+     * @param mixed $p_mJavascript
+     * @return void
+     */
+    protected function addJavascript($p_mJavascript) {
+        $this->_view->addJavascript($p_mJavascript);
     }
 
-    protected function _clearFlashMessage() {
-    	$this->clearFlashMessage();
-    }
+	/**
+	 * Override the default template file, with optional include for the .php or .tpl extension
+	 * @param string $p_sNewTemplateFile New Template Filename
+	 * @todo have this lookup the template engines default extension and remove the smarty param
+     * @return void
+	 */
+	protected function setTemplateFile($p_sNewTemplateFile, $p_bUseSmarty = false) {
+		$this->_view->setTemplateFile($p_sNewTemplateFile, $p_bUseSmarty);
+	}
+			
 
 	/**
 	 * Setter for setting the flash message to appear on next page load.

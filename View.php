@@ -18,7 +18,7 @@ class PPI_View {
 	 * @param array $p_tplParams Optional user defined params
 	 */
 	function load($p_tplFile, $p_tplParams = array()) {
-		$oConfig = $this->getConfig();
+		$oConfig = PPI_Helper::getConfig();
 		if($this->_rendererOverride !== null) {
 			$sRenderer = $this->_rendererOverride;
 		} elseif(isset($oConfig->layout->renderer) && $oConfig->layout->renderer != '') {

@@ -36,7 +36,7 @@ class PPI_Dispatch extends PPI_Input {
 
 		// Subtract the BaseUrl from the actual full URL and then what we have left is our controllers..etc
 		$aUrls            = explode('/', trim(str_replace($sBaseUrl, '', $sFullUrl), '/'));
-		$sControllerName  = (count($aUrls) > 0) ? $aUrls[0] : '';
+		$sControllerName  = !empty($aUrls) ? $aUrls[0] : '';
 
 		// See if the mastercontroller exists in the config
 		if(!isset($oConfig->system->masterController)) {
@@ -77,13 +77,6 @@ class PPI_Dispatch extends PPI_Input {
 			}
 			$this->setMethodName($sMethod);
 			
-			// Try and remember why we have usePPI, if we don't need it anymore then remove it.
-			if(isset($oConfig->system->acl->enabled) 
-					&& $oConfig->system->acl->enabled == true 
-					&& $oConfig->system->acl->usePPI == true) {
-					
-				$oController->checkAuth();
-			}
 			// Call up the relevant controller and method
 			$oController->$sMethod();
 			return $this; // Method chain

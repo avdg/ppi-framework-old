@@ -1,5 +1,4 @@
 <?php
-if(!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  *
@@ -8,7 +7,6 @@ if(!defined('BASEPATH')) exit('No direct script access allowed');
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   PPI
- * @subpackage core
  */
 class PPI_Model_Form  {
 	/**
@@ -104,6 +102,7 @@ class PPI_Model_Form  {
 	 * @param string $formName
 	 * @param string $formAction
 	 * @param string $formMethod
+	 * @return void
 	 */
 	function init($formName, $formAction = '', $formMethod='post') {
 		$this->_formAction 	= $formAction;
@@ -117,6 +116,7 @@ class PPI_Model_Form  {
 	 * Add an error against a specific field.
 	 * @param string $elementName
 	 * @param string $errorMessage
+	 * @return void
 	 */
 	function setElementError($elementName, $errorMessage) {
 		// if we already have an error for this field. lets just keep the first one and ignore the rest
@@ -169,6 +169,7 @@ class PPI_Model_Form  {
 	/**
 	 * Overwrites the submit label for the form
 	 * @param string $sLabel
+	 * @return void
 	 */
 	function setSubmitLabel($sLabel) {
 		if(array_key_exists('submit', $this->_formStructure['fields'])) {
@@ -177,6 +178,7 @@ class PPI_Model_Form  {
 	}
 	/**
 	 * This disables the <form></form> tags from being renered
+	 * @return void
 	 */
 	function disableForm() {
 		$this->_renderFormTag = false;
@@ -184,6 +186,7 @@ class PPI_Model_Form  {
 
 	/**
 	 * Disables the submit button from being rendered
+	 * @return void
 	 */
 	function disableSubmit() {
 		$this->_renderSubmitTag = false;
@@ -191,6 +194,7 @@ class PPI_Model_Form  {
 
 	/**
 	 * Enables the submit button from being rendered
+	 * @return void
 	 */
 	function enableSubmit() {
 		$this->_renderSubmitTag = true;
@@ -198,6 +202,7 @@ class PPI_Model_Form  {
 
 	/**
 	 * This enables the <form></form> tags from being renered
+	 * @return void
 	 */
 	function enableForm() {
 		$this->_renderFormTag = true;
@@ -244,7 +249,7 @@ class PPI_Model_Form  {
 		$submitFields = $this->oHooker->preRetreival($submitFields);
 
 		// Clean the inputs
-		$submitFields = PPI_Model_Helper::getInstance()->arrayTrim($submitFields);
+		$submitFields = PPI_Helper::getInstance()->arrayTrim($submitFields);
 		return $submitFields;
 	}
 
@@ -363,7 +368,7 @@ class PPI_Model_Form  {
 	}
 	/**
 	 * Validates an error or an array of errors against one field at a time.
-	 * @return unknown
+	 * @return boolean
 	 */
 	function validateForm() {
 
@@ -488,6 +493,10 @@ class PPI_Model_Form  {
 	*/
 	}
 
+	/**
+	 * Get the options for the form
+	 * @return array
+	 */
 	function getFormDetails() {
 		return array(
 			'formMethod' 		 => $this->_formMethod,
@@ -500,10 +509,18 @@ class PPI_Model_Form  {
 		);
 	}
 
+	/**
+	 * Get the form structure
+	 * @return array
+	 */
 	function getFormStructure() {
 		return $this->_formStructure;
 	}
 
+	/**
+	 * Get the combbined information to be passed to the view renderer
+	 * @return array
+	 */
 	function getRenderInformation() {
 		return array(
 			'formStructure' => $this->getFormStructure(),
@@ -512,22 +529,43 @@ class PPI_Model_Form  {
 		);
 	}
 
+	/**
+	 * Get the form errors
+	 * @param boolean $count Default is false. If false will give the errors, else a count of the errors
+	 */
 	function getFormErrors($count = false) {
 		return ($count === false) ? $this->_elementErrors : count($this->_elementErrors);
 	}
 
-	function getFormName($p_iFormID) {
+	/**
+	 * Get the form name
+	 * @return integer
+	 */
+	function getFormName() {
 		return $this->_formName;
 	}
-	function getFormID($p_iFormName) {
+	
+	/**
+	 * Get the form ID
+	 * @return integer
+	 */
+	function getFormID() {
 
 	}
+	/**
+	 * Enable tinyMCE rendering
+	 * @param boolean $p_sType
+	 */
 	function setTinyMCE($p_sType) {
 		if(!is_bool($p_sType)) {
 			$p_sType = (bool) $p_sType;
 		}
 		$this->_isTinyMCEEnabled = $p_sType;
 	}
+	/**
+	 * Get if tinyMCE is enabled
+	 * @return boolean
+	 */
 	function getTinyMCE() {
 		return $this->_isTinyMCEEnabled;
 	}

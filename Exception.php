@@ -1,14 +1,12 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-
-
+<?php
 /**
-	 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-	 * @copyright (c) Digiflex Development Team 2008
-	 * @version 1.0
-	 * @author Paul Dragoonis <paul@digiflex.org>
-	 * @since Version 1.0
-	 * @subpackage	Classes
-	 */
+ *
+ * @version   1.0
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @copyright Digiflex Development
+ * @package   PPI
+ */
 
 class PPI_Exception extends Exception {
 

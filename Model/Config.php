@@ -71,6 +71,11 @@ class PPI_Model_Config extends PPI_Base {
 		return $this->_oConfig;
 	}
 
+	/**
+	 * Read the config file, only ini type implemented
+	 * @todo Implement XML and PHP config files
+	 * @return void
+	 */
 	function readConfig () {
 		global $siteTypes;
 		if(!file_exists(CONFIGPATH . $this->_configFile)) {
@@ -95,6 +100,11 @@ class PPI_Model_Config extends PPI_Base {
 		}
 	}
 
+	/**
+	 * Converts role name to role ID
+	 * @param integer $p_roleID The Role ID
+	 * @return string
+	 */
 	function getRoleNameFromID($p_roleID) {
 		foreach($this->roleMapping as $key => $val) {
 			if($val == $p_roleID) {
@@ -103,34 +113,18 @@ class PPI_Model_Config extends PPI_Base {
 		}
 		return '';
 	}
+	
+	/**
+	 * Get the Role ID from the Role Name 
+	 * @param string $p_roleName Role Name
+	 * @return integer
+	 */
 	function getRoleIDFromName($p_roleName) {
 		foreach($this->_oConfig->system->roleMapping as $key => $val) {
 			if($key == $p_roleName) {
 				return $val;
 			}
 		}
-		return '';
-	}
-	function getDefaultViewLanguage($name = false) {
-		if(!$name) {
-			return $this->_oConfig->layout->default_view_language;
-		} else {
-			return $this->languageCodeToName($this->_oConfig->layout->default_view_language);
-		}
-	}
-	function languageCodeToName($code) {
-		if(array_key_exists($code, $this->_oConfig->layout->languages)) {
-			return $this->languages[$code];
-		}
-		die("Language code not found in config View Languages. Code: $code");
-	}
-	function languageNameToCode($name) {
-		foreach($this->_oConfig->layout->languages as $langkey => $langval) {
-			if($this->_oConfig->layout->languages[$key] == $name) {
-				return $langval;
-			}
-		}
-		die("Language name not found in config View Languages. Name: $name");
-
+		return 0;
 	}
 }

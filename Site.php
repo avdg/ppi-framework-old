@@ -1,5 +1,12 @@
 <?php
-
+/**
+ *
+ * @version   1.0
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @copyright Digiflex Development
+ * @package   PPI
+ */
 class PPI_Site {
 
 	public $_configFile = null;
@@ -14,6 +21,10 @@ class PPI_Site {
 		$this->_configFile = $p_sFilename;
 	}
 
+	/**
+	 * Set the custom session object for the runtime
+	 * @param PPI_Session_Interface $oSessionHandler The Session Handler
+	 */
 	function setSessionHandler(PPI_Session_Interface $oSessionHandler) {
 
 	}

@@ -1,4 +1,14 @@
 <?php
+
+/**
+ *
+ * @version   1.0
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @copyright Digiflex Development
+ * @package   PPI
+ */
+
 class PPI_Controller_User extends APP_Controller_Application {
 
 	function __construct() {
@@ -90,18 +100,18 @@ class PPI_Controller_User extends APP_Controller_Application {
 
 					if($oUser->sendRecoverEmail($aUser)) {
 						$successMessage = 'An email has been dispatched to ' . $aValues['email'] . '. Please remember to check your spam folder.';
-						$this->_redirect('user/recover/successmsg/' . urlencode($successMessage));
+						$this->redirect('user/recover/successmsg/' . urlencode($successMessage));
 
 						// The email was errornous
 					} else {
 						$failureMessage = 'We tried to send out a recovery email to your address but there an error.';
-						$this->_redirect('user/recover/failuremsg/' . urlencode($failureMessage));
+						$this->redirect('user/recover/failuremsg/' . urlencode($failureMessage));
 					}
 
 					// User record was not round
 				} else {
 					$failureMessage = 'That email address was not found in our database, please check your input and try again.';
-					$this->_redirect('user/recover/failuremsg/' . urlencode($failureMessage));
+					$this->redirect('user/recover/failuremsg/' . urlencode($failureMessage));
 				}
 
 			}

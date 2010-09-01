@@ -1,6 +1,13 @@
 <?php
-  if (!defined ('BASEPATH')) die ('No direct file access allowed');
-  header("HTTP/1.1 500 Internal error");
+/**
+ *
+ * @version   1.0
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @copyright Digiflex Development
+ * @package   PPI
+ */
+	header("HTTP/1.1 500 Internal error");
 ?>
 
 <html>

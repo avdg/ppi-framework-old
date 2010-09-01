@@ -1,11 +1,39 @@
 <?php
+/**
+ *
+ * @version   1.0
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @copyright Digiflex Development
+ * @package   PPI
+ */
 class PPI_View {
 	// functions that will be contained in here are to check
 	// if the header has already been loaded, or if the footer has already been loaded
 	protected $_viewParams = array();
+	
+	/**
+	 * Are we loading a plugin view (TBC)
+	 * @var boolean
+	 */
 	private $_plugin = false;
+	
+	/**
+	 * Default renderer, PHP helper
+	 * @var string
+	 */
 	private $_defaultRenderer = 'php';
+	
+	/**
+	 * Master Template Override from config or setTemplateFile()
+	 * @var string|null
+	 */
 	private $_templateOverride = null;
+	
+	/**
+	 * Template Renderer Override from config or useRenderer()
+	 * @var unknown_type
+	 */
 	private $_rendererOverride = null;
 
 	function __construct() {}
@@ -18,6 +46,8 @@ class PPI_View {
 	 * @param array $p_tplParams Optional user defined params
 	 */
 	function load($p_tplFile, $p_tplParams = array()) {
+		
+		// checking for config overrides or useRenderer() overrides
 		$oConfig = PPI_Helper::getConfig();
 		if($this->_rendererOverride !== null) {
 			$sRenderer = $this->_rendererOverride;
@@ -67,6 +97,7 @@ class PPI_View {
 	 * @param array $p_tplParams Optional user defined parameres
 	 */
 	function setupRenderer(PPI_Interface_Template $oTpl, $p_tplFile, $p_tplParams = array()) {
+		
 		$oConfig  = PPI_Helper::getConfig();
 		$oSession = PPI_Helper::getSession();
 
@@ -100,6 +131,7 @@ class PPI_View {
 			PPI_Input::clearFlashMessage();
 		}
 
+		// Master template override from config or setTemplateFile()
 		if($this->_templateOverride !== null) {
 			$sMasterTemplate = $this->_templateOverride;
 		} elseif(isset($oConfig->layout->masterFile) && $oConfig->layout->masterFile != '') {
@@ -115,7 +147,7 @@ class PPI_View {
 	 * Obtain the list of default view variables
 	 * @todo review making var names not HNC prefixed.
 	 * @param array $options
-	 * @return unknown
+	 * @return array
 	 */
 	function getDefaultRenderValues(array $options) {
 		$oConfig   = PPI_Helper::getConfig();
@@ -145,10 +177,19 @@ class PPI_View {
 	}
 
 
+	/**
+	 * To set a view variable to be rendered. (TBC)
+	 * @param string $key Key name
+	 * @param mixed $val Value
+	 */
 	function setVar($key, $val) {
 		$this->_viewParams[$key] = $val;
 	}
 
+	/**
+	 * To get a view variable that is set to get rendered. (TBC)
+	 * @param $key
+	 */
 	function getVar($key) {
 		if(!array_key_exists($key, $this->_viewParams)) {
 			throw new PPI_Exception('Unable to find View Key: '.$key);
@@ -204,6 +245,11 @@ class PPI_View {
 			case 'smarty':
 				throw new PPI_Exception('Not yet implemented.');
 				break;
+				
+			case 'twig':
+			default:
+				throw new PPI_Exception('Not yet implemented.');
+				break;				
 
 		}
 

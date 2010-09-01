@@ -7,7 +7,6 @@
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   PPI
- * @subpackage core
  */
 
 	/* PHP Fatal Error Information

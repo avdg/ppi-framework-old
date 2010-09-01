@@ -4,6 +4,8 @@
  * @version 1.0
  * @author Paul Dragoonis <dragoonis@php.net>
  * @since Version 1.0
+ * 
+ * Inspiration from Zend Framework, minified and custom tweaked
  */
 class PPI_Config_Ini extends PPI_Config
 {

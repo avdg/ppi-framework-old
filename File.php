@@ -514,21 +514,6 @@ class File
 		return $this->path;
 	}
 
-	/**
-	 * Returns the mime type of the file.
-	 *
-	 * The mime type is guessed using the functions finfo(), mime_content_type()
-	 * and the system binary "file" (in this order), depending on which of those
-	 * is available on the current operating system.
-	 *
-	 * @returns string  The guessed mime type, e.g. "application/pdf"
-	 */
-	public function getMimeType()
-	{
-		$guesser = MimeTypeGuesser::getInstance();
-
-		return $guesser->guess($this->getPath());
-	}
 
 	/**
 	 * Returns the size of this file

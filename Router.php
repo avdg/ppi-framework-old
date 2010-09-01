@@ -1,5 +1,12 @@
 <?php
 /**
+ *
+ * @version   1.0
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @copyright Digiflex Development
+ * @package   PPI
+ * 
  * Routing class for PPI.
  *
  */
@@ -26,7 +33,7 @@ class PPI_Router {
 	/**
 	 * Get the routes, either from the cache or newly from disk
 	 *
-	 * @return unknown
+	 * @return array
 	 */
 	function getRoutes() {
 		self::$_routingFile      = PPI_Registry::get('PPI_Base::routing_file', null);

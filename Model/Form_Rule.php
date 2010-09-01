@@ -7,15 +7,38 @@
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   PPI
- * @subpackage core
  */
 
 class PPI_Model_Form_Rule extends PPI_Model {
 	
+	/**
+	 * Table Name
+	 * @var string
+	 */
 	public $_name = 'ppi_fb_rule';
-	private $_primary = 'id';	
+	
+	/**
+	 * The Primary Key
+	 * @var string $_primary 
+	 */
+	private $_primary = 'id';
+
+	/**
+	 * The Form Name
+	 * @var string
+	 */
 	private $_formName = '';
+	
+	/**
+	 * The Form ID
+	 * @var integer
+	 */
 	private $_formID;
+	
+	/**
+	 * The Form Fields
+	 * @var array
+	 */
 	private $_formFields = array();
 	
 	function __construct($p_sFormName) {
@@ -23,14 +46,16 @@ class PPI_Model_Form_Rule extends PPI_Model {
 		parent::__construct($this->_name, $this->_primary);
 	}
 	
+	/**
+	 * Get the different types of rules
+	 */
 	function getRuleTypes() {
-		$select 		= $this->select()->from('ppi_fb_rule_type');
-		$aRuleTypes 	= $select->getList($select);
+		$aRuleTypes = $this->select()->from('ppi_fb_rule_type')->getList();
 		$aRules		= array();
 		foreach($aRuleTypes as $aRule) {
 			$aRules[$aRule['id']] = array('name' => $aRule['name'], 'message' => $aRule['default_error_message']);
 		}
-		return (count($aRuleTypes) > 0) ? $aRules : array();
+		return $aRules;
 	}	
 	
 }	

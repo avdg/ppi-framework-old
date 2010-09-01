@@ -1,11 +1,12 @@
 <?php
 /**
-	 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-	 * @copyright (c) Digiflex Development
-	 * @version 1.0
-	 * @author Paul Dragoonis <dragoonis@php.net>
-	 * @since Version 1.0
-	 */
+ *
+ * @version   1.0
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @copyright Digiflex Development
+ * @package   PPI
+ */
 
 abstract class PPI_Model extends PPI_Base {
 
@@ -27,13 +28,11 @@ abstract class PPI_Model extends PPI_Base {
 	 * Constructor for the SQL API.
 	 * Used for making connections and setting up instance information.
 	 * This information is used throughout this class's lifecycle
-	 * @param $p_sTableName string The name of the DB Table
-	 * @param $p_sTableIndex string The index of the primary key
-	 * @param $p_sDBInfo string The database section to use for the DSN
-	 * @param $p_iRecord string To obtain the record and set it as meta data
+	 * @param string $p_sTableName  The name of the DB Table
+	 * @param string $p_sTableIndex  The index of the primary key
+	 * @param string $p_sDBInfo  The database section to use for the DSN
+	 * @param integer $p_iRecord  To obtain the record and set it as meta data
 	 * @throws PPI_Exception
-	 * @throws PDO_Exception
-	 * @global $oConfig
 	 */
 
 	function __construct($p_sTableName = "", $p_sTableIndex = "", $p_sDBInfo = "", $p_iRecordID = 0) {
@@ -124,14 +123,10 @@ abstract class PPI_Model extends PPI_Base {
 
 	/**
 	 * Returns the PPI Select object to allow object-oriented query selecting
-	 * @return PPI_DB_Select
+	 * @return PPI_Model_Select
 	 */
 	function select() {
-		return new PPI_Model_Select($this, array(
-			'host'	 	=> $this->sHostName,
-			'user' 		=> $this->sUserName,
-			'pass' 		=> $this->sPassword,
-			'db' 		=> $this->sDataBase));
+		return new PPI_Model_Select($this);
 	}
 
     /**
@@ -167,7 +162,7 @@ abstract class PPI_Model extends PPI_Base {
 	 *
 	 * @param integer $p_iRecordID Optional Record ID to delete. If nothing passed then will look for record ID in meta data
 	 * @throws PPI_Exception
-	 * @return
+	 * @return integer The affected rows
 	 */
 	function delete($p_iRecordID = 0) {
 		if($p_iRecordID === 0) {
@@ -322,6 +317,11 @@ abstract class PPI_Model extends PPI_Base {
 		return $this->rHandler->lastInsertId();
 	}
 
+	/**
+	 * Performs extended inserts
+	 * @param array $p_aRecords Multi Dimensional array of records to insert
+	 * @return integer
+	 */
 	function insertMultiple(array $p_aRecords) {
 		if(!isset($p_aRecords[0]) || !is_array($p_aRecords[0])) {
 			throw new PPI_Exception('Invalid data structure format passed to insertMultiple');
@@ -367,6 +367,13 @@ abstract class PPI_Model extends PPI_Base {
 		return $modifiedRecords;
 	}
 
+	/**
+	 * Update a record
+	 * @param array $p_aRecord Record Data
+	 * @param string $p_mWhere Optional where clause
+	 * @return integer
+	 * @throws PPI_Exception
+	 */
 	function update($p_aRecord, $p_mWhere = null) {
 		$aWhere = array();
 		if($p_mWhere !== null) {
@@ -463,6 +470,10 @@ abstract class PPI_Model extends PPI_Base {
 		}
 	}
 
+	/**
+	 * Fetch a singular row from the getList()
+	 * @see PPI_Model->getList()
+	 */
 	function fetch($p_mFilter = '', $p_sOrder = '', $p_iLimit = '', $p_sGroup = '') {
 		return $this->getList($p_mFilter, $p_sOrder, $p_iLimit, $p_sGroup)->fetch();
 	}
@@ -555,7 +566,7 @@ abstract class PPI_Model extends PPI_Base {
 	/**
 	 * Perform a MySQL MAX() lookup on the current table.
 	 *
-	 * @param string $p_sMaxKey The field name you wish to perform the max() on
+	 * @param string $p_sField The field name you wish to perform the max() on
 	 * @param string $p_sClause The optional clause for the query
 	 * @return integer
 	 */
@@ -563,6 +574,13 @@ abstract class PPI_Model extends PPI_Base {
 		return $this->findMinMax('MAX', $p_sField, $p_sClause);
 	}
 
+	/**
+	 * Perform a MySQL MAX() lookup on the current table.
+	 *
+	 * @param string $p_sField The field name you wish to perform the min() on
+	 * @param string $p_sClause The optional clause for the query
+	 * @return integer
+	 */
 	function findMin($p_sField, $p_sClause = '') {
 		return $this->findMinMax('MIN', $p_sField, $p_sClause);
 	}
@@ -573,7 +591,7 @@ abstract class PPI_Model extends PPI_Base {
 	 * @param string $p_sType Type ('MIN' or 'MAX')
 	 * @param string $p_sField The field to perform the minmax on
 	 * @param string $p_sClause Optional clause to apply to the query
-	 * @return
+	 * @return integer
 	 */
 	private function findMinMax($p_sType, $p_sField, $p_sClause = '') {
 		$query = "SELECT $p_sType($p_sField) value FROM $this->sTableName";
@@ -653,9 +671,6 @@ abstract class PPI_Model extends PPI_Base {
 	 */
 	function delRecord($p_mClause = null) {
 		$aWhere = ($p_mClause !== null) ? array_merge(array(), (array) $p_mClause) : array();
-		if($p_sRecordName != '' && $p_iRecordID != '') {
-			$aWhere[] = "`$p_sRecordName` = ".$this->quote($p_iRecordID);
-		}
 		if(empty($aWhere)) {
 			throw new PPI_Exception('Unable to wipe table contents, use truncation specific method instead');
 		}
@@ -663,6 +678,9 @@ abstract class PPI_Model extends PPI_Base {
 		return $this->exec($sQuery);
 	}
 
+	/**
+	 * Truncate the table assigned to this model
+	 */
 	function truncate() {
 		return $this->exec("TRUNCATE TABLE `{$this->sTableName}`");
 	}
@@ -679,31 +697,57 @@ abstract class PPI_Model extends PPI_Base {
 	/* return the connection handler generated from mysql_connect() */
 	function getHandler() { return $this->rHandler; }
 
+	/**
+	 * Get the primary key assigned to this midel
+	 * @return string
+	 */
 	function getPrimaryKey() {
 		return $this->sTableIndex;
 	}
 
+	/**
+	 * Get the table name assigned to this Model
+	 * @return string
+	 */
 	function getTableName() {
 		return $this->sTableName;
 	}
 
+	/**
+	 * Sanitize DB input
+	 * @param mixed $var
+	 */
 	function quote($var) {
 		if(is_int($var) || is_float($var)) { return $var; }
 		return $this->rHandler->quote($var);
 	}
 
+	/**
+	 * Get the config object
+	 */
 	function getConfig() {
 		return PPI_Helper::getConfig();
 	}
 
+	/**
+	 * Get the registry object
+	 */
 	function getRegistry() {
 		return PPI_Helper::getRegistry();
 	}
 
+	/**
+	 * Get the session object
+	 */
 	function getSession() {
 		return PPI_Helper::getSession();
 	}
 
+	/**
+	 * Check if a chatset exists
+	 * @param string $charset The Charset
+	 * @return boolean
+	 */
 	function isCharsetExists($charset) {
 		return (bool) $this->query("SHOW CHARACTER SET LIKE " . $this->quote($charset))->fetch();
 	}

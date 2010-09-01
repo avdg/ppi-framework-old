@@ -1,5 +1,15 @@
 <?php
 
+/**
+ *
+ * @version   1.0
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @copyright Digiflex Development
+ * @package   PPI
+ */
+
+
 // never throw an exception in this file or any functions that it calls.
 // This results in an infinite exception loop and you get a PHP fatal error.
 

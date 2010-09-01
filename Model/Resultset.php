@@ -1,4 +1,12 @@
 <?php
+/**
+ *
+ * @version   1.0
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @copyright Digiflex Development
+ * @package   PPI
+ */
 
 class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
 
@@ -60,37 +68,68 @@ class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
 		return $this->_statement->fetchAll($sFetchMode);
 	}
 
+	/**
+	 * Count the number of rows returned from the query
+	 * @return integer
+	 */
 	function countRows() {
 		return $this->_statement->rowCount();
 	}
 
+	/**
+	 * Check if an offset exists From the SPL Interface: ArrayAccess
+	 * @param integer $offset
+	 * @return boolean
+	 */
 	function offsetExists($offset) {
 		return isset($this->_rows[(int) $offset]);
 	}
 
 
+	/**
+	 * Get a row from the offset
+	 * @param integer $offset The Offset
+	 * @reurn mixed
+	 */
 	function offsetGet($offset) {
 		$this->_pointer = (int) $offset;
 		return $this->current();
 	}
 
+	/**
+	 * Remove a record by offset
+	 * @param $offset
+	 */
 	function offsetUnset($offset) {
 
 	}
 
+	/**
+	 * Set a row's data by offset
+	 * @param integer $offset The Offset
+	 * @param mixed $value The Value
+	 */
 	function offsetSet($offset, $value) {
 		$this->_rows[(int) $offset] = $value;
 	}
 
-	// For Countable interface
+	// Internal count function from the Countable interface.
 	function count() {
 		return $this->countRows();
 	}
 
+	/**
+	 * Get the saved statement object
+	 * @return object
+	 */
 	function getStatement() {
 		return $this->_statement;
 	}
 
+	/**
+	 * Get the row from the current pointer offset. If not encountered before, fetches it
+	 * @return mixed
+	 */
 	function current() {
 		if(empty($this->_rows[$this->_dataPointer])) {
 			$this->_rows[$this->_dataPointer] = $this->_statement->fetch($this->_fetchMode);
@@ -98,18 +137,35 @@ class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
 		return $this->_rows[$this->_dataPointer];
 	}
 
+	/**
+	 * Get the current pointer set - From the SPL Interface: Iterator
+	 * 
+	 * @return integer
+	 */
 	function key() {
 		return $this->_dataPointer;
 	}
 
+	/**
+	 * Increment the pointer - From the SPL Interface: Iterator
+	 * @return void
+	 */
 	function next() {
 		++$this->_dataPointer;
 	}
 
+	/**
+	 * Rewind the pointer - From the SPL Interface: Iterator
+	 * @return void
+	 */	
 	function rewind() {
 		$this->_dataPointer = 0;
 	}
 
+	/**
+	 * Verify if there is another pointer next or we are at the end - From the SPL Interface: Iterator
+	 * @return boolean
+	 */	
 	function valid() {
 		return $this->_dataPointer < $this->count();
 	}

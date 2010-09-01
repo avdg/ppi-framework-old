@@ -7,7 +7,6 @@
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   PPI
- * @subpackage core
  */
 
 class PPI_Model_Email_Template extends PPI_Model {
@@ -23,7 +22,12 @@ class PPI_Model_Email_Template extends PPI_Model {
         parent::__construct('ppi_email_template', 'id');
     }  
       
-      
+    /**
+     * Set the template to be used
+     * @param string $p_sTemplate Template Name
+     * @param array $p_aReplacerData Replacer Tags
+     * @return $this (fluent interface)
+     */  
     function setTemplate($p_sTemplate, $p_aReplacerData = array()) {
         // get the template data, does the template exist ?
         $rows = parent::getList("name = '$p_sTemplate'");
@@ -41,6 +45,10 @@ class PPI_Model_Email_Template extends PPI_Model {
         return $this;
     }   
     
+    /**
+     * Replace the data from the templates
+     * @return void
+     */
     function replaceData() {
 
         if(count($this->_replacerData) > 0) {
@@ -56,6 +64,9 @@ class PPI_Model_Email_Template extends PPI_Model {
         }
     }
     
+    /**
+     * Send the email out
+     */
     function sendMail() {
         // check required properties (to,from,subject,[body](warning(maybe)) 
         if(is_array($this->_recipient) && count($this->_recipient) < 1) {
@@ -96,6 +107,10 @@ class PPI_Model_Email_Template extends PPI_Model {
         */
     }
     
+    /**
+     * Set the email headers
+     * @return void
+     */
     function setHeaders() {
         $this->_headers     = "Content-Type: text/html; charset=iso-8859-1\n";
         $this->_headers     .= "From: <".$this->_sender.">\nReply-to: <noreply@".getHostname().">\n";        
@@ -103,10 +118,21 @@ class PPI_Model_Email_Template extends PPI_Model {
         $this->_headers     .= "X-Priority: 1\r\n";
     }
     
+    /**
+     * Set the Sender
+     * @param string $p_sSender The Sender
+     * @return $this (fluent interface)
+     */
     function setSender($p_sSender) {
         $this->_sender = $p_sSender;
         return $this;
     }
+    
+    /**
+     * Set the Recipient
+     * @param mixed $p_mRecipient The Recipient(s)
+     * @return $this (fluent interface)
+     */
     function setRecipient($p_mRecipient) {
         if(is_array($p_mRecipient)) {
             
@@ -115,15 +141,31 @@ class PPI_Model_Email_Template extends PPI_Model {
         }
         return $this;
     }
+    
+    /**
+     * Set the Subject
+     * @param string $p_sSubject The Subject
+     * @return $this (fluent interface)
+     */
     function setSubject($p_sSubject) {
         $this->_subject = $p_sSubject;
         return $this;
     }
+    /**
+     * Set the replacer data
+     * @param array $p_aData The replacer tags
+     * @return $this (fluent interface)
+     */
     function setReplacerData(array $p_aData) {
         $this->_replacerData = $p_aData;
         return $this;        
     }    
     
+    /**
+     * Get the addedit structure for Formbuilder
+     * @param string $p_sMode The Mode
+     * @return array
+     */
     function getAddEditFormStructure($p_sMode) {
         $structure = array(
             'fields' => array(

@@ -9,7 +9,7 @@ defined('PPI_CONTROLLER_PLUGIN') or define ('PPI_CONTROLLER_PLUGIN', 1);
  * @returns string
  */
 function getRoleType() {
-	$aUserInfo = PPI_Model_Session::getInstance()->getAuthData();
+	$aUserInfo = PPI_Session::getInstance()->getAuthData();
 	return ($aUserInfo !== false && count($aUserInfo) > 0) ? $aUserInfo['role_name'] : 'guest';
 }
 
@@ -19,7 +19,7 @@ function getRoleType() {
  * @return integer
  */
 function getRoleID() {
-       $aUserInfo = PPI_Model_Session::getInstance()->getAuthData();
+       $aUserInfo = PPI_Session::getInstance()->getAuthData();
        return ($aUserInfo !== false && count($aUserInfo) > 0) ? $aUserInfo['role_id'] : 1;
 }
 

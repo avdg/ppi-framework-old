@@ -8,12 +8,13 @@
 	 */
 
 class PPI_Base {
-	protected static $_instances = array();
+	
 	/**
-        * Base contructor
-        * @access  public
-        * @return  void
-        */
+	 * Class Name Instances
+	 * @var unknown_type
+	 */
+	protected static $_instances = array();
+
 	function __construct($p_aArguments = "") {
 	}
 

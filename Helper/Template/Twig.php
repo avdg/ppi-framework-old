@@ -7,7 +7,6 @@
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   PPI
- * @subpackage core
  */
 
 require_once SYSTEMPATH . 'Vendor/Twig/Autoloader.php';

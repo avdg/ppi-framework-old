@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * @version   1.0
@@ -12,21 +11,21 @@
 
 class PPI_Session {
 
-    private $_authNamespaceName		= 'userAuthData';
+    private $_authKeyName = 'userAuthInfo';
 
     /**
      * Default value for the session name for the app.
      * This can be overritten by the config
      * @var string
      */
-	private $_sessionName			= 'myproject';
+	private $_sessionName = 'myproject';
 
 	/**
 	 * The default namespace name for the framework.
-	 * This can be overitten by the config
-	 * @var unknown_type
+	 * This can be overitten by the config: system.sessionNamespace
+	 * @var string
 	 */
-    private $_frameworkSessionName	= '__PPI';
+    private $_frameworkSessionName = '__PPI';
 
     /**
      * The PPI_Session instance
@@ -51,51 +50,71 @@ class PPI_Session {
     /**
 	 * Set the authentication information for the current user
 	 *
-	 * @param array $aData The data to be set
+	 * @param mixed $aData The data to be set
 	 * @return void
 	 */
-	function setAuthData(array $aData) {
+	function setAuthData($mData) {
 		global $oConfig;
 		if(isset($oConfig->system->user_session_key)) {
-			$this->_authNamespaceName = $oConfig->system->user_session_key;
+			$this->_authKeyName = $oConfig->system->user_session_key;
 		}
-		$this->set($this->_authNamespaceName, $aData);
+		$this->set($this->_authKeyName, $mData);
 	}
 
 	/**
-	 * Clear the set auth data
+	 * Clear the set authentication information
 	 * @return void
 	 */
 	function clearAuthData() {
-		$this->set($this->_authNamespaceName, null);
+		$this->set($this->_authKeyName, null);
 	}
 
 	/**
 	 * Get the auth data, if it doesn't exist we return a blank array
+	 * @param boolean $p_bUseArray Default is true. If true returns array, else object.
 	 * @return array
 	 */
 	function getAuthData($p_bUseArray = true) {
-		$aAuthData = $this->get($this->_authNamespaceName, false);
+		$aAuthData = $this->get($this->_authKeyName, false);
 		$aAuthData = ($aAuthData !== false && !empty($aAuthData)) ? $aAuthData : array();
 		return $p_bUseArray === true ? $aAuthData : (object) $aAuthData;
 	}
 
-	function exists($p_sNamespace) {
-		return array_key_exists($p_sNamespace, $_SESSION[$this->_sessionName]);
+	/**
+	 * Check if a key exists
+	 * @param $p_sKey
+	 * @return boolean
+	 */
+	function exists($p_sKey) {
+		return array_key_exists($p_sKey, $_SESSION[$this->_sessionName]);
 	}
 	
+	/**
+	 * Remove all set keys from the session
+	 * @return void
+	 */
 	function removeAll() {
-		foreach((array)$_SESSION[$this->_sessionName] as $key => $val) {
+		foreach( (array) $_SESSION[$this->_sessionName] as $key => $val) {
 			unset($_SESSION[$this->_sessionName][$key]);
 		}
 	}	
 
-	function remove($p_sNamespace, $p_sName = null) {
-		if($this->exists($p_sNamespace)) {
+	/**
+	 * <code>
+	 * $session->remove('userInfo');
+	 * $session->remove('userInfo', 'email');
+	 * </code>
+	 * Remove a specific key, or just data within that key.
+	 * @param $p_sKey The initial key set
+	 * @param $p_sName A key within the initial key set. 
+	 * @return void
+	 */
+	function remove($p_sKey, $p_sName = null) {
+		if($this->exists($p_sKey)) {
 			if($p_sName === null) {
-				unset($_SESSION[$this->_sessionName][$p_sNamespace]);
+				unset($_SESSION[$this->_sessionName][$p_sKey]);
 			} else {
-				unset($_SESSION[$this->_sessionName][$p_sNamespace][$p_sName]);
+				unset($_SESSION[$this->_sessionName][$p_sKey][$p_sName]);
 			}
 		}
 	}
@@ -107,19 +126,20 @@ class PPI_Session {
 	 * @param mixed $p_mDefault Optional. Default is null
 	 * @return mixed
 	 */
-	function get($p_sNamespace, $p_mDefault = null) {
-		return ($this->exists($p_sNamespace)) ? $_SESSION[$this->_sessionName][$p_sNamespace] : $p_mDefault;
+	function get($p_sKey, $p_mDefault = null) {
+		return ($this->exists($p_sKey)) ? $_SESSION[$this->_sessionName][$p_sKey] : $p_mDefault;
 	}
 
 
 	/**
-	 * Set data into the session
+	 * Set data into the session by key
 	 *
 	 * @param string $p_sNamespace
 	 * @param mixed $p_mData
+	 * @return void
 	 */
-	function set($p_sNamespace, $p_mData = true) {
-		$_SESSION[$this->_sessionName][$p_sNamespace] = $p_mData;
+	function set($p_sKey, $p_mData = true) {
+		$_SESSION[$this->_sessionName][$p_sKey] = $p_mData;
 	}
 
 }

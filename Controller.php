@@ -1,9 +1,12 @@
 <?php
-	/**
-	 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-	 * @copyright (c) Digiflex Development Team 2008
-	 * @author Paul Dragoonis <dragoonis@php.net>
-	 */
+/**
+ *
+ * @version   1.0
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @copyright Digiflex Development
+ * @package   PPI
+ */
 class PPI_Controller {
 
 	protected $_input = null;

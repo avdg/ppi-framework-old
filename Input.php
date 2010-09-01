@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * @version   1.0
@@ -7,7 +6,6 @@
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   PPI
- * @subpackage Input
  */
 class PPI_Input {
 	private $aArguments;

@@ -7,7 +7,6 @@
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   PPI
- * @subpackage core
  */
 
 class PPI_Model_ReCaptcha {
@@ -171,12 +170,7 @@ class PPI_Model_ReCaptcha {
 		}
 		// Change this to $req = substr($req, 0, -1);
 		return substr($req,0,strlen($req)-1);
-	}	
-	
-	function post($host, $aData) {
-		fclose($fs);
-		return explode("\r\n\r\n", $response, 2);
-	}	
+	}		
 	
     /**
      * Set the ip property

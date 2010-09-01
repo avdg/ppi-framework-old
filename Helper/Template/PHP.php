@@ -7,9 +7,8 @@
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   PPI
- * @subpackage core
+ */
 
-*/
 class PPI_Helper_Template_PHP implements PPI_Interface_Template {
 
 	private $_viewVars = array();

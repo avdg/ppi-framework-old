@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @version   1.0
@@ -6,9 +7,7 @@
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   PPI
- * @subpackage core
  */
-
 class PPI_Model_Form_Form extends PPI_Model {
 	
 	private $_name 			= 'ppi_fb_form';
@@ -58,12 +57,13 @@ class PPI_Model_Form_Form extends PPI_Model {
 	function getFields() {
 		
 		$aFieldTypes 	= $this->oField->getFieldTypes();
-		$select 		= $this->oField->select()
+		$aFields 		= $this->oField->select()
 							->columns('id, type_id, name, label')
 							->from($this->oField->_name)
 							->where("form_name = '".$this->_formName."'")
-							->order('`order`');
-		$aFields 		= $select->getList($select);
+							->order('`order`')
+							->getList();
+							
 		// Do the field type mapping	
 		foreach($aFields as $key => $aField) {
 			$aFields[$key]['type'] = $aFieldTypes[$aField['type_id']]; // Set the field type
@@ -88,12 +88,12 @@ class PPI_Model_Form_Form extends PPI_Model {
 	 */
 	function getRules() {
 		$aRuleTypes 	= $this->oRule->getRuleTypes();
-		$select 		= $this->oRule->select()
+		$aRules 		= $this->oRule->select()
 							->columns('r.field_id, r.rule_id, r.value, r.error_message, f.name as field_name')
 							->from($this->oRule->_name . ' r')
 							->innerJoin($this->oField->_name . ' f', 'r.field_id = f.id')
-							->where("r.form_name = '".$this->_formName."'");
-		$aRules 		= $select->getList();
+							->where("r.form_name = '".$this->_formName."'")
+							->getList();
 		$aNewRules		= array();
 		// Do the field rule type mapping	
 		foreach($aRules as $key => $aRule) {
@@ -110,18 +110,9 @@ class PPI_Model_Form_Form extends PPI_Model {
 		
 	}	
 	
-	function checkExists() {
-		// Form Name
-		if(is_string()) {
-			
-		// Form ID
-		} else {
-			
-		}		
-	}
-	
 	/**
 	 * Build the entire form structure from the database
+	 * @return array
 	 */
 	function buildForm() {
 		$formStructure = array();
@@ -157,6 +148,7 @@ class PPI_Model_Form_Form extends PPI_Model {
 	/**
 	 * Set the form name
 	 * @param string $p_sFormName
+	 * @return void
 	 */
 	function setFormName($p_sFormName) {
 		$this->_formName = $p_sFormName;	
@@ -164,7 +156,7 @@ class PPI_Model_Form_Form extends PPI_Model {
 	
 	/**
 	 * Get the form name
-	 * @return unknown
+	 * @return void
 	 */
 	function getFormName() {
 		return $this->_formName;
@@ -173,6 +165,7 @@ class PPI_Model_Form_Form extends PPI_Model {
 	/**
 	 * Set the form id
 	 * @param integer $p_iFormID
+	 * @return void
 	 */
 	function setFormID($p_iFormID) {
 		$this->_formID = $p_iFormID;
@@ -180,7 +173,7 @@ class PPI_Model_Form_Form extends PPI_Model {
 	
 	/**
 	 * Get the form id
-	 * @return unknown
+	 * @return integer
 	 */
 	function getFormID() {
 		return $this->_formID;

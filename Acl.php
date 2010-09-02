@@ -13,14 +13,14 @@ class PPI_Acl {
 	/**
 	 * The stored ACL rules
 	 *
-	 * @var array
+	 * @var array $_rules
 	 */
 	private $_rules = array();
 	
 	/**
 	 * The instance variable
 	 *
-	 * @var PPI_Acl
+	 * @var null|object $_instance
 	 */
 	private static $_instance = null;
 	
@@ -64,7 +64,7 @@ class PPI_Acl {
     /**
      * Retrieves the default instance of the ACL, if it doesn't exist then we create it.
      *
-     * @return PPI_Acl
+     * @return object
      */
     public static function getInstance() {
         if (self::$_instance === null) {

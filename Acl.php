@@ -20,7 +20,11 @@ class PPI_Acl {
 	/**
 	 * The instance variable
 	 *
+<<<<<<< HEAD
 	 * @var null|object $_instance
+=======
+	 * @var PPI_Acl $_instance
+>>>>>>> b9177fa0bf68918b36acf3735315db3e38206b25
 	 */
 	private static $_instance = null;
 	

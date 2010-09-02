@@ -13,14 +13,14 @@ class PPI_Acl {
 	/**
 	 * The stored ACL rules
 	 *
-	 * @var array
+	 * @var array $_rules
 	 */
 	private $_rules = array();
 	
 	/**
 	 * The instance variable
 	 *
-	 * @var PPI_Acl
+	 * @var PPI_Acl $_instance
 	 */
 	private static $_instance = null;
 	

@@ -14,25 +14,25 @@ class PPI_View {
 	
 	/**
 	 * Are we loading a plugin view (TBC)
-	 * @var boolean
+	 * @var boolean $_plugin
 	 */
 	private $_plugin = false;
 	
 	/**
 	 * Default renderer, PHP helper
-	 * @var string
+	 * @var string $_defaultRenderer
 	 */
 	private $_defaultRenderer = 'php';
 	
 	/**
 	 * Master Template Override from config or setTemplateFile()
-	 * @var string|null
+	 * @var string $_templateOverride
 	 */
 	private $_templateOverride = null;
 	
 	/**
 	 * Template Renderer Override from config or useRenderer()
-	 * @var unknown_type
+	 * @var string $_rendererOverride
 	 */
 	private $_rendererOverride = null;
 
@@ -92,7 +92,8 @@ class PPI_View {
 	/**
 	 * Initialisation for the renderer, assignment of default values, boot up of the master template
 	 *
-	 * @param PPI_Interface_Template $oTpl Templating renderer
+	 * @param object $oTpl Templating renderer. Instance of 
+PPI_Interface_Template
 	 * @param string $p_tplFile The template file to render
 	 * @param array $p_tplParams Optional user defined parameres
 	 */
@@ -188,7 +189,7 @@ class PPI_View {
 
 	/**
 	 * To get a view variable that is set to get rendered. (TBC)
-	 * @param $key
+	 * @param string $key The Key
 	 */
 	function getVar($key) {
 		if(!array_key_exists($key, $this->_viewParams)) {

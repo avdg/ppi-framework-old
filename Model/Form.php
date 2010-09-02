@@ -11,61 +11,61 @@
 class PPI_Model_Form  {
 	/**
 	 * The FormBuilder internal formStructure. This consists of the field and their rules
-	 * @var array
+	 * @var array $_formStructure
 	 */
 	private $_formStructure 		= array();
 
 	private $_formFields 			= array();
 	/**
 	 * The list of errors assigned against a form field
-	 * @var array
+	 * @var array $_elementErrors
 	 */
 	private $_elementErrors 		= array();
 	/**
 	 * The action attribute of the <form> tag
-	 * @var string
+	 * @var string $_formAction
 	 */
 	private $_formAction 			= '';
 
 	/**
 	 * The hooker object to allow user control over the behaviour of FormBuilder
-	 * @var unknown_type
+	 * @var object The FormBuilder Hooker
 	 */
 	private $oHooker				= null;
 
 	/**
 	 * The symbolic name assigned to this current form.
-	 * @var string
+	 * @var string $_formName
 	 */
 	private $_formName 				= '';
 
 	/**
 	 * The method attribute on the <form> tag
-	 * @var string
+	 * @var string $_formMethod
 	 */
 	private $_formMethod 			= '';
 
 	/**
 	 * Wether or not the setDefaults() function has been called
-	 * @var boolean
+	 * @var boolean $_defaultsApplied
 	 */
 	private $_defaultsApplied 		= false;
 
 	/**
 	 * Wether or not to render the <form> tag
-	 * @var boolean
+	 * @var boolean $_renderFormTag
 	 */
 	private $_renderFormTag 		= true;
 
 	/**
 	 * Wether or not to render the submit button on the form
-	 * @var boolean
+	 * @var boolean $_renderSubmitTag
 	 */
 	private $_renderSubmitTag 		= true;
 
 	/**
 	 * Wether or not to perform JS validation when rendering the form.
-	 * @var boolean
+	 * @var boolean $renderJSValidation
 	 */
 	private $_renderJSValidation    = true;
 
@@ -78,19 +78,19 @@ class PPI_Model_Form  {
 	private $_reservedKeys			= array('type', 'value', 'label', 'options', 'name');
 	/**
 	 * To determine if recaptcha has been set on one of the fields
-	 * @var boolean
+	 * @var boolean $_isReCaptcha
 	 */
 	private $_isReCaptcha			= false;
 
 	/**
 	 * Not sure what this is need to identify but i think it's the field name that's been assigned a recaptcha type
-	 * @var array
+	 * @var array $_captchaFields 
 	 */
 	private $_captchaFields			= array();
 
 	/**
 	 * To determine wether or not tineMCE has been initiated on one of the fields
-	 * @var boolean
+	 * @var boolean $_isTinyMCEEnabled 
 	 */
 	private $_isTinyMCEEnabled		= false;
 

@@ -271,7 +271,7 @@ class PPI_Model_User extends APP_Model_Application {
 	/**
 	 * Incomplete
 	 * @todo everything
-	 * @param $p_sRecoverCode
+	 * @param string $p_sRecoverCode Recovery code
 	 */
 	function verifyRecoverCode($p_sRecoverCode) {
 		$p_sRecoverCode = base64_decode(urldecode($p_sRecoverCode));

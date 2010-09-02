@@ -12,49 +12,44 @@
 class PPI_Model_ReCaptcha {
     /**
      * URI to the regular API
-     * @var string
+     * @var string API Server
      */
     const API_SERVER = 'http://api.recaptcha.net';
 
     /**
      * URI to the secure API
-     * @var string
+     * @var string API Server Secure
      */
     const API_SERVER_SECURE = 'https://api-secure.recaptcha.net';
 
     /**
      * URI to the verify server
-     * @var string
+     * @var string Verify Server
      */
     const VERIFY_SERVER = 'api-verify.recaptcha.net';
     
     /**
      * Public key used when displaying the captcha
-     * @var string
+     * @var string $_publicKey
      */
     protected $_publicKey = null;
 
     /**
      * Private key used when verifying user input
-     * @var string
+     * @var string $_privateKey
      */
     protected $_privateKey = null;
 
     /**
      * Ip address used when verifying user input
-     * @var string
+     * @var string $_ip
      */
     protected $_ip = null;
 
-    /**
-     * Response from the verify server
-     * @var Zend_Service_ReCaptcha_Response
-     */
-    protected $_response = null;
 
     /**
      * Parameters for the object
-     * @var array
+     * @var array $_params
      */
     protected $_params = array(
         'ssl' => false, /* Use SSL or not when generating the recaptcha */
@@ -67,7 +62,7 @@ class PPI_Model_ReCaptcha {
     /**
      * Options for tailoring reCaptcha
      * See the different options on http://recaptcha.net/apidocs/captcha/client.html
-     * @var array
+     * @var array $_options
      */
     protected $_options = array(
         'theme' => 'red',
@@ -160,8 +155,8 @@ class PPI_Model_ReCaptcha {
 
 	/**
 	 * Encodes the given data into a query string format
-	 * @param $data - array of string elements to be encoded
-	 * @return string - encoded request
+	 * @param array $data array of string elements to be encoded
+	 * @return string encoded request
 	 */
 	function queryStringEncode ($data) {
 		$req = '';

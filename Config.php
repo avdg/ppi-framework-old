@@ -6,28 +6,29 @@
  * @copyright Digiflex Development
  * @package   PPI
  * 
- * Inspiration from Zend Framework but minified and custom tweaked
+ * @notes Inspiration from Zend Framework but minified and custom 
+tweaked
  */
 class PPI_Config implements Countable, Iterator {
 
     /**
      * Iteration index
      *
-     * @var integer
+     * @var integer $_index
      */
     protected $_index;
 
     /**
      * Number of elements in configuration data
      *
-     * @var integer
+     * @var integer $_count
      */
     protected $_count;
 
     /**
      * Contains array of configuration data
      *
-     * @var array
+     * @var array $_data
      */
     protected $_data;
 
@@ -37,7 +38,7 @@ class PPI_Config implements Countable, Iterator {
      * if all sections were loaded, a string name if one section is loaded
      * and an array of string names if multiple sections were loaded.
      *
-     * @var mixed
+     * @var mixed $_loadedSection
      */
     protected $_loadedSection;
 
@@ -51,7 +52,7 @@ class PPI_Config implements Countable, Iterator {
      * PPI_Config also implements Countable and Iterator to
      * facilitate easy access to the data.
      *
-     * @param  array   $array
+     * @param  array $array
      * @return void
      */
     public function __construct(array $array) {

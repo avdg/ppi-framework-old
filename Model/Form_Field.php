@@ -15,13 +15,13 @@ class PPI_Model_Form_Field extends PPI_Model {
 	
 	/**
 	 * Primary key
-	 * @var string
+	 * @var string $_primary
 	 */
 	private $_primary = 'id';
 	
 	/**
 	 * Table Name
-	 * @var string
+	 * @var string $_name
 	 */
 	public $_name = 'ppi_fb_field';
 	

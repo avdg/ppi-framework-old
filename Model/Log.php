@@ -45,7 +45,7 @@
 		/**
 		 * Get email logs with an optional clause
 		 *
-		 * @param string|array $p_mWhere
+		 * @param string array $p_mWhere
 		 */
 		function getEmailLogs($p_mWhere = '') {
 			$oDB = new PPI_Model_Shared('ppi_email_log', 'id');
@@ -59,7 +59,7 @@
 		/**
 		 * Get system logs with an optional clause
 		 *
-		 * @param string|array $p_mWhere
+		 * @param string array $p_mWhere
 		 */
 		function getSystemLogs($p_mWhere = '') {
 			$oDB = new PPI_Model_Shared('ppi_system_log', 'id');

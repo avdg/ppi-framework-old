@@ -115,7 +115,7 @@ class PPI_Exception extends Exception {
 	/**
 	 * Show an error message
 	 *
-	 * @param unknown_type $p_sMsg
+	 * @param string $p_sMsg
 	 */
 	function show_error($p_sMsg) {
         $oConfig = PPI_Helper::getConfig();

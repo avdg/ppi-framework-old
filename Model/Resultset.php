@@ -45,9 +45,9 @@ class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
 	/**
 	 * Fetch the next row from the statement class
 	 *
-	 * @param null|string $p_sFetchMode
+	 * @param string $p_sFetchMode
 	 * @todo Make this an isset() lookup instead of in_array()
-	 * @return unknown
+	 * @return array
 	 */
 	function fetch($p_sFetchMode = null) {
 		// If a custom fetchmode was passed and it's a valid fetch mode then we use it otherwise defaulting to  $this->_fetchMode
@@ -58,7 +58,7 @@ class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
 	/**
 	 * Fetch all the records from the statement class
 	 *
-	 * @param null|string $p_sFetchMode
+	 * @param string $p_sFetchMode
 	 * @todo Make this an isset() lookup instead of in_array()
 	 * @return array
 	 */
@@ -98,7 +98,7 @@ class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
 
 	/**
 	 * Remove a record by offset
-	 * @param $offset
+	 * @param integer $offset
 	 */
 	function offsetUnset($offset) {
 

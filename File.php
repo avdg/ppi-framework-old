@@ -4,7 +4,7 @@ class File
 {
 	/**
 	 * Assignment of mime types to their default extensions
-	 * @var array
+	 * @var array $defaultExtensions
 	 */
 	static protected $defaultExtensions = array(
 	    'application/andrew-inset' => 'ez',
@@ -421,7 +421,7 @@ class File
 
 	/**
 	 * The absolute path to the file without dots
-	 * @var string
+	 * @var string $path
 	 */
 	protected $path;
 

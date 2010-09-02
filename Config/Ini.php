@@ -12,7 +12,7 @@ class PPI_Config_Ini extends PPI_Config
     /**
      * String that separates nesting levels of configuration data
      *
-     * @var string
+     * @var string $_nestChar
      */
     protected $_nestChar = '.';
 

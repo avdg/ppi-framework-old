@@ -17,7 +17,7 @@ class PPI_Model_Config extends PPI_Base {
 
     /**
      * Registry object provides storage for shared objects.
-     * @var PPI
+     * @var object $_instance
      */
     private static $_instance = null;
 

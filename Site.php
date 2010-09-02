@@ -23,9 +23,11 @@ class PPI_Site {
 
 	/**
 	 * Set the custom session object for the runtime
-	 * @param PPI_Session_Interface $oSessionHandler The Session Handler
+	 * @param object  $oSessionHandler The Session Handler. Instance 
+of PPI_Interfaces_Session
 	 */
-	function setSessionHandler(PPI_Session_Interface $oSessionHandler) {
+	function setSessionHandler(PPI_Interfaces_Session 
+$oSessionHandler) {
 
 	}
 

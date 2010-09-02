@@ -11,10 +11,9 @@
 class PPI_Registry extends ArrayObject  {
     /**
      * Registry object provides storage for shared objects.
-     * @var PPI_Registry
+     * @var object $_instance
      */
     private static $_instance = null;
-
     
     /**
      * Constructs a parent ArrayObject with default to allow acces as an object

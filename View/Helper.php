@@ -13,13 +13,13 @@ class PPI_View_Helper {
 	
 	/**
 	 * Stylesheet files to be rendered
-	 * @var array
+	 * @var array $_styleSheets
 	 */
 	protected static $_styleSheets = array();
 	
 	/**
 	 * Javascript files to be rendered
-	 * @var array
+	 * @var array $_javascriptFiles
 	 */
 	protected static $_javascriptFiles = array();	
 	

@@ -13,7 +13,7 @@ class PPI_Model_Form_Rule extends PPI_Model {
 	
 	/**
 	 * Table Name
-	 * @var string
+	 * @var string $_name
 	 */
 	public $_name = 'ppi_fb_rule';
 	
@@ -25,19 +25,19 @@ class PPI_Model_Form_Rule extends PPI_Model {
 
 	/**
 	 * The Form Name
-	 * @var string
+	 * @var string $_formName
 	 */
 	private $_formName = '';
 	
 	/**
 	 * The Form ID
-	 * @var integer
+	 * @var integer $_formID
 	 */
 	private $_formID;
 	
 	/**
 	 * The Form Fields
-	 * @var array
+	 * @var array $_formFields
 	 */
 	private $_formFields = array();
 	

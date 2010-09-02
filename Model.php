@@ -202,8 +202,8 @@ abstract class PPI_Model extends PPI_Base {
 
 	/**
 	 * Set a piece of meta data
-	 * @param $p_sName The name of the meta data
-	 * @param $p_mValue The value of the meta data
+	 * @param string $p_sName The name of the meta data
+	 * @param mixed $p_mValue The value of the meta data
 	 * @return Return the current class, useful for method chaining
 	 */
 	function __set($p_sName, $p_mValue) {
@@ -233,7 +233,7 @@ abstract class PPI_Model extends PPI_Base {
 
 	/**
 	 * Obtain the value of the meta data set
-	 * @param $p_sName
+	 * @param string $p_sName The Property Name
 	 * @return mixed
 	 */
 	function __get($p_sName) {
@@ -281,8 +281,8 @@ abstract class PPI_Model extends PPI_Base {
 	 * This will be called unless the update function has been overloaded by the applications model
 	 * If the record doesn't exist, then we will perform the insert function
 	 * This will be called unless the insert function has been overloaded by the applications model
-	 * @param $p_aRecord array
-	 * @param $p_aOptions array
+	 * @param array $p_aRecord
+	 * @param array $p_aOptions
 	 * @throws PDO_Exception
 	 * @return integer
 	 */
@@ -395,7 +395,7 @@ abstract class PPI_Model extends PPI_Base {
 
 	/**
 	 * This function is used to backtick all fields
-	 * @param $p_aKeys array The array of key names
+	 * @param array $p_aKeys The array of key names
 	 * @return array
 	 */
 	function parse_reserved_keys($p_aKeys) {
@@ -409,10 +409,10 @@ abstract class PPI_Model extends PPI_Base {
 	 * This function is the same as getList() however it will return you its first row directly as an array
 	 * @see $this->getList()
 	 * @todo Perform a fetchMode check to check the return type
-	 * @param array|string $p_mFilter The filter.
-	 * @param $p_sOrder The order clause
-	 * @param $p_iLimit The limit clause
-	 * @param $p_aExtras
+	 * @param mixed $p_mFilter The filter.
+	 * @param string $p_sOrder The order clause
+	 * @param integer $p_iLimit The limit clause
+	 * @param array $p_aExtras
 	 * @return array
 	 */
 	function getRecord($p_mFilter, $p_sOrder = "", $p_iLimit = "", $p_sGroup = '') {
@@ -424,10 +424,10 @@ abstract class PPI_Model extends PPI_Base {
 	 * From the instance information, retreives information from the table.
 	 * Building up query of orders, limits and clauses it returns a data structure of the records found.
 	 * If you do not have instance information, or would like to access another table then $p_aExtras should be populated.
-	 * @param $p_mFilter string WHERE
-	 * @param $p_sOrder string ORDER BY
-	 * @param $p_iLimit string LIMIT
-	 * @param $p_sGroup string GROUP BY
+	 * @param string $p_mFilter WHERE
+	 * @param string $p_sOrder ORDER BY
+	 * @param string $p_iLimit LIMIT
+	 * @param string $p_sGroup GROUP BY
 	 * @throws PPI_Exception
 	 * @throws PDO_Exception
 	 * @return array
@@ -481,8 +481,9 @@ abstract class PPI_Model extends PPI_Base {
 
 	/**
 	 * This will return you one row by getting a record by its primary key.
-	 * @param $search integer
-	 * @param $p_bSetMetaData Default is false. If true will set the meta data upon successfull fetch() of the record
+	 * @param integer $search
+	 * @param boolean $p_bSetMetaData Default is false. If true will 
+set the meta data upon successfull fetch() of the record
 	 * @return array
 	 */
 	function find($search, $p_bSetMetaData = false) {
@@ -515,7 +516,7 @@ abstract class PPI_Model extends PPI_Base {
 
 	/**
 	 * This sets the fetch mode for PDO to retreive records
-	 * @param $p_sMode string
+	 * @param string $p_sMode
 	 * @return void
 	 */
 	function setFetchMode($p_sMode) {
@@ -541,8 +542,9 @@ abstract class PPI_Model extends PPI_Base {
 
 	/**
 	 * Create an IN statement from an input such as a string or an array
-	 * @param string|array $p_mValues The values to be added to the IN()
-	 * @return boolean|string On error return false. On sucess return the IN() filled string
+	 * @param mixed $p_mValues The values to be added to the IN()
+	 * @return mixed On error return false. On sucess return the 
+IN() filled string
 	 */
 	function makeIN($p_mValues = '') {
 
@@ -619,7 +621,7 @@ abstract class PPI_Model extends PPI_Base {
 	}
 	/**
 	 * This checks if the table for your model exists
-	 * @param $p_sTableName string
+	 * @param string $p_sTableName
 	 * @return boolean
 	 */
 	function isTableExist($p_sTableName) {
@@ -628,7 +630,7 @@ abstract class PPI_Model extends PPI_Base {
 
 	/**
 	 * This checks if a DB exists or not.
-	 * @param $p_sDBName string
+	 * @param string $p_sDBName
 	 * @return boolean
 	 */
 	function isDBExist($p_sDBName) {
@@ -666,8 +668,8 @@ abstract class PPI_Model extends PPI_Base {
 	/**
 	 * Delete a record by clause
 	 *
-	 * @param string|array $p_mClause The where clause
-	 * @return number of rows affected
+	 * @param mixed $p_mClause The where clause
+	 * @return integer The number of rows affected
 	 */
 	function delRecord($p_mClause = null) {
 		$aWhere = ($p_mClause !== null) ? array_merge(array(), (array) $p_mClause) : array();

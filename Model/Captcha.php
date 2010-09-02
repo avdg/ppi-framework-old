@@ -17,23 +17,20 @@ define('SI_IMAGE_GIF',  3);
 /**
  * Securimage CAPTCHA Class.
  *
- * @package    Securimage
- * @subpackage classes
- *
  */
 class PPI_Model_Captcha {
 
   /**
    * The desired width of the CAPTCHA image.
    *
-   * @var int
+   * @var int $_image_width
    */
   var $image_width = 175;
 
   /**
    * The desired width of the CAPTCHA image.
    *
-   * @var int
+   * @var int $image_height
    */
   var $image_height = 45;
 
@@ -41,14 +38,14 @@ class PPI_Model_Captcha {
    * The image format for output.<br />
    * Valid options: SI_IMAGE_PNG, SI_IMAGE_JPG, SI_IMAGE_GIF
    *
-   * @var int
+   * @var int $image_type
    */
   var $image_type = SI_IMAGE_PNG;
 
   /**
    * The length of the code to generate.
    *
-   * @var int
+   * @var int $code_length
    */
   var $code_length = 4;
 
@@ -57,7 +54,7 @@ class PPI_Model_Captcha {
    * Letters are converted to uppercase.<br />
    * The font must support the letters or there may be problematic substitutions.
    *
-   * @var string
+   * @var string $chatset
    */
   var $charset = 'ABCDEFGHKLMNPRSTUVWYZ23456789';
   //var $charset = '0123456789';
@@ -72,7 +69,7 @@ class PPI_Model_Captcha {
   /**
    * True to use a word list file instead of a random code
    *
-   * @var bool
+   * @var bool $use_wordlist
    */
   var $use_wordlist  = true;
 
@@ -80,7 +77,7 @@ class PPI_Model_Captcha {
    * Whether to use a GD font instead of a TTF font.<br />
    * TTF offers more support and options, but use this if your PHP doesn't support TTF.<br />
    *
-   * @var boolean
+   * @var boolean $use_gd_font
    */
   var $use_gd_font = false;
 
@@ -89,7 +86,7 @@ class PPI_Model_Captcha {
    * Internal gd fonts can be loaded by their number.<br />
    * Alternatively, a file path can be given and the font will be loaded from file.
    *
-   * @var mixed
+   * @var mixed $gd_font_file
    */
   var $gd_font_file = 'captcha-font-bubblebath.gdf';
 
@@ -98,7 +95,7 @@ class PPI_Model_Captcha {
    * This does not control the size of the font because that is determined by the GD font itself.<br />
    * This is used to aid the calculations of positioning used by this class.<br />
    *
-   * @var int
+   * @var int $gd_font_size
    */
   var $gd_font_size = 20;
 
@@ -107,7 +104,7 @@ class PPI_Model_Captcha {
   /**
    * The path to the TTF font file to load.
    *
-   * @var string
+   * @var string $ttf_file
    */
   var $ttf_file = "captcha-font-elephant.ttf";
 
@@ -115,7 +112,7 @@ class PPI_Model_Captcha {
    * The font size.<br />
    * Depending on your version of GD, this should be specified as the pixel size (GD1) or point size (GD2)<br />
    *
-   * @var int
+   * @var int $font_size
    */
   var $font_size = 24;
 
@@ -124,7 +121,7 @@ class PPI_Model_Captcha {
    * Higher values represent a counter-clockwise rotation.<br />
    * For example, a value of 90 would result in bottom-to-top reading text.
    *
-   * @var int
+   * @var int $text_angle_minimum
    */
   var $text_angle_minimum = -20;
 
@@ -133,7 +130,7 @@ class PPI_Model_Captcha {
    * Higher values represent a counter-clockwise rotation.<br />
    * For example, a value of 90 would result in bottom-to-top reading text.
    *
-   * @var int
+   * @var int $text_angle_maximum
    */
   var $text_angle_maximum = 20;
 
@@ -141,7 +138,7 @@ class PPI_Model_Captcha {
    * The X-Position on the image where letter drawing will begin.<br />
    * This value is in pixels from the left side of the image.
    *
-   * @var int
+   * @var int $text_x_start
    */
   var $text_x_start = 8;
 
@@ -151,7 +148,7 @@ class PPI_Model_Captcha {
    * This should be <i>at least</i> as wide as a font character.<br />
    * Small values can cause letters to be drawn over eachother.<br />
    *
-   * @var int
+   * @var int $text_minimum_distance
    */
   var $text_minimum_distance = 30;
 
@@ -161,7 +158,7 @@ class PPI_Model_Captcha {
    * This should be <i>at least</i> as wide as a font character.<br />
    * Small values can cause letters to be drawn over eachother.<br />
    *
-   * @var int
+   * @var int $text_maximum_distance
    */
   var $text_maximum_distance = 33;
 
@@ -170,7 +167,7 @@ class PPI_Model_Captcha {
    * This should be specified in HTML hex format.<br />
    * Make sure to include the preceding # sign!
    *
-   * @var string
+   * @var string $image_bg_color
    */
   var $image_bg_color = "#e3daed";
 
@@ -181,7 +178,7 @@ class PPI_Model_Captcha {
    * Specify the color in HTML hex format with preceding # sign
    *
    * @see Securimage::$use_multi_text
-   * @var string
+   * @var string $text_color 
    */
   var $text_color = "#ff0000";
 
@@ -189,7 +186,7 @@ class PPI_Model_Captcha {
    * Set to true to use multiple colors for each character.
    *
    * @see Securimage::$multi_text_color
-   * @var boolean
+   * @var boolean  $use_multi_text
    */
   var $use_multi_text = true;
 
@@ -198,7 +195,7 @@ class PPI_Model_Captcha {
    * Separate each possible color with commas.<br />
    * Be sure to precede each value with the # sign.
    *
-   * @var string
+   * @var string  $multi_text_color
    */
   var $multi_text_color = "#0a68dd,#f65c47,#8d32fd";
 
@@ -206,7 +203,7 @@ class PPI_Model_Captcha {
    * Set to true to make the characters appear transparent.
    *
    * @see Securimage::$text_transparency_percentage
-   * @var boolean
+   * @var boolean $use_transparent_text
    */
   var $use_transparent_text = true;
 
@@ -215,7 +212,7 @@ class PPI_Model_Captcha {
    * A value of 0 is completely opaque, 100 is completely transparent (invisble)
    *
    * @see Securimage::$use_transparent_text
-   * @var int
+   * @var int $text_transparency_percentage 
    */
   var $text_transparency_percentage = 15;
 
@@ -228,7 +225,7 @@ class PPI_Model_Captcha {
    * @see Securimage::$line_distance
    * @see Securimage::$line_thickness
    * @see Securimage::$draw_lines_over_text
-   * @var boolean
+   * @var boolean $draw_lines
    */
   var $draw_lines = true;
 
@@ -237,7 +234,7 @@ class PPI_Model_Captcha {
    * Use HTML hex format with preceding # sign.
    *
    * @see Securimage::$draw_lines
-   * @var string
+   * @var string $line_color
    */
   var $line_color = "#80BFFF";
 
@@ -245,7 +242,7 @@ class PPI_Model_Captcha {
    * How far apart to space the lines from eachother in pixels.
    *
    * @see Securimage::$draw_lines
-   * @var int
+   * @var int  $line_distance
    */
   var $line_distance = 5;
 
@@ -255,7 +252,7 @@ class PPI_Model_Captcha {
    *
    * @see Securimage::$draw_lines
    * @see Securimage::$line_distance
-   * @var int
+   * @var int $line_thickness
    */
   var $line_thickness = 1;
 
@@ -263,7 +260,7 @@ class PPI_Model_Captcha {
    * Set to true to draw angled lines on the image in addition to the horizontal and vertical lines.
    *
    * @see Securimage::$draw_lines
-   * @var boolean
+   * @var boolean $draw_angled_lines
    */
   var $draw_angled_lines = false;
 
@@ -272,7 +269,7 @@ class PPI_Model_Captcha {
    * If fales lines will be drawn before putting the text on the image.<br />
    * This can make the image hard for humans to read depending on the line thickness and distance.
    *
-   * @var boolean
+   * @var boolean $draw_lines_over_text
    */
   var $draw_lines_over_text = false;
 
@@ -281,7 +278,7 @@ class PPI_Model_Captcha {
    * Two arced lines will be drawn over the text on each side of the image.<br />
    * This is currently expirimental and may be off in certain configurations.
    *
-   * @var boolean
+   * @var boolean $arc_linethrough
    */
   var $arc_linethrough = true;
 
@@ -290,7 +287,7 @@ class PPI_Model_Captcha {
    * Use HTML hex notation with preceding # sign, and separate each value with a comma.<br />
    * This should be similar to your font color for single color images.
    *
-   * @var string
+   * @var string $arc_line_colors
    */
   var $arc_line_colors = "#8080ff";
 
@@ -299,7 +296,7 @@ class PPI_Model_Captcha {
    * Name Files  [A-Z0-9].wav
    *
    * @since 1.0.1
-   * @var string
+   * @var string $audio_path
    */
   var $audio_path = './audio/';
 
@@ -311,7 +308,7 @@ class PPI_Model_Captcha {
    * The gd image resource.
    *
    * @access private
-   * @var resource
+   * @var resource $im
    */
   var $im;
 
@@ -319,7 +316,7 @@ class PPI_Model_Captcha {
    * The background image resource
    *
    * @access private
-   * @var resource
+   * @var resource $bgimg
    */
   var $bgimg;
 
@@ -327,7 +324,7 @@ class PPI_Model_Captcha {
    * The code generated by the script
    *
    * @access private
-   * @var string
+   * @var string $code
    */
   var $code;
 
@@ -335,7 +332,7 @@ class PPI_Model_Captcha {
    * The code that was entered by the user
    *
    * @access private
-   * @var string
+   * @var string $code_entered;
    */
   var $code_entered;
 
@@ -343,7 +340,7 @@ class PPI_Model_Captcha {
    * Whether or not the correct code was entered
    *
    * @access private
-   * @var boolean
+   * @var boolean $correct_code
    */
   var $correct_code;
 

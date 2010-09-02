@@ -67,8 +67,8 @@ class PPI_Input {
 	 * Can specify a key and return that, else return the whole $_POST array
 	 *
 	 * @param string [$p_sIndex] Specific $_POST key
-	 * @param null|mixed [$p_sDefaultValue] null if not specified, mixed otherwise
-	 * @return string|array
+	 * @param mixed [$p_sDefaultValue] null if not specified, mixed otherwise
+	 * @return string array
 	 */
 	function post($p_sIndex = null, $p_sDefaultValue = null, $p_aOptions = null) {
 		if($p_sIndex === null) {

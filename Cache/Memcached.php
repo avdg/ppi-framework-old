@@ -55,8 +55,8 @@ class PPI_Cache_Memcached implements PPI_Interface_Cache {
 	/**
 	 * Add a memcached server to connect to
 	 * @param string $host The Hostname
-	 * @param numeric $port The Port
-	 * @param $weight
+	 * @param integer $port The Port
+	 * @param integer $weight The Weight
 	 */
 	function addServer($host, $port = 11211, $weight = 10) {
 		$this->_handler->addServer($host, $port, true, $weight);

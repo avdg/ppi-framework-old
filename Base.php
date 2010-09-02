@@ -11,7 +11,7 @@ class PPI_Base {
 	
 	/**
 	 * Class Name Instances
-	 * @var unknown_type
+	 * @var object $_instances
 	 */
 	protected static $_instances = array();
 

@@ -7,7 +7,7 @@
  * @copyright Digiflex Development
  * @package   PPI
  * 
- * Security class for PHP
+ * @notes Security class for PHP
  *
  */
 class PPI_Security {

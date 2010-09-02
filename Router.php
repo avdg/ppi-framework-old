@@ -7,7 +7,7 @@
  * @copyright Digiflex Development
  * @package   PPI
  * 
- * Routing class for PPI.
+ * @notes Routing class for PPI.
  *
  */
 class PPI_Router {
@@ -15,14 +15,14 @@ class PPI_Router {
 	/**
 	 * The file to get the routes from
 	 *
-	 * @var string|null
+	 * @var string $_routingFile
 	 */
 	static $_routingFile = null;
 	
 	/**
 	 * The filename of the cache file on disk of the routes
 	 * @todo if we are using raw PHP then we don't need to cache
-	 * @var string|null
+	 * @var string $_routingCachingFile
 	 */
 	static $_routingCachingFile = null;
 	

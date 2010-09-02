@@ -16,20 +16,20 @@ class PPI_Session {
     /**
      * Default value for the session name for the app.
      * This can be overritten by the config
-     * @var string
+     * @var string $_sessionName
      */
 	private $_sessionName = 'myproject';
 
 	/**
 	 * The default namespace name for the framework.
 	 * This can be overitten by the config: system.sessionNamespace
-	 * @var string
+	 * @var string $_frameworkSessionName
 	 */
     private $_frameworkSessionName = '__PPI';
 
     /**
      * The PPI_Session instance
-     * @var object
+     * @var object $_instance
      */
     private static $_instance = null;
 
@@ -38,7 +38,7 @@ class PPI_Session {
      *
      */
     function __construct() {
-    	global $oConfig;
+    	$oConfig = PPI_Helper::getConfig();
     	if(isset($oConfig->system->sessionNamespace)) {
         	$this->_sessionName = $this->_frameworkSessionName . '_' . $oConfig->system->sessionNamespace;
     	}
@@ -54,7 +54,7 @@ class PPI_Session {
 	 * @return void
 	 */
 	function setAuthData($mData) {
-		global $oConfig;
+		$oConfig = PPI_Helper::getConfig();
 		if(isset($oConfig->system->user_session_key)) {
 			$this->_authKeyName = $oConfig->system->user_session_key;
 		}
@@ -82,7 +82,7 @@ class PPI_Session {
 
 	/**
 	 * Check if a key exists
-	 * @param $p_sKey
+	 * @param string $p_sKey The key
 	 * @return boolean
 	 */
 	function exists($p_sKey) {
@@ -105,8 +105,8 @@ class PPI_Session {
 	 * $session->remove('userInfo', 'email');
 	 * </code>
 	 * Remove a specific key, or just data within that key.
-	 * @param $p_sKey The initial key set
-	 * @param $p_sName A key within the initial key set. 
+	 * @param string $p_sKey The initial key set
+	 * @param string $p_sName A key within the initial key set. 
 	 * @return void
 	 */
 	function remove($p_sKey, $p_sName = null) {

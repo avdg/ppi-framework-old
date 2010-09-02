@@ -7,7 +7,7 @@
  * @copyright Digiflex Development
  * @package   PPI
  * 
- * Main Helper Class
+ * @notes Main Helper Class
  * 
  */
 class PPI_Helper {

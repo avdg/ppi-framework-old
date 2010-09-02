@@ -156,7 +156,7 @@ class PPI_Model_Select {
 
 	/**
 	 * Set the LIMIT
-	 * @param integer|string $limit
+	 * @param string $limit
 	 */
 	function limit($limit) {
 		$this->_limit = $limit;

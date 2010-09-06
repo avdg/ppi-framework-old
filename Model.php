@@ -5,7 +5,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   Model
  */
 
 abstract class PPI_Model extends PPI_Base {
@@ -149,12 +149,16 @@ abstract class PPI_Model extends PPI_Base {
 	 * @return array
 	 */
 	function query($p_sQuery, $p_bLogQuery = true) {
-		if($p_bLogQuery) {
-			$this->appendQueryList($p_sQuery);
+		try {
+			if($p_bLogQuery) {
+				$this->appendQueryList($p_sQuery);
+			}
+			$ret = $this->rHandler->prepare($p_sQuery);
+			$ret->execute();
+			return new PPI_Model_Resultset($ret);
+		} catch(PDOException $e) {
+			throw new PPI_Exception($e->getMessage());
 		}
-		$ret = $this->rHandler->prepare($p_sQuery);
-		$ret->execute();
-		return new PPI_Model_Resultset($ret);
 	}
 
 	/**
@@ -487,20 +491,23 @@ set the meta data upon successfull fetch() of the record
 	 * @return array
 	 */
 	function find($search, $p_bSetMetaData = false) {
-        $sQuery = 'SELECT * FROM `'.$this->sTableName. '` WHERE `' . $this->sTableIndex . '` = ' . $this->quote($search);
-		$oResult = $this->rHandler->prepare($sQuery);
-        $this->appendQueryList($sQuery);
-		$oResult->execute();
-		$aRecord = $oResult->fetch($this->sFetchMode);
-		if($p_bSetMetaData !== false && $aRecord !== false) {
-			/*
-			if(isset($aRecord['rHandler'])) {
-				unset($aRecord['rHandler']);
+		try {
+			$sQuery = 'SELECT * FROM `'.$this->sTableName. '` WHERE `' . $this->sTableIndex . '` = ' . $this->quote($search);
+			$oResult = $this->rHandler->prepare($sQuery);
+			$this->appendQueryList($sQuery);
+			$oResult->execute();
+			$aRecord = $oResult->fetch($this->sFetchMode);
+			if($p_bSetMetaData !== false && $aRecord !== false) {
+				/*
+				if(isset($aRecord['rHandler'])) {
+					unset($aRecord['rHandler']);
+				}
+				*/
+				$this->setMetaAttributes($aRecord);
 			}
-			*/
-			$this->setMetaAttributes($aRecord);
+		} catch(PDOException $e) {
+			throw new PPI_Exception($e->getMessage());
 		}
-
 		return ($aRecord !== false && !empty($aRecord)) ? $aRecord : array();
 	}
 

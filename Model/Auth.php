@@ -6,7 +6,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   Model
  */
 
 class PPI_Model_Auth extends PPI_Model {

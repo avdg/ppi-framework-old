@@ -6,7 +6,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   Cache
  */
 
 class PPI_Cache_Memcached implements PPI_Interface_Cache {
@@ -14,6 +14,9 @@ class PPI_Cache_Memcached implements PPI_Interface_Cache {
 	private $_handler;
 	
 	function __construct() {
+		if(!extension_loaded('memcached')) {
+			throw new PPI_Exception('Cannot use memcached, extension not loaded');
+		}
 		$this->_handler = new Memcached();
 	}
 	

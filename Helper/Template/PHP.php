@@ -6,7 +6,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   View
  */
 
 class PPI_Helper_Template_PHP implements PPI_Interface_Template {

@@ -6,7 +6,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   Email
  */
 
 class PPI_Model_Email_Template extends PPI_Model {

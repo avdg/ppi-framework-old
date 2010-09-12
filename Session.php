@@ -5,8 +5,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
- * @subpackage core
+ * @package   Session
  */
 
 class PPI_Session {

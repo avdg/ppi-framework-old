@@ -1,4 +1,13 @@
-	<?php
+<?php
+
+/**
+ *
+ * @version   1.0
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @copyright Digiflex Development
+ * @package   Cache
+ */
 class PPI_Cache {
 
 	private static $_handler = null;	

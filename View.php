@@ -5,7 +5,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   View
  */
 class PPI_View {
 	// functions that will be contained in here are to check
@@ -92,8 +92,7 @@ class PPI_View {
 	/**
 	 * Initialisation for the renderer, assignment of default values, boot up of the master template
 	 *
-	 * @param object $oTpl Templating renderer. Instance of 
-PPI_Interface_Template
+	 * @param object $oTpl Templating renderer. Instance of PPI_Interface_Template
 	 * @param string $p_tplFile The template file to render
 	 * @param array $p_tplParams Optional user defined parameres
 	 */

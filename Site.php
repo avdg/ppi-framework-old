@@ -11,6 +11,7 @@ class PPI_Site {
 
 	public $_configFile = null;
 	public $_templateName = null;
+	public $_dispatcher = null;
 
 	/**
 	 * Override the config file
@@ -23,11 +24,9 @@ class PPI_Site {
 
 	/**
 	 * Set the custom session object for the runtime
-	 * @param object  $oSessionHandler The Session Handler. Instance 
-of PPI_Interfaces_Session
+	 * @param object  $oSessionHandler The Session Handler. Instance of PPI_Interfaces_Session
 	 */
-	function setSessionHandler(PPI_Interfaces_Session 
-$oSessionHandler) {
+	function setSessionHandler(PPI_Interfaces_Session $oSessionHandler) {
 
 	}
 
@@ -47,6 +46,20 @@ $oSessionHandler) {
 	 */
 	function setRoutesFile($p_sFilename) {
 		$this->_routesFile = $p_sFilename;
+	}
+	
+	
+	function setErrorLevel() {
+		// Get code from laptop
+	}
+	
+	/**
+	 * Dispatcher override
+	 * @param $p_oDispatcher
+	 * @return void
+	 */
+	function setDispatcher($p_oDispatcher) {
+		$this->_dispatcher = $p_oDispatcher;
 	}
 
 

@@ -80,10 +80,7 @@ class PPI_Base {
 			exit;
 		}
 
-		if($p_oSite === null) {
-			$oHelper = new PPI_Dispatch_Helper_Standard();
-		}
-		$dispatch = new PPI_Dispatch($oHelper);
+		$dispatch = new PPI_Dispatch($p_oSite === null ? new PPI_Dispatch_Helper_Standard() : $p_oSite->_dispatcher);
 		// Set the dispatch object in the registry for future use.
 		PPI_Registry::getInstance()->set('PPI_Dispatch', $dispatch);
 		

@@ -6,16 +6,10 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   Cache
+ * @package   PPI
  */
 
-class PPI_Cache_Apc implements PPI_Interface_Cache {
-	
-	function __construct() {
-		if(!extension_loaded('apc')) {
-			throw new PPI_Exception('Cannot use memcached, extension not loaded');
-		}	
-	}
+class PPI_Cache_Apc implements PPI_Cache_Interface {
 	
 	/**
 	 * Get a value from cache

@@ -5,11 +5,10 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   View
+ * @package   PPI
  */
 class PPI_View {
-	// functions that will be contained in here are to check
-	// if the header has already been loaded, or if the footer has already been loaded
+
 	protected $_viewParams = array();
 	
 	/**
@@ -72,7 +71,17 @@ class PPI_View {
 				break;
 		}
 
-		$this->setupRenderer($oTpl, $p_tplFile, $p_tplParams);
+		$this->setupRenderer($oTpl, $p_tplFile, $p_tplParams, $oConfig);
+	}
+	
+	/**
+	 * Add a var to the view params
+	 *
+	 * @param string $p_sKey
+	 * @param mixed $p_mVal
+	 */
+	function set($p_sKey, $p_mVal) {
+		$this->_viewParams[$p_sKey] = $p_mVal;
 	}
 
 	/**
@@ -82,7 +91,7 @@ class PPI_View {
 	 * @param array $p_tplParams Optional user defined params
 	 */
 	function loadSmarty($p_tplFile, $p_tplParams = array()) {
-		$this->setupRenderer(new PPI_Helper_Template_Smarty(), $p_tplFile, $p_tplParams);
+		$this->setupRenderer(new PPI_Helper_Template_Smarty(), $p_tplFile, $p_tplParams, PPI_Helper::getConfig());
 	}
 
 	function useRenderer($p_sRendererName) {
@@ -96,9 +105,8 @@ class PPI_View {
 	 * @param string $p_tplFile The template file to render
 	 * @param array $p_tplParams Optional user defined parameres
 	 */
-	function setupRenderer(PPI_Interface_Template $oTpl, $p_tplFile, $p_tplParams = array()) {
+	function setupRenderer(PPI_Interface_Template $oTpl, $p_tplFile, $p_tplParams = array(), $p_oConfig) {
 		
-		$oConfig  = PPI_Helper::getConfig();
 		$oSession = PPI_Helper::getSession();
 
 		// Default View Values
@@ -113,29 +121,32 @@ class PPI_View {
 		$sPath = (defined('PLUGINVIEWPATH') ? PLUGINVIEWPATH : APPFOLDER . 'View/');
 
 		// View Directory Preparation By Theme
-		$sViewDir = $sPath . $oConfig->layout->view_theme . '/';
+		$sViewDir = $sPath . $p_oConfig->layout->view_theme . '/';
 
 		// Get the default view vars that come when you load a view page.
 		$defaultViewVars = $this->getDefaultRenderValues(array(
 			'viewDir'    => $sViewDir,
 			'actionFile' => $p_tplFile
-		));
+		), $p_oConfig);
+
 		foreach($defaultViewVars as $varName => $viewVar) {
 			$oTpl->assign($varName, $viewVar);
 		}
 
 		// Flash Messages
-		if(!isset($oConfig->layout->useMessageFlash) || 
-			($oConfig->layout->useMessageFlash && $oConfig->layout->useMessageFlash == true)) {
+		if(!isset($p_oConfig->layout->useMessageFlash) || 
+			($p_oConfig->layout->useMessageFlash && $p_oConfig->layout->useMessageFlash == true)) {
 			$oTpl->assign('ppiFlashMessage', PPI_Input::getFlashMessage());
 			PPI_Input::clearFlashMessage();
 		}
+		
+
 
 		// Master template override from config or setTemplateFile()
 		if($this->_templateOverride !== null) {
 			$sMasterTemplate = $this->_templateOverride;
-		} elseif(isset($oConfig->layout->masterFile) && $oConfig->layout->masterFile != '') {
-			$sMasterTemplate = $oConfig->layout->masterFile;
+		} elseif(isset($p_oConfig->layout->masterFile) && $p_oConfig->layout->masterFile != '') {
+			$sMasterTemplate = $p_oConfig->layout->masterFile;
 		} else {
 			$sMasterTemplate = $oTpl->getDefaultMasterTemplate();
 		}
@@ -149,8 +160,8 @@ class PPI_View {
 	 * @param array $options
 	 * @return array
 	 */
-	function getDefaultRenderValues(array $options) {
-		$oConfig   = PPI_Helper::getConfig();
+	function getDefaultRenderValues(array $options, $p_oConfig) {
+
 		$authData  = PPI_Helper::getSession()->getAuthData();
 		$oDispatch = PPI_Helper::getDispatcher();
 		$request   = array(
@@ -159,38 +170,29 @@ class PPI_View {
 		);
 		return array(
 			'isLoggedIn'      => !empty($authData),
-			'config'          => $oConfig,
+			'config'          => $p_oConfig,
 			'request'         => $request,			
 			'input'           => PPI_Helper::getInput(),
 			'authInfo'        => $authData,
-			'baseUrl'         => $oConfig->system->base_url,
+			'baseUrl'         => $p_oConfig->system->base_url,
 			'fullUrl'         => PPI_Helper::getFullUrl(),
 			'currUrl'         => PPI_Helper::getCurrUrl(),
 			'viewDir'         => $options['viewDir'],
 			'actionFile'      => $options['actionFile'],
+			'responseCode'    => PPI_Helper::getRegistry()->get('PPI_View::httpResponseCode', 200),
 			'stylesheetFiles' => PPI_View_Helper::getStylesheets(),
 			'javascriptFiles' => PPI_View_Helper::getJavascripts(),
 			'aAuthInfo'       => $authData, // Do not use, just BC stuff.			
 			'bIsLoggedIn'     => !empty($authData), // Do not use, just BC stuff			
-			'oConfig'         => $oConfig, // Do not use, just BC stuff
+			'oConfig'         => $p_oConfig, // Do not use, just BC stuff
 		);
-	}
-
-
-	/**
-	 * To set a view variable to be rendered. (TBC)
-	 * @param string $key Key name
-	 * @param mixed $val Value
-	 */
-	function setVar($key, $val) {
-		$this->_viewParams[$key] = $val;
 	}
 
 	/**
 	 * To get a view variable that is set to get rendered. (TBC)
 	 * @param string $key The Key
 	 */
-	function getVar($key) {
+	function get($key) {
 		if(!array_key_exists($key, $this->_viewParams)) {
 			throw new PPI_Exception('Unable to find View Key: '.$key);
 		}

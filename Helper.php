@@ -67,7 +67,7 @@ class PPI_Helper {
 	 * @return object
 	 */
 	static function getConfig() {
-		return self::getObjectFromRegistry('PPI_Config');
+		return PPI_Registry::getInstance()->get('PPI_Config');
 	}
 
 	/**
@@ -76,7 +76,7 @@ class PPI_Helper {
 	 * @return object
 	 */
 	static function getDispatcher() {
-		return self::getObjectFromRegistry('PPI_Dispatch');
+		return PPI_Registry::getInstance()->get('PPI_Dispatch');
 	}
 	
 	/**
@@ -96,6 +96,15 @@ class PPI_Helper {
 	static function getSession() {
 		return self::getObjectFromRegistry('PPI_Session');
 	}
+	
+	/**
+	 * Get the cache object
+	 *
+	 * @return object
+	 */
+	static function getCache() {
+		return self::getObjectFromRegistry('PPI_Cache');
+	}	
 	
 	/**
 	 * Get the router object

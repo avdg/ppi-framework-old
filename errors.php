@@ -10,29 +10,16 @@
  */
 
 
-// never throw an exception in this file or any functions that it calls.
-// This results in an infinite exception loop and you get a PHP fatal error.
-
-function show_404 ($sLocation = "") {
-	$oErr =  new PPI_Exception ();
-	$oErr->show_404 ($sLocation);
-	return;
-}
-
-function show_403 ($sMessage = "") {
-	$oErr =  new PPI_Exception ();
-	$oErr->show_403 ($sMessage);
-	return;
-}
-
-function show_error ($sError = "") {
-	$oErr =  new PPI_Exception();
-	$oErr->show_error ($sError);
-	return;
-}
-
+/**
+ * The default PPI error handler, will play with some data then throw an exception, thus the set_exception_handler callback is ran
+ *
+ * @param string $errno The error level (number)
+ * @param string $errstr The error message
+ * @param string $errfile The error filename
+ * @param string $errline The error line
+ * @throws PPI_Exception
+ */
 function ppi_error_handler($errno = '', $errstr = "", $errfile = "", $errline = "") {
-	global $ppi_exception_thrown, $sql_queries;
 	$ppi_exception_thrown = true;
 	$error = array ();
 	$error ['code']   	= $errno;
@@ -48,14 +35,16 @@ function ppi_error_handler($errno = '', $errstr = "", $errfile = "", $errline = 
 	$oException->show_exceptioned_error($error);
 }
 
+/**
+ * The default exception handler
+ *
+ * @param object $oException The exception object
+ * @return void
+ */
 function ppi_exception_handler($oException) {
-
-	$oConfig = PPI_Helper::getConfig();
-
 	if(!$oException instanceof Exception) {
 		return false;
 	}
-
 	$error = array();
 	foreach(array('code', 'message', 'file', 'line', 'traceString') as $field) {
 		$fieldName = "_$field";
@@ -68,29 +57,45 @@ function ppi_exception_handler($oException) {
 	}
 
 	try {
+		
+		if(!PPI_Registry::getInstance()->exists('PPI_Config')) {
+			$oException->show_exceptioned_error($error);
+			return;
+		}
 
+		$oConfig = PPI_Helper::getConfig();		
 		$error['sql'] = PPI_Helper::getRegistry()->get('PPI_Model::PPI_Model_Queries', array());
 
 		// email the error with the backtrace information to the developer
 		if(!isset($oConfig->system->log_errors) || $oConfig->system->log_errors != false) {
-			// write the error to the php error log
-			writeErrorToLog($error['message'] . ' in file: '.$error['file'] . ' on line: '.$error['line']);
+			
 			// get the email contents
 			$emailContent = $oException->getErrorForEmail($error);
+			
 			$oLog = new PPI_Model_Log();
 			$oLog->addExceptionLog(array(
 				'code' 		=> $oException->_code,
 				'message' 	=> $oException->_message,
 				'file' 		=> $oException->_file,
 				'line'		=> $oException->_line,
-				'content'	=> $emailContent
+				'backtrace' => $error['backtrace'],
+				'post'      => serialize($_POST),
+				'cookie'    => serialize($_COOKIE),
+				'get'       => serialize($_GET),
+				'session'   => serialize($_SESSION),
+				'content'	=> $emailContent								
 			));
+		
 			if($oConfig->system->email_errors) {
 				//@mail($oConfig->system->developer_email, 'PHP Exception For '.getHostname(), $emailContent);
 				//include CORECLASSPATH.'mail.php';
 				//$mail = new Mail();
 				//$mail->send();
 			}
+			
+			// write the error to the php error log
+			writeErrorToLog($error['message'] . ' in file: '.$error['file'] . ' on line: '.$error['line']);			
+			$oException->show_exceptioned_error($error); 
 		}
 
 	}
@@ -103,32 +108,11 @@ function ppi_exception_handler($oException) {
 	catch(PDOException $e) {
 		writeErrorToLog($e->getMessage());
 	}
-
-	ppi_show_exceptioned_error($error);
-}
-
-/**
- * PPI_Exception::show_exceptioned_error()
- * Show this exception
- * @param string $p_aError Error information from the custom error log
- * @return void
- */
-function ppi_show_exceptioned_error($p_aError = "") {
-	global $siteTypes;
-	$oConfig = PPI_Helper::getConfig();
-
-	$p_aError['sql'] = PPI_Helper::getRegistry()->get('PPI_Model::Query_Backtrace', array());
-	$sHostName = getHTTPHostname();
-	if($siteTypes[$sHostName] == 'development') {
-		$heading = "Exception";
-		$baseUrl = $oConfig->system->base_url;
-		require SYSTEMPATH.'View/code_error.php';
-		echo $header.$html.$footer;
-	} else {
-		$oView = new PPI_View();
-		$oView->loadSmarty('error', array('message' => $p_aError['message']));
-	}
-	exit;
+	$oException->show_exceptioned_error($error); 
+	
+	// @todo This should go to an internal error page which doesn't use framework components and show the error code
+//	ppi_show_exceptioned_error($error);
+	
 }
 
 function writeErrorToLog($message) {
@@ -141,4 +125,8 @@ function writeErrorToLog($message) {
 	} elseif($sErrorLog !== '' && is_writable($sErrorLog)) {
 		file_put_contents($sErrorLog, "\n$message\n", FILE_APPEND);
 	}
+}
+
+function ppi_show_exceptioned_error() {
+	
 }

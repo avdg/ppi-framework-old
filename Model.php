@@ -8,7 +8,7 @@
  * @package   Model
  */
 
-abstract class PPI_Model extends PPI_Base {
+abstract class PPI_Model {
 
 	protected $sLastQuery;
 	protected $sLastError;
@@ -30,21 +30,19 @@ abstract class PPI_Model extends PPI_Base {
 	 * This information is used throughout this class's lifecycle
 	 * @param string $p_sTableName  The name of the DB Table
 	 * @param string $p_sTableIndex  The index of the primary key
-	 * @param string $p_sDBInfo  The database section to use for the DSN
+	 * @param string $p_sDBKey  The database section to use for the DSN
 	 * @param integer $p_iRecord  To obtain the record and set it as meta data
 	 * @throws PPI_Exception
 	 */
 
-	function __construct($p_sTableName = "", $p_sTableIndex = "", $p_sDBInfo = "", $p_iRecordID = 0) {
-		parent::__construct(); // Initialise the Base
-
+	function __construct($p_sTableName = "", $p_sTableIndex = "", $p_sDBKey = "", $p_iRecordID = 0) {
 
 		if (!extension_loaded('pdo')) {
 			throw new PPI_Exception('PDO is not enabled');
 		}
 
-		if (empty($p_sDBInfo)) {
-			$p_sDBInfo = "default";
+		if (empty($p_sDBKey)) {
+			$p_sDBKey = "default";
 		}
 		if ($p_sTableName == '' || $p_sTableIndex == '') {
 			throw new PPI_Exception('Table name or index not found');
@@ -53,29 +51,41 @@ abstract class PPI_Model extends PPI_Base {
 		$this->sTableName  = $p_sTableName;
 
 		$oConfig = $this->getConfig();
-		// Verification that all the required DB fields are setup properly
-		$db[$p_sDBInfo] = $oConfig->db->toArray();
-		foreach(array('host', 'username', 'password', 'database', 'enabled') as $field) {
-			if(!isset($db[$p_sDBInfo][$field])) {
-				throw new PPI_Exception('Database configuration error. Unable to find '.$field.' in '.$p_sDBInfo);
+		
+		// Multiple DB Check and Verify their key exists
+		if($p_sDBKey !== 'default') {
+			if(!isset($oConfig->db->$p_sDBKey)) {
+				throw new PPI_Exception('Unable to find database connection information for key: ' . $p_sDBKey);
 			}
-			if($field != 'password' && $db[$p_sDBInfo][$field] == '') {
+			
+		// Look for db.default in the config, if it doesn't exist revert back to db.*
+		} else {
+			$dbInfo = isset($oConfig->db->default) ? $oConfig->db->default->toArray() : $oConfig->db->toArray();
+		}
+		
+		// Verification that all the required DB fields are setup properly
+		foreach(array('host', 'username', 'password', 'database', 'enabled') as $field) {
+			if(!isset($dbInfo[$field])) {
+				throw new PPI_Exception('Database configuration error. Unable to find '.$field.' in '.$p_sDBKey);
+			}
+			// @todo: Why are we checking for 'password' here ?
+			if($field !== 'password' && $dbInfo[$field] == '') {
 				throw new PPI_Exception('No information found for database configuration option: '.$field);
 			}
 		}
-		if(!$db[$p_sDBInfo]['enabled']) {
-			throw new PPI_Exception('Trying to use database configuration for '.$p_sDBInfo.' and it is turned off.Check your database configuration file');
+		if(!$dbInfo['enabled']) {
+			throw new PPI_Exception('Trying to use database configuration for <b>'.$p_sDBKey.'</b> and it is turned off. Check your database configuration file');
 		}
 
-		$this->sHostName = $db[$p_sDBInfo]['host'];
-		$this->sUserName = $db[$p_sDBInfo]['username'];
-		$this->sPassword = $db[$p_sDBInfo]['password'];
-		$this->sDataBase = $db[$p_sDBInfo]['database'];
+		$this->sHostName = $dbInfo['host'];
+		$this->sUserName = $dbInfo['username'];
+		$this->sPassword = $dbInfo['password'];
+		$this->sDataBase = $dbInfo['database'];
 
 		// Try our PDO connection. this checks for persistent connections and charsets too
 		try {
 			$persistent = false;
-			if(isset($db[$p_sDBInfo]['persistent']) && $db[$p_sDBInfo]['persistent'] == true) {
+			if(isset($dbInfo['persistent']) && $dbInfo['persistent'] == true) {
 				$persistent = true;
 			}
 			$this->rHandler = new PDO($this->makeDSN(),
@@ -90,7 +100,7 @@ abstract class PPI_Model extends PPI_Base {
 		}
 
 		// Lets store our charset being overridable from the config, and defaulting to utf8.
-		$bIsCharsetOverride = isset($db[$p_sDBInfo]['charset']) && $db[$p_sDBInfo]['charset'] != '';
+		$bIsCharsetOverride = isset($dbInfo['charset']) && $dbInfo['charset'] != '';
 		$charset            = strtolower($bIsCharsetOverride ? $oConfig->db->charset : 'utf8');
 		// If the charset is overriden lets check this charset exists in the mysqld. Exception upon non-existant charset
 		if($bIsCharsetOverride && !$this->isValidCharset($charset)) {
@@ -441,13 +451,13 @@ abstract class PPI_Model extends PPI_Base {
 			// Where
 			/* Turn the filters into a string (if not already) */
 			if (is_array($p_mFilter) && !empty($p_mFilter)) {
-				$sFilter = $this->_filtersToStr($p_mFilter);
+				$sFilter = 'WHERE ' . implode(' AND ', $p_mFilter);
 			} elseif(is_string($p_mFilter) && $p_mFilter != '') {
 				$sFilter = 'WHERE ' . $p_mFilter;
 			} else {
 				$sFilter = '';
 			}
-
+			
 			// Order
 			$sOrder = is_array($p_sOrder) && !empty($p_sOrder) ? 'ORDER BY ' : '';
 			if($sOrder == '') {
@@ -462,10 +472,9 @@ abstract class PPI_Model extends PPI_Base {
 			$sGroup = $p_sGroup != '' ? ' GROUP BY ' . $p_sGroup : '';
 
 			// Limit
-			$sLimit = ($p_iLimit != '') ? 'LIMIT '.$p_iLimit : '';
-
-			$sQuery 	= "SELECT * FROM {$this->sTableName} $sFilter $sOrder $sGroup $sLimit";
-			return $this->query($sQuery);
+			$sLimit = ($p_iLimit != '') ? 'LIMIT ' . $p_iLimit : '';
+			$sQuery = "SELECT * FROM {$this->sTableName} $sFilter $sOrder $sGroup $sLimit";
+			return $this->query(rtrim($sQuery));
 
 		} catch(PDOException $e) {
 			throw new PPI_Exception($e->getMessage());

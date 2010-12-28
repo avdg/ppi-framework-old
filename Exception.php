@@ -5,7 +5,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   Exception
+ * @package   PPI
  */
 
 class PPI_Exception extends Exception {
@@ -64,8 +64,8 @@ class PPI_Exception extends Exception {
      */
 	function show_403($p_sMessage = "") {
 		$heading = "403 Forbidden";
-		//header("HTTP/1.1 403 Forbidden");
 		$message = (!empty ($p_sMessage) ) ? $p_sMessage : "You are not allowed to access the requested location";
+		PPI_Helper::getRegistry()->set('PPI_View::httpResponseCode', 403);
 		require SYSTEMPATH.'errors/403.php';
 	}
 
@@ -76,17 +76,20 @@ class PPI_Exception extends Exception {
     * @access	public
     * @todo change this to a new function name
     * @todo make this do 404 on the HTTP status line
-    * @param        string argument name
+    * @param    string argument name
     * @return	void
     */
 	static function show_404($p_sLocation = "", $p_bUseImage = false) {
 		$oConfig = PPI_Helper::getConfig();
-		$heading = "404 Page Not Found";
+		$heading = "Page cannot be found";
 		$message = (!empty ($p_sLocation) ) ? $p_sLocation : "The page you requested was not found.";
-		//header("HTTP/1.1 404 Not Found");
-		require SYSTEMPATH.'View/404.php';
+		PPI_Helper::getRegistry()->set('PPI_View::httpResponseCode', 404);
+		$oView   = new PPI_View();
+		$oView->load('framework/404', array('heading' => 'Page cannot be found', 'message' => $message));
         exit;
 	}
+	
+	
 
 	/**
 	 * PPI_Exception::show_exceptioned_error()
@@ -95,14 +98,19 @@ class PPI_Exception extends Exception {
 	 * @return void
 	 */
 	function show_exceptioned_error($p_aError = "") {
-		global $siteTypes;
-        $oConfig = PPI_Helper::getConfig();
-
-		$p_aError['sql'] = $this->_queries;
-		$sHostName = getHTTPHostname();
-		if($siteTypes[$sHostName] == 'development') {
-			$heading = "PHP Exception";
-			$baseUrl = $oConfig->system->base_url;
+		$p_aError['sql'] = PPI_Helper::getRegistry()->get('PPI_Model::Query_Backtrace', array());
+		$oApp = PPI_Helper::getRegistry()->get('PPI_App', false);
+		if($oApp === false) {
+			$sSiteMode = 'development';
+			$heading = "Exception";
+			require SYSTEMPATH.'View/fatal_code_error.php';
+			echo $header.$html.$footer;	
+			exit;	
+		}
+		$sSiteMode = $oApp->getSiteMode();
+		if($sSiteMode == 'development') {
+			$heading = "Exception";
+			$baseUrl = PPI_Helper::getConfig()->system->base_url;
 			require SYSTEMPATH.'View/code_error.php';
 			echo $header.$html.$footer;
 		} else {
@@ -110,7 +118,8 @@ class PPI_Exception extends Exception {
 			$oView->load('error', array('message' => $p_aError['message']));
 		}
 		exit;
-	}
+	}	
+	
 
 	/**
 	 * Show an error message

@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * @version   1.0
@@ -10,43 +9,62 @@
  */
 class PPI_Cache {
 
-	private static $_handler = null;	
-    
+	private $_handler = null;	
+   
+	function __construct($handler = null, array $p_aOptions = array()) {
+		if($handler !== null && $handler instanceof PPI_Cache_Interface) {
+			$this->_handler = $handler;
+		} else {
+			$this->init();
+		}
+	}
+	
 	/**
-	 * Set the current handler class, overridable from config: system.cacheHandler
+	 * Initialise the cache handler
+	 * 
+	 * @throws PPI_Exception
+	 *
 	 */
-    function __construct() {
-    	$oConfig = PPI_Helper::getConfig();
-    	if(!empty($oConfig->system->cacheHandler)) {
-    		switch($oConfig->system->cacheHandler) {
-    			case 'apc':
-    				$handler = 'PPI_Cache_Apc';
-    				break;
-    			
-    			case 'memcached':
-    				$handler = 'PPI_Cache_Memcached';
-    				break;
-    				
-    			default:
-    				throw new PPI_Exception('Caching Handler Not Implemented');
-    				break;
-    				
-    		}
-    	} else {
-    		$handler = 'PPI_Cache_Disk';
-    	}
-    	
-    	self::$_handler = new $handler();
-    	
-    }
-    
+	function init(array $p_aOptions = array()) {
+		$oConfig = PPI_Helper::getConfig();
+		if(!empty($oConfig->system->cacheHandler)) {
+			switch($oConfig->system->cacheHandler) {
+				case 'apc':
+					if(!extension_loaded('apc')) {
+						throw new PPI_Exception('Unable to use APC for caching. Extension not loaded');
+					}
+					$handler = 'PPI_Cache_Apc';
+					break;
+
+				case 'disk':
+					$handler = 'PPI_Cache_Disk';
+					break;
+
+				case 'memcache':
+				case 'memcached':  				
+					$handler = 'PPI_Cache_Memcached';
+					break;
+
+				default:
+					throw new PPI_Exception('Caching Handler Not Implemented');
+					break;
+			}
+		} else {
+			$handler = 'PPI_Cache_Disk';
+		}
+		$this->_handler = new $handler($p_aOptions);		
+	}
+	
     /**
      * Get a key value from the cache
      * @param string $p_sKey The Key
      * @return mixed
      */
-    static function get($p_sKey) {
-    	return self::$_handler->get($p_sKey);
+    function get($p_sKey) {
+    	if($this->_handler === null) {
+    		$this->init();
+    	}
+    	return $this->_handler->get($p_sKey);
     }
     
     /**
@@ -55,8 +73,11 @@ class PPI_Cache {
      * @param mixed $p_mValue The Value
      * @return boolean
      */
-    static function set($p_sKey, $p_mValue) {
-    	return self::$_handler->set($p_sKey, $p_mValue);
+    function set($p_sKey, $p_mValue) {
+    	if($this->_handler === null) {
+    		$this->init();
+    	}    	
+    	return $this->_handler->set($p_sKey, $p_mValue);
     }
     
     /**
@@ -64,8 +85,11 @@ class PPI_Cache {
      * @param string $p_sKey The Key
      * @return boolean
      */
-    static function exists($p_sKey) {
-    	return self::$_handler->exists($p_sKey);
+    function exists($p_sKey) {
+    	if($this->_handler === null) {
+    		$this->init();
+    	}    	
+    	return $this->_handler->exists($p_sKey);
     }
     
     /**
@@ -73,8 +97,11 @@ class PPI_Cache {
      * @param string $p_sKey The Key
      * @return boolean
      */
-    static function remove($p_sKey) {
-    	return self::$_handler->remove($p_sKey);
+    function remove($p_sKey) {
+    	if($this->_handler === null) {
+    		$this->init();
+    	}    	
+    	return $this->_handler->remove($p_sKey);
     }
 	
 }

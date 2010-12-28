@@ -5,7 +5,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   Input
+ * @package   PPI
  */
 class PPI_Input {
 	private $aArguments;
@@ -192,5 +192,9 @@ class PPI_Input {
     static function clearFlashMessage() {
         PPI_Helper::getSession()->remove('ppi_flash_message');
     }
+    
+	function emptyPost() {
+		$_POST = array();
+	}    
 
 }

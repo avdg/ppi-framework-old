@@ -10,6 +10,7 @@
 class PPI_Controller {
 
 	protected $_input = null;
+	protected $_view = null;
 
 	function __construct () {
 		$this->_input = PPI_Helper::getInput();
@@ -22,8 +23,9 @@ class PPI_Controller {
 	 * @param string $p_sURL Optional param for where to redirect to
 	 * @param boolean $p_bPrependBase Default is true. If true will prepend the framework's base Url. 
  	 *									If false will redirect to absolute external url.
+ 	 * @throws PPI_Exception
 	 */
-	protected function redirect($p_sURL="", $p_bPrependBase = true) {
+	protected function redirect($p_sURL = '', $p_bPrependBase = true) {
 		$sUrl = ($p_bPrependBase === true) ? $this->getConfig()->system->base_url . $p_sURL : $p_sURL;
 		if($this->getCurrUrl() == $sUrl) {
 			return false;
@@ -36,10 +38,41 @@ class PPI_Controller {
 		}
 	}
 	
+	/**
+	 * Load a view
+	 *
+	 * @param string $p_tplFile The view filename. File extensions are optional.
+	 * @param array $p_tplParams Optional parameters to the view file.
+	 * @return void
+	 */
 	protected function load($p_tplFile, $p_tplParams = array()) {
 		$this->_view->load($p_tplFile, $p_tplParams);
 	}
 	
+	/**
+	 * Set a view variable or a list of view variables.
+	 *
+	 * @param mixed $p_mKeys
+	 * @param mixed $p_mValue
+	 */
+	protected function set($p_mKeys, $p_mValue = null) {
+		if(is_array($p_mKeys)) {
+			foreach($p_mKeys as $key => $val) {
+				$this->_view->set($key, $val);
+			}
+		} else {
+			$this->_view->set($p_mKeys, $p_mValue);
+		}
+	}
+	
+	/**
+	 * Load a view, but override the renderer to smarty
+	 *
+	 * @param string $p_tplFile The view filename. File extensions are optional.
+	 * @param array $p_tplParams Optional parameters to the view file.
+	 * @return void
+	 * 
+	 */
 	protected function loadSmarty($p_tplFile, $p_tplParams = array()) {
 		$this->_view->loadsmarty($p_tplFile, $p_tplParams);
 	}
@@ -153,6 +186,15 @@ class PPI_Controller {
 	protected function getRegistry() {
 		return PPI_Helper::getRegistry();
 	}
+	
+	/**
+	 * Get the cache object from PPI_Helper
+	 *
+	 * @return object
+	 */
+	protected function getCache() {
+		return PPI_Helper::getCache();
+	}
 
 	/**
 	 * Checks if the current user is logged in
@@ -173,24 +215,79 @@ class PPI_Controller {
 		return $p_bUseArray ? $authData : (object) $authData;
 	}
 	
+	/**
+	 * Get a parameter from the URI
+	 *
+	 * @param string $p_sVar The key name
+	 * @param mixed $p_mDefault The default value returned if the key doesn't exist
+	 * @return mixed
+	 */
 	protected function get($p_sVar, $p_mDefault = null) {
 		return $this->_input->get($p_sVar, $p_mDefault);
 	}
 	
+	/**
+	 * Access the HTTP POST variables
+	 *
+	 * @param string $p_sVar The variable name to access
+	 * @param mixed $p_mDefault The default value if the key defined doesn't exist
+	 * @return mixed
+	 */
 	protected function post($p_sVar = null, $p_mDefault = null) {
 		return $this->_input->post($p_sVar, $p_mDefault);
 	}	
 	
+	/**
+	 * Does a particular post variable exist
+	 *
+	 * @param string $p_sKey The post variable
+	 * @return boolean
+	 */
 	protected function hasPost($p_sKey) {
 		return $this->_input->hasPost($p_sKey);
 	}
 	
+	/**
+	 * Has the form been submitted ?
+	 *
+	 * @return boolean
+	 */
 	protected function isPost() {
 		return $this->_input->isPost();
 	}
 	
+	/**
+	 * Obtain strippost from the input object
+	 * Will give all HTTP POST variables that match a specific prefix
+	 *
+	 * @param unknown_type $p_sPrefix
+	 * @return unknown
+	 */
 	protected function stripPost($p_sPrefix) {
 		return $this->_input->stripPost($p_sPrefix);
+	}
+	
+	/**
+	 * Remove a value from HTTP POST 
+	 *
+	 * @param string $p_sKey
+	 * @return void
+	 */
+	protected function removePost($p_sKey) {
+		$this->_input->removePost($p_sKey);
+	}	
+	
+	/**
+	 * Empty the entire HTTP POST
+	 *
+	 * @return void
+	 */
+	protected function emptyPost() {
+		$this->_input->emptyPost();
+	}
+	
+	protected function getPlugin($p_sPluginName) {
+		return PPI_Helper::getPlugin()->getPlugin($p_sPluginName);
 	}
 
 }

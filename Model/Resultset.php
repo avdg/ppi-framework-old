@@ -5,7 +5,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   Model
+ * @package   PPI
  */
 
 class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
@@ -19,6 +19,13 @@ class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
 	* The default fetch mode
 	*/
 	private $_fetchMode  = PDO::FETCH_ASSOC;
+	
+	/**
+	 * The number of rows returned from this query.
+	 *
+	 * @var integer
+	 */
+	private $_countResult = null;
 
 	/**
 	* List of the acceptable fetch modes
@@ -52,7 +59,10 @@ class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
 	function fetch($p_sFetchMode = null) {
 		// If a custom fetchmode was passed and it's a valid fetch mode then we use it otherwise defaulting to  $this->_fetchMode
 		$sFetchMode = ($p_sFetchMode !== null && in_array($p_sFetchMode, $this->_fetchModes)) ? $p_sFetchMode : $this->_fetchMode;
-		return $this->_statement->fetch($sFetchMode);
+		$row = $this->_statement->fetch($sFetchMode);
+		$this->_rows[$this->_dataPointer] = $row;
+		$this->_dataPointer++;
+		return $row;
 	}
 
 	/**
@@ -113,9 +123,16 @@ class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
 		$this->_rows[(int) $offset] = $value;
 	}
 
-	// Internal count function from the Countable interface.
+	/**
+	 * Internal count function from the Countable interface.
+	 *
+	 * @return integer
+	 */
 	function count() {
-		return $this->countRows();
+		if($this->_countResult === null) {
+			$this->_countResult = $this->countRows();
+		}
+		return $this->_countResult;
 	}
 
 	/**

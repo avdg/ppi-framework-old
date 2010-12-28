@@ -5,7 +5,8 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   Config
+ * @package   PPI
+ * @subpackage core
  */
 
 class PPI_Model_Config extends PPI_Base {
@@ -13,51 +14,6 @@ class PPI_Model_Config extends PPI_Base {
 	private $bRead       = null;
 	private $_oConfig    = null;
 	private $_configFile = null;
-
-    /**
-     * Registry object provides storage for shared objects.
-     * @var object $_instance
-     */
-    private static $_instance = null;
-
-    /**
-     * Initialize the default registry instance.
-     *
-     * @return void
-     */
-    protected static function init()
-    {
-        self::setInstance(new PPI_Model_Config());
-    }
-
-    /**
-     * Set the default registry instance to a specified instance.
-     *
-     * @param PPI $registry An object instance of type PPI,
-     *   or a subclass.
-     * @return void
-     * @throws PPI_Exception if registry is already initialized.
-     */
-    public static function setInstance(PPI_Model_Config $instance)
-    {
-        if (self::$_instance !== null) {
-            throw new PPI_Exception('Registry is already initialized');
-        }
-
-        self::$_instance = $instance;
-    }
-    /**
-     * Retrieves the default registry instance.
-     * @return PPI_Model_Config
-     */
-    public static function getInstance()
-    {
-        if (self::$_instance === null) {
-            self::init();
-        }
-
-        return self::$_instance;
-    }
 
 	function __construct() {}
 

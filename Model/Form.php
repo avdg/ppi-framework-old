@@ -6,7 +6,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   Form
+ * @package   PPI
  */
 class PPI_Model_Form  {
 	/**
@@ -289,8 +289,9 @@ class PPI_Model_Form  {
 						}
 					}
 				}
+
 				// ------------- ReCaptcha Detection to set a isReCaptcha to true and render the HTML for it. ----------
-				if(strtolower($fieldOptions['type']) == 'recaptcha') {
+				if(strtolower($fieldOptions['type']) === 'recaptcha') {
 					$this->_isReCaptcha 						= true;
 					$this->_captchaFields[]						= $fieldName;
 					$oCaptcha 									= new PPI_Model_ReCaptcha();
@@ -304,6 +305,13 @@ class PPI_Model_Form  {
 				if($fieldOptions['type'] == 'dropdown' && !array_key_exists('options', $fieldOptions)) {
 					$structure['fields'][$fieldName]['options'] = array();
 				}
+				
+				if(strtolower($fieldOptions['type'])  === 'dropdown') {
+					$structure['fields'][$fieldName]['option_keys']   = array_keys($structure['fields'][$fieldName]['options']);
+					$structure['fields'][$fieldName]['option_values'] = array_values($structure['fields'][$fieldName]['options']);
+				}
+								
+				
 				// Set the extra attributes so that any additional keys to this fields array will be applied to the HTML
 				// 'class' => 'myclass' would be converted to class="myclass".
 				$aExtraOptions = array();

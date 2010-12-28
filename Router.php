@@ -5,12 +5,12 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   Routing
+ * @package   PPI
  * 
  * @notes Routing class for PPI.
  *
  */
-class PPI_Router {
+class PPI_Router implements PPI_Router_Interface {
 	
 	/**
 	 * The file to get the routes from
@@ -30,19 +30,39 @@ class PPI_Router {
 		
 	}
 	
+	function init() {
+		ppi_dump('heheheh', true);
+		$this->_routes = $this->getRoutes();
+	}
+	
 	/**
 	 * Get the routes, either from the cache or newly from disk
 	 *
 	 * @return array
 	 */
-	function getRoutes() {
-		self::$_routingFile      = PPI_Registry::get('PPI_Base::routing_file', null);
-		self::$_routingCacheFile = PPI_Registry::get('PPI_Base::routing_cache_file', null);
-		clearstatcache();
-		if(!file_exists(self::$_routingCacheFile) || filemtime($this->_routingFile) < $iLastTime) {
-			self::parseRoutes();
+	function getRoute() {
+		
+		$this->routes = file_get_contents(APPFOLDER . 'Config/routes.php');
+		ppi_dump($this->routes, true);
+		// Loop through the route array looking for wild-cards
+		foreach($this->routes as $key => $val) {						
+			// Convert wild-cards to RegEx
+			$key = str_replace(':any', '.+', str_replace(':num', '[0-9]+', $key));
+			// Does the RegEx match?
+			if (preg_match('#^'.$key.'$#', $uri)) {
+				// Do we have a back-reference?
+				if (strpos($val, '$') !== FALSE AND strpos($key, '(') !== FALSE) {
+					$val = preg_replace('#^'.$key.'$#', $val, $uri);
+				}
+			
+				$this->_set_request(explode('/', $val));		
+				return;
+			}
 		}
-		return self::$_routesLoaded ? self::$_routes : unserialize(file_get_contents(self::$_routingCachingFile));
+
+		PPI_Helper::getRegistry()->set();
+		
+		return self::$_routes;
 	}
 	
 	/**

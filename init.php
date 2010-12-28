@@ -36,21 +36,6 @@ defined('SMARTY_EXT')           or define('SMARTY_EXT', '.tpl');
 // ------- system constants -------
 defined('PPI_VERSION')     		or define('PPI_VERSION', '1.1');
 
-global $siteTypes;
-
-/*
-// Autoload preparation
-set_include_path('.'
-	. PATH_SEPARATOR . PLUGINMODELPATH
-	. PATH_SEPARATOR . MODELPATH
-	. PATH_SEPARATOR . COREMODELPATH
-	. PATH_SEPARATOR . CORECONTROLLERPATH
-	. PATH_SEPARATOR . COREHELPERPATH
-	. PATH_SEPARATOR . COREINTERFACEPATH
-	. PATH_SEPARATOR . get_include_path());
-
-*/
-
 set_include_path('.' . PATH_SEPARATOR . SYSTEMPATH . PATH_SEPARATOR . get_include_path());
 // Autload registration
 include_once('Base.php');
@@ -66,24 +51,4 @@ PPI_Base::setErrorHandlers('ppi_error_handler', 'ppi_exception_handler');
 // Turn off magic quotes if it's enabled
 if(version_compare(PHP_VERSION, '5.3.0', '<')) {
 	set_magic_quotes_runtime(0); // Kill magic quotes
-}
-
-// If there are no site types defined in the bootstrap then let the developer know about it
-if(!isset($siteTypes) || (is_array($siteTypes) && empty($siteTypes))) {
-	die('Unable to find your site in the bootstrap file. Please add a site and its type to your index.php file.');
-}
-
-// Identify if the hostname exists in the bootstrap.
-$sHostName = getHTTPHostname();
-if(!isset($siteTypes[$sHostName])) {
-	die('Unable to find your site: <b>'. $sHostName .'</b> in index.php bootstrap site types');
-}
-
-// ------------ ERROR LEVEL CHECKING --------------
-if($siteTypes[$sHostName] == 'development') {
-	error_reporting(-1);
-	ini_set('display_errors', 'On');
-} else {
-	error_reporting(0);
-	ini_set('display_errors', 'Off');
 }

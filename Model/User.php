@@ -6,7 +6,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   Model
+ * @package   PPI
  */
 
 class PPI_Model_User extends APP_Model_Application {
@@ -112,8 +112,8 @@ class PPI_Model_User extends APP_Model_Application {
 				if(array_key_exists('password', $user)) {
 					unset($user['password']);
 				}
-				$user['role_name'] = getRoleNameFromID($user['role_id']);
-				$user['role_name_nice'] = ucwords(str_replace('_', ' ', $user['role_name']));
+				$user['role_name'] = PPI_Helper_User::getRoleNameFromID($user['role_id']);
+				$user['role_name_nice'] = PPI_Helper_User::getRoleNameNice($user['role_name']);
 				$this->getSession()->setAuthData($user);
 			return true;
 			}
@@ -135,9 +135,7 @@ class PPI_Model_User extends APP_Model_Application {
 	function isLoggedIn() {
 		return (count($this->getSession()->getAuthData()) > 0);
 	}
-	/* ----------------- Authentication Functions ----------------- */
 
-	/* ---------------------- Role Functions -------------------- */
 	function getRoleGroups() {
 		global $oConfig;
 		if(is_array($oConfig->system->roleMapping)) {
@@ -169,7 +167,6 @@ class PPI_Model_User extends APP_Model_Application {
 		}
 		return false;
 	}
-	/* ---------------------- Role Functions -------------------- */
 
 	function getID($where) {
 		$select = $this->select()
@@ -179,8 +176,12 @@ class PPI_Model_User extends APP_Model_Application {
 		return (count($rows) > 0) ? $rows[0][$this->_iTableIndex] : 0;
 	}
 
-	/* ----------- Encryption Functions ----------- */
-
+	/**
+	 * Generate a new password
+	 *
+	 * @param string $password The plaintext password
+	 * @return string
+	 */
 	function encryptNewPassword($password) {
 		$oReg = $this->getRegistry();
 		if(!$oReg->exists('PPI_Model_User::hash_algos')) {
@@ -207,6 +208,13 @@ class PPI_Model_User extends APP_Model_Application {
 		return $salt . hash($this->_encryptionAlgorithm, $salt . $password);
 	}
 
+	/**
+	 * Verify the username against the password
+	 *
+	 * @param string $username The username
+	 * @param string $password The password
+	 * @return boolean
+	 */
 	function checkPassword($username, $password) {
 		$user = $this->fetch($this->getConfig()->system->usernameField . ' = ' . $this->quote($username));
 		if(!empty($user)) {
@@ -296,10 +304,4 @@ class PPI_Model_User extends APP_Model_Application {
 		return $structure;
 
 	}
-
-
-
-
-
-	/* ----------- Encryption Functions ----------- */
 }

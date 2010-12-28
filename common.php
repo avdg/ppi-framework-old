@@ -23,15 +23,6 @@ function getRoleID() {
        return ($aUserInfo !== false && count($aUserInfo) > 0) ? $aUserInfo['role_id'] : 1;
 }
 
-function getRoleNameFromID($p_iRoleID) {
-	$oConfig = PPI_Helper::getConfig();
-	$aRoles = array_flip(getRoles());
-	if(array_key_exists($p_iRoleID, $aRoles)) {
-		return $aRoles[$p_iRoleID];
-	}
-	throw new PPI_Exception('Unknown Role ID: '.$p_iRoleID);
-}
-
 function getRoleIDFromName($p_sRoleName) {
 	$aRoles = PPI_Helper::getConfig()->system->roleMapping->toArray();
 	if(isset($aRoles[$p_sRoleName])) {
@@ -260,7 +251,6 @@ function getSiteType() {
  * @param mixed $var
  */
 function ppi_dump($var, $p_bThrowException = false) {
- 		//	if(Zend_Registry::get('site')->config->site->siteType != 'production') {
 	 	if($p_bThrowException === false) {
 		 	$trace = debug_backtrace();
 		 	$label = "File: ".str_replace($_SERVER['DOCUMENT_ROOT'], '...', $trace[0]['file'] . "<br>\n");
@@ -275,6 +265,7 @@ function ppi_dump($var, $p_bThrowException = false) {
 			var_dump($var);
 			echo '</pre>';
 	 	} else {
+	 		echo "<pre>";
 	 		var_dump($var);
 	 		throw new PPI_Exception('Exceptioned Dump');
 	 	}

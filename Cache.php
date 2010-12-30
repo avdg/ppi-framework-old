@@ -28,25 +28,16 @@ class PPI_Cache {
 	function init(array $p_aOptions = array()) {
 		$oConfig = PPI_Helper::getConfig();
 		if(!empty($oConfig->system->cacheHandler)) {
-			switch($oConfig->system->cacheHandler) {
+                        $handlerName = $oConfig->system->cacheHandler;
+			$handler = 'PPI_Cache_' . ucfirst($handlerName);
+			switch($handlerName) {
 				case 'apc':
-					if(!extension_loaded('apc')) {
-						throw new PPI_Exception('Unable to use APC for caching. Extension not loaded');
-					}
-					$handler = 'PPI_Cache_Apc';
-					break;
-
-				case 'disk':
-					$handler = 'PPI_Cache_Disk';
-					break;
-
 				case 'memcache':
-				case 'memcached':  				
+				case 'memcached':
+					if(!extension_loaded($handlerName)) {
+						throw new PPI_Exception('Unable to use ' . $handlerName . ' for caching. Extension not loaded.');
+					}  				
 					$handler = 'PPI_Cache_Memcached';
-					break;
-
-				default:
-					throw new PPI_Exception('Caching Handler Not Implemented');
 					break;
 			}
 		} else {

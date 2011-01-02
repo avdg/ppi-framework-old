@@ -40,7 +40,12 @@ set_include_path('.' . PATH_SEPARATOR . SYSTEMPATH . PATH_SEPARATOR . get_includ
 // Autload registration
 include_once('Base.php');
 include_once('Autoload.php');
+
 PPI_Autoload::register();
+PPI_Autoload::add('Zend', array(
+	'path' => SYSTEMPATH . 'Vendor/',
+	'prefix' => 'Zend_'
+));
 
 
 // General stuff

@@ -43,9 +43,9 @@ class PPI_Autoload {
 
 	static function add($key, array $p_aOptions) {
 		self::$_libraries[$key] = $p_aOptions;
-//		if(isset($p_aOptions['include_path'])) {
-//			set_include_path(get_include_path() . PATH_SEPARATOR . $p_aOptions['include_path']);
-//		}
+		if(isset($p_aOptions['path'])) {
+			set_include_path(get_include_path() . PATH_SEPARATOR . $p_aOptions['path']);
+		}
 	}
 
 	static function remove($p_sKey) {
@@ -60,7 +60,4 @@ class PPI_Autoload {
 	static function convertClassName($p_sClassName) {
 		return str_replace('_', DS, $p_sClassName);
 	}
-
-
-
 }

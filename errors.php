@@ -130,3 +130,20 @@ function writeErrorToLog($message) {
 function ppi_show_exceptioned_error() {
 	
 }
+
+/**
+ * Set the error and exception handlers
+ *
+ * @param string $p_sErrorHandler The error handler function name
+ * @param string $p_sExceptionHandler The exception handler function name
+ * @return void
+ */
+function setErrorHandlers($p_sErrorHandler = null, $p_sExceptionHandler = null) {
+        if($p_sErrorHandler !== null) {
+                set_error_handler($p_sErrorHandler, E_ALL);
+         }
+         if($p_sExceptionHandler !== null) {
+                set_exception_handler($p_sExceptionHandler);
+        }
+}
+

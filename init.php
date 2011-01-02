@@ -52,7 +52,7 @@ PPI_Autoload::add('Zend', array(
 include_once('common.php');
 // load up custom error handlers
 include_once('errors.php');
-PPI_Base::setErrorHandlers('ppi_error_handler', 'ppi_exception_handler');
+setErrorHandlers('ppi_error_handler', 'ppi_exception_handler');
 
 // Turn off magic quotes if it's enabled
 if(version_compare(PHP_VERSION, '5.3.0', '<')) {

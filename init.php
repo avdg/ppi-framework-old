@@ -39,7 +39,8 @@ defined('PPI_VERSION')     		or define('PPI_VERSION', '1.1');
 set_include_path('.' . PATH_SEPARATOR . SYSTEMPATH . PATH_SEPARATOR . get_include_path());
 // Autload registration
 include_once('Base.php');
-PPI_Base::registerAutoload();
+include_once('Autoload.php');
+PPI_Autoload::register();
 
 
 // General stuff

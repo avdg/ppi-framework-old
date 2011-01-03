@@ -37,8 +37,7 @@ defined('SMARTY_EXT')           or define('SMARTY_EXT', '.tpl');
 defined('PPI_VERSION')     		or define('PPI_VERSION', '1.1');
 
 set_include_path('.' . PATH_SEPARATOR . SYSTEMPATH . PATH_SEPARATOR . get_include_path());
-// Autload registration
-include_once('Base.php');
+// Autoload registration
 include_once('Autoload.php');
 
 PPI_Autoload::register();

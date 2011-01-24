@@ -209,13 +209,15 @@ class PPI_Model_Select {
 		if(!empty($this->_where)) {
 			$query .= ' ' . self::SQL_WHERE . ' (' . implode(' ' . self::SQL_AND . ' ', $this->_where) . ')';
 		}
-		// order by
-		if($this->_order != '') {
-			$query .=  ' ' . self::SQL_ORDER_BY . ' ' . $this->_order;
-		}
+		
 		// group by
 		if($this->_group != '') {
 			$query .= ' ' . self::SQL_GROUP_BY . ' ' . $this->_group;
+		}		
+		
+		// order by
+		if($this->_order != '') {
+			$query .=  ' ' . self::SQL_ORDER_BY . ' ' . $this->_order;
 		}
 
 		// limit

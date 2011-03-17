@@ -6,14 +6,14 @@
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   PPI
- * 
+ * @link      www.ppiframework.com
  * @notes Main Helper Class
- * 
+ *
  */
 class PPI_Helper {
-	
-    private static $_instance = null;	
-    
+
+    private static $_instance = null;
+
     /**
      * The initialise function to create the instance
      * @return void
@@ -21,8 +21,8 @@ class PPI_Helper {
     protected static function init() {
         self::setInstance(new PPI_Helper());
     }
-    
-	
+
+
     /**
      * The function used to initially set the instance
      *
@@ -36,7 +36,7 @@ class PPI_Helper {
         }
         self::$_instance = $instance;
     }
-    
+
     /**
      * Obtain the instance if it exists, if not create it
      *
@@ -47,7 +47,7 @@ class PPI_Helper {
             self::init();
         }
         return self::$_instance;
-    } 
+    }
 
 	/**
 	 * Function to recursively trim strings
@@ -59,7 +59,7 @@ class PPI_Helper {
 	        return trim($input);
     	}
 	    return array_map(array($this, 'arrayTrim'), $input);
-	}      	
+	}
 
 	/**
 	 * Get the config object
@@ -78,7 +78,7 @@ class PPI_Helper {
 	static function getDispatcher() {
 		return PPI_Registry::getInstance()->get('PPI_Dispatch');
 	}
-	
+
 	/**
 	 * Get the dispatcher object
 	 *
@@ -96,7 +96,7 @@ class PPI_Helper {
 	static function getSession() {
 		return self::getObjectFromRegistry('PPI_Session');
 	}
-	
+
 	/**
 	 * Get the cache object
 	 *
@@ -104,8 +104,8 @@ class PPI_Helper {
 	 */
 	static function getCache() {
 		return self::getObjectFromRegistry('PPI_Cache');
-	}	
-	
+	}
+
 	/**
 	 * Get the router object
 	 *
@@ -114,7 +114,7 @@ class PPI_Helper {
 	static function getRouter() {
 		return self::getObjectFromRegistry('PPI_Router');
 	}
-	
+
 	/**
 	 * Get the router object
 	 *
@@ -122,14 +122,16 @@ class PPI_Helper {
 	 */
 	static function getSecurity() {
 		return self::getObjectFromRegistry('PPI_Security');
-	}	
-	
+	}
+
 	static function getObjectFromRegistry($p_sClass) {
 		$registry = PPI_Registry::getInstance();
 		if(!$registry->exists($p_sClass)) {
-			$registry->set($p_sClass, new $p_sClass());
+		    $oClass = new $p_sClass();
+			$registry->set($p_sClass, $oClass);
+			return $oClass;
 		}
-		return $registry->get($p_sClass);		
+		return $registry->get($p_sClass);
 	}
 
 	/**
@@ -143,6 +145,7 @@ class PPI_Helper {
 
 	/**
 	 * Obtain the extension from a filename
+         * @todo Move to PPI_File
 	 * @param string $fileName The file's filename
 	 * @return string
 	 */
@@ -166,7 +169,7 @@ class PPI_Helper {
 		}
 		return $p_sTemplateFile;
 	}
-	
+
 	/**
 	 * Get the current full url
 	 * @todo match this with $this->getCurrUrl()
@@ -174,11 +177,11 @@ class PPI_Helper {
 	 */
 	static function getFullUrl() {
 		$sProtocol  = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
-		return $sProtocol . '://' . str_replace('www.', '', $_SERVER['HTTP_HOST']) . $_SERVER['REQUEST_URI'];		
+		return $sProtocol . '://' . str_replace('www.', '', $_SERVER['HTTP_HOST']) . $_SERVER['REQUEST_URI'];
 	}
 
 	static function getCurrUrl() {
-		return trim($_SERVER['REQUEST_URI'], '/') . '/';		
+		return trim($_SERVER['REQUEST_URI'], '/') . '/';
 	}
 
 }

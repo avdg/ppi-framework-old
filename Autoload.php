@@ -1,4 +1,16 @@
 <?php
+
+/**
+ * Autoload class
+ *
+ * @category  PPI
+ * @package   PPI_Autoload
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @copyright 2001-2010 Digiflex Development Team
+ * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version   PHP 5.1.0
+ * @link      www.ppiframework.com
+*/
 class PPI_Autoload {
 
 	static protected $_libraries = array(
@@ -19,7 +31,7 @@ class PPI_Autoload {
 	}
 
 	static function unregister() {
-                spl_autoload_unregister(array('PPI_Autoload', 'autoload'));	
+                spl_autoload_unregister(array('PPI_Autoload', 'autoload'));
 	}
 
 	static function autoload($className) {

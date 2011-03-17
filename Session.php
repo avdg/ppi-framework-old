@@ -1,12 +1,13 @@
 <?php
 /**
  *
- * @version   1.0
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
- * @copyright Digiflex Development
- * @package   PPI
+ * @version    1.0
+ * @author     Paul Dragoonis <dragoonis@php.net>
+ * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @copyright  Digiflex Development
+ * @package    PPI
  * @subpackage core
+ * @link       www.ppiframework.com/docs/session.html
  */
 
 class PPI_Session {
@@ -88,7 +89,7 @@ class PPI_Session {
 	function exists($p_sKey) {
 		return array_key_exists($p_sKey, $_SESSION[$this->_sessionName]);
 	}
-	
+
 	/**
 	 * Remove all set keys from the session
 	 * @return void
@@ -97,7 +98,7 @@ class PPI_Session {
 		foreach( (array) $_SESSION[$this->_sessionName] as $key => $val) {
 			unset($_SESSION[$this->_sessionName][$key]);
 		}
-	}	
+	}
 
 	/**
 	 * <code>
@@ -106,7 +107,7 @@ class PPI_Session {
 	 * </code>
 	 * Remove a specific key, or just data within that key.
 	 * @param string $p_sKey The initial key set
-	 * @param string $p_sName A key within the initial key set. 
+	 * @param string $p_sName A key within the initial key set.
 	 * @return void
 	 */
 	function remove($p_sKey, $p_sName = null) {

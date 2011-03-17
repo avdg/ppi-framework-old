@@ -16,24 +16,99 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 
 	function __construct(array $p_aOptions = array()) {
 	    $this->_options = $p_aOptions;
-	    $this->_cacheDir = isset($p_aOptions['cache_dir']) ? $p_aOptions['cache_dir'] : APPFOLDER . 'Cache/Disk/';
+	    $this->_cacheDir = isset($p_aOptions['cache_dir'])
+	       ? $p_aOptions['cache_dir'] : APPFOLDER . 'Cache/Disk/';
 	}
 
 	/**
-	 * Get a value from cache
-	 * @param string $p_sKey The Key
+	 * Get the data from the specified path
+	 *
+	 * @param string $p_sKey
 	 * @return mixed
 	 */
-	function get($p_sKey) {
-            $path = $this->getKeyCacheDir($p_sKey);
-            list($splitPos, $headerData) = $this->getHeaderData($path);
-	    // If we have a positive TTL (must expire some time) check its expire time and do a cleanup if expired
-	    if($headerData['ttl'] > 0 && $headerData['expire_time'] < time()) {
-	        unlink($path);
-	        return null;
+	protected function getData($p_sPath) {
+	    $sContent = file_get_contents($p_sPath);
+	    return $sContent != '' ? unserialize($sContent) : '';
+	}
+
+	/**
+	 * Remove a key from the cache
+	 * @param string $p_sKey The Key
+	 * @return boolean
+	 */
+	public function remove($p_sKey) {
+		return $this->removeKeyByPath($this->getKeyCachePath($p_sKey))
+		    && $this->removeKeyByPath($this->getKeyMetaCachePath($p_sKey));
+	}
+
+	/**
+	 * Remove a file by path
+	 * @param string $p_sPath
+	 * @return boolean
+	 */
+    public function removeKeyByPath($p_sPath) {
+        return file_exists($p_sPath) && unlink($p_sPath);
+    }
+
+
+	/**
+	 * Get the full path to a cache item
+	 * @param string $p_sKey
+	 * @return string
+     */
+	protected function getKeyCachePath($p_sKey) {
+		return $this->_cacheDir . 'default--' . $p_sKey;
+	}
+
+	/**
+	 * Get the full path to a cache item's metadata file
+	 *
+	 * @param string $p_sKey
+	 * @return string
+	 */
+	protected function getKeyMetaCachePath($p_sKey) {
+	    return $this->getKeyCachePath($p_sKey) . '.metadata';
+	}
+
+	/**
+	 * Get the metadata for a chosen cache file
+	 *
+	 * @param string $p_sKey
+	 * @return array
+	 */
+	protected function getMetaData($p_sKey) {
+	    return $this->getData($this->getKeyMetaCachePath($p_sKey));
+	}
+
+	/**
+	 * Set data by writing it to disk
+	 *
+	 * @param string $p_sPath
+	 * @param mixed $p_mData
+	 * @return integer
+	 */
+	protected function setData($p_sPath, $p_mData) {
+	    return file_put_contents($p_sPath, serialize($p_mData), LOCK_EX) > 0;
+	}
+
+	/**
+	 * Check if a key exists in the cache
+	 * @param string $p_mKey The Key(s)
+	 * @return boolean
+	 */
+	public function exists($p_sKey) {
+        $sPath = $this->getKeyCachePath($p_sKey);
+	    if(file_exists($sPath) === false) {
+	        return false;
 	    }
-	    $sContent = file_get_contents($path, true, null, $splitPos + 2, filesize($path));
-	    return $sContent != '' ? unserialize($sContent) : null;
+        $aMetaData = $this->getMetaData($p_sKey);
+	    // See if the item has a ttl and if it has expired then we delete it.
+	    if($aMetaData['ttl'] > 0 && (int) $aMetaData['expire_time'] < time()) {
+	        // Remove the cache item and its metadata file.
+	        $this->remove($p_sKey);
+	        return false;
+	    }
+	    return true;
 	}
 
 	/**
@@ -43,109 +118,46 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	 * @param integer $p_iTTL The Time To Live
 	 * @return boolean
 	 */
-	function set($p_sKey, $p_mData, $p_iTTL = 0) {
-            $path = $this->getKeyCacheDir($p_sKey);
-	    if(file_exists($path)) {
-	        unlink($path);
+	public function set($p_sKey, $p_mData, $p_iTTL = 0) {
+
+        $sPath = $this->getKeyCachePath($p_sKey);
+	    if($this->exists($p_sKey)) {
+	        $this->remove($p_sKey);
 	    }
-	    if(is_writeable(dirname($path)) === false) {
-		throw new PPI_Exception('Unable to create cache file: ' . $p_sKey);
+
+	    $sCacheDir = dirname($sPath);
+	    if(!is_dir($sCacheDir)) {
+	        try {
+	           mkdir($sCacheDir);
+	        } catch(PPIException $e) {
+	            throw new PPI_Exception('Unable to create directory:<br>(' . $sCacheDir . ')');
+	        }
 	    }
-            $header = 'expire_time:' . (int) (time() + $p_iTTL) . '|ttl:' . $p_iTTL . "\r\n";
-	    return file_put_contents($path, $header . serialize($p_mData), LOCK_EX) > 0;
+	    if(is_writeable($sCacheDir) === false) {
+	        $aFileInfo = fileperms(dirname($sPath));
+	        ppi_dump($aFileInfo); exit;
+		    throw new PPI_Exception('Unable to create cache file: ' . $p_sKey. '. Cache directory not writeable.<br>(' . $this->_cacheDir . ')<br>Current permissions: ');
+	    }
+
+	    $aMetaData = array(
+	       'expire_time' => time() + (int) $p_iTTL,
+	       'ttl'         => $p_iTTL
+	    );
+
+	    return $this->setData($sPath, $p_mData)
+	       && $this->setData($this->getKeyMetaCachePath($p_sKey), $aMetaData);
 	}
 
 	/**
-	 * Check if a key exists in the cache
-	 * @param string $p_mKey The Key(s)
-	 * @return boolean
-	 */
-	function exists($p_mKey) {
-		if(is_string($p_mKey)) {
-			$path = $this->getKeyCacheDir($p_mKey);
-			if(is_readable($path) === false) {
-				return false;
-			}
-			list(, $headerData) = $this->getHeaderData($path);
-			// If ttl is 0, then it's infinitely existing
-			// otherwise it is > 0 and the expire time must be in the future from time()
-			return $headerData['ttl'] == 0 || $headerData['expire_time'] >= time();
-		}
-		if(is_array($p_mKey)) {
-			$exists = false;
-			foreach($p_mKey as $file) {
-				// Recursion to itself passing in a string.
-				if($this->exists($file) === false) {
-					return false;
-				}
-				$exists = true;
-			}
-			return $exists;
-		}
-		throw new PPI_Exception('Invalid input type; expecting string or array');
-	}
-
-	/**
-	 * Remove a key from the cache
+	 * Get a value from cache
 	 * @param string $p_sKey The Key
-	 * @return boolean
+	 * @return mixed
 	 */
-	function remove($p_sKey) {
-		$path = $this->getKeyCacheDir($p_sKey);
-		return file_exists($path) && unlink($path);
-	}
-	
-	/**
-	 * Get the header data from a cache item
-	 * @param string $p_sPath The Path
-	 * @throws PPI_Exception
-	 * @return array
-	 */
-	protected function getHeaderData($p_sPath) {
-            if( ($fd = fopen($p_sPath, 'r')) === false) {
-                 throw new PPI_Exception('Unable to open: ' . $p_sPath);
-            }
-	    // lock, read, unlock, free
-	    flock($fd, LOCK_SH);
-            $data = fread($fd, 40);
-	    flock($fd, LOCK_UN);
-	    fclose($fd);
-
-            if( ($splitPos = strpos($data, "\r\n")) !== false) {
-                list($headerData,) = explode("\r\n", $data);
-                return array($splitPos, $this->prepareHeaderData($headerData));
+	public function get($p_sKey, $p_mDefault = null) {
+	    if($this->exists($p_sKey) === false) {
+	        return $p_mDefault;
 	    }
-	    throw new PPI_Exception('Unable to locate header information for: ' . $p_sPath);
-	}
-
-        /**
-         * Convert the header data into an array
-         * @param string $headerData
-         * @return array
-         */
-        protected function prepareHeaderData($headerData) {
-            $headers = array();
-            foreach(explode('|', $headerData) as $header) {
-                list($key, $val) = explode(':', $header, 2);
-                $headers[$key] = $val;
-            }
-            return $headers;
-        }
-
-	/**
-	 * Get the cache dir
-	 * @return string
-	 */
-	protected function getBaseCacheDir() {
-		return $this->_cacheDir;
-	}
-
-	/**
-	 * Get the full path to a cache item
-	 * @return string
-         */ 
-	protected function getKeyCacheDir($p_sKey) {
-		return $this->_cacheDir . 'default--' . $p_sKey;
+	    return $this->getData($this->getKeyCachePath($p_sKey));
 	}
 
 }

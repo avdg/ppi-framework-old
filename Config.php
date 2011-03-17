@@ -6,7 +6,7 @@
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   PPI
- * @subpackage core
+ * @link      wwww.ppiframework.com
  */
 
 class PPI_Config {

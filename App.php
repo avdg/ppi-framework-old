@@ -12,7 +12,7 @@
  * @link      www.ppiframework.com
 */
 class PPI_App {
-    
+
     protected $_errorLevel = E_ALL;
     protected $_showErrors = 'On';
     protected $_configBlock = 'development';
@@ -21,7 +21,7 @@ class PPI_App {
     protected $_dispatcher = null;
     protected $_router = null;
     protected $_session = null;
-    
+
     function __construct($p_aParams = array()) {
         if(!empty($p_aParams)) {
               foreach ($p_aParams as $key => $value) {
@@ -31,7 +31,7 @@ class PPI_App {
               }
         }
     }
-    
+
     /**
      * Setter for the environment, passing in options determining how the app will behave
      *
@@ -45,12 +45,11 @@ class PPI_App {
         // The sites "mode" this is production or development.
         // This is so PPI knows how to handle things like errors and exceptions without implicitly telling it what to do.
         if(isset($p_aOptions['siteMode'])) {
-            $this->_siteMode = ($p_aOptions['siteMode'] !== 'development' && $p_aOptions['siteMode'] !== 'production') 
-                ? 'development' 
-                : $p_aOptions['siteMode'];
+            $this->_siteMode = ($p_aOptions['siteMode'] !== 'development' && $p_aOptions['siteMode'] !== 'production')
+                ? 'development' : $p_aOptions['siteMode'];
             unset($p_aOptions['siteMode']);
         }
-        // Any further options passed, it maps; 'errorLevel' to $this->_errorLevel    
+        // Any further options passed, eg: it maps; 'errorLevel' to $this->_errorLevel
         foreach($p_aOptions as $option) {
             $option = '_' . $option;
             if(isset($this->$option)) {
@@ -58,7 +57,7 @@ class PPI_App {
             }
         }
     }
-    
+
     /**
      * Set the router object for the app bootup
      *
@@ -67,7 +66,7 @@ class PPI_App {
     function setRouter(PPI_Router_Interface $p_oRouter) {
         $this->_router = $p_oRouter;
     }
-    
+
     /**
      * Set the dispatch object for the app bootup
      *
@@ -76,7 +75,7 @@ class PPI_App {
     function setDispatcher(PPI_Dispatch_Interface $p_oDispatch) {
         $this->_dispatcher = $p_oDispatch;
     }
-    
+
     /**
      * Set the session object for the app bootup
      *
@@ -85,30 +84,27 @@ class PPI_App {
     function setSession(PPI_Session_Interface $p_oSession) {
         $this->_session = $p_oSession;
     }
-    
+
     /**
-     * Run the boot process, boot up our app. Call the relevant classes such as config, registry, session, dispatch, router and so on
+     * Run the boot process, boot up our app. Call the relevant classes such as:
+     * config, registry, session, dispatch, router.
      *
      * @return $this Fluent interface
      */
     function boot() {
-        
+
         error_reporting($this->_errorLevel);
         ini_set('display_errors', $this->_showErrors);
-        
+
         // Fire up the default config handler
         if($this->_config === null) {
             $this->_config = new PPI_Config('general.ini');
         }
-        
-        // Fire up the default session handler
-        if($this->_session === null) {
-            
-        }
-        
+
         $this->_config = $this->_config->getConfig();
-        // Set the config into the registry
-        PPI_Registry::getInstance()->set('PPI_Config', $this->_config);
+        $registry = PPI_Registry::getInstance();
+        // Set the config into the registry for quick read/write
+        $registry->set('PPI_Config', $this->_config);
 
         // ------------- Initialise the session -----------------
         if(!headers_sent()) {
@@ -118,33 +114,37 @@ class PPI_App {
                 session_name($this->_config->system->sessionNamespace);
             }
             session_start();
-            PPI_Registry::getInstance()->set('PPI_Session', new PPI_Session());
+
+	        // Fire up the default session handler
+	        if($this->_session === null) {
+	            $this->_session = new PPI_Session();
+	        }
+            $registry->set('PPI_Session', $this->_session);
         }
-        
-        PPI_Registry::getInstance()->set('PPI_App', $this);
-        
+
+        $registry->set('PPI_App', $this);
+
         return $this;
     }
-    
+
     /**
      * Call the dispatch process. Running the dispatcher and dispatching
      *
      * @return $this Fluent interface
      */
     function dispatch() {
+
         // Fire up the default dispatcher
         if($this->_dispatcher === null) {
             $this->_dispatcher = new PPI_Dispatch_Standard(array('router' => $this->_router));
         }
 
         $dispatch = new PPI_Dispatch($this->_dispatcher);
-                        
         PPI_Registry::getInstance()->set('PPI_Dispatch', $dispatch);
-
         $dispatch->dispatch();
         return $this;
     }
-    
+
     /**
      * Get the current site mode set, such as 'development' or 'production'
      *
@@ -153,5 +153,5 @@ class PPI_App {
     function getSiteMode() {
         return $this->_siteMode;
     }
-    
+
 }

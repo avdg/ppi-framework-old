@@ -173,7 +173,7 @@ class PPI_View {
 			'config'          => $p_oConfig,
 			'request'         => $request,			
 			'input'           => PPI_Helper::getInput(),
-			'authInfo'        => $authData,
+                        'authData'        => $authData,
 			'baseUrl'         => $p_oConfig->system->base_url,
 			'fullUrl'         => PPI_Helper::getFullUrl(),
 			'currUrl'         => PPI_Helper::getCurrUrl(),
@@ -182,6 +182,7 @@ class PPI_View {
 			'responseCode'    => PPI_Helper::getRegistry()->get('PPI_View::httpResponseCode', 200),
 			'stylesheetFiles' => PPI_View_Helper::getStylesheets(),
 			'javascriptFiles' => PPI_View_Helper::getJavascripts(),
+                        'authInfo'        => $authData, // Do not use, just BC stuff
 			'aAuthInfo'       => $authData, // Do not use, just BC stuff.			
 			'bIsLoggedIn'     => !empty($authData), // Do not use, just BC stuff			
 			'oConfig'         => $p_oConfig, // Do not use, just BC stuff

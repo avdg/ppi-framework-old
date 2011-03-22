@@ -8,7 +8,6 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @copyright 2001-2010 Digiflex Development Team
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version   PHP 5.1.0
  * @link      www.ppiframework.com
 */
 class PPI_App {
@@ -45,8 +44,9 @@ class PPI_App {
         // The sites "mode" this is production or development.
         // This is so PPI knows how to handle things like errors and exceptions without implicitly telling it what to do.
         if(isset($p_aOptions['siteMode'])) {
-            $this->_siteMode = ($p_aOptions['siteMode'] !== 'development' && $p_aOptions['siteMode'] !== 'production')
-                ? 'development' : $p_aOptions['siteMode'];
+            if(in_array($p_aOptions['siteMode'], array('development', 'production'))) {
+            	$this->_siteMode = $p_aOptions['siteMode'];
+            }
             unset($p_aOptions['siteMode']);
         }
         // Any further options passed, eg: it maps; 'errorLevel' to $this->_errorLevel
@@ -98,10 +98,10 @@ class PPI_App {
 
         // Fire up the default config handler
         if($this->_config === null) {
-            $this->_config = new PPI_Config('general.ini');
+            $this->_config = new PPI_Config('general.ini', array('block' => $this->_siteMode));
         }
-
         $this->_config = $this->_config->getConfig();
+
         $registry = PPI_Registry::getInstance();
         // Set the config into the registry for quick read/write
         $registry->set('PPI_Config', $this->_config);

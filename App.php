@@ -12,22 +12,22 @@
 */
 class PPI_App {
 
-    protected $_errorLevel = E_ALL;
-    protected $_showErrors = 'On';
-    protected $_configBlock = 'development';
-    protected $_siteMode = 'development';
-    protected $_config = null;
-    protected $_dispatcher = null;
-    protected $_router = null;
-    protected $_session = null;
+    protected $_errorLevel       = E_ALL;
+    protected $_showErrors       = 'On';
+    protected $_configBlock      = 'development';
+    protected $_siteMode         = 'development';
+    protected $_config           = null;
+    protected $_dispatcher       = null;
+    protected $_router           = null;
+    protected $_session          = null;
 
     function __construct($p_aParams = array()) {
         if(!empty($p_aParams)) {
-              foreach ($p_aParams as $key => $value) {
-                if (method_exists($this, ($sMethod = 'set' . ucfirst($key)))) {
-                    $this->$sMethod($value);
-                }
-              }
+			foreach ($p_aParams as $key => $value) {
+				if (method_exists($this, ($sMethod = 'set' . ucfirst($key)))) {
+					$this->$sMethod($value);
+				}
+			}
         }
     }
 

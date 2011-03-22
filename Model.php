@@ -51,18 +51,18 @@ abstract class PPI_Model {
 		$this->sTableName  = $p_sTableName;
 
 		$oConfig = $this->getConfig();
-		
+
 		// Multiple DB Check and Verify their key exists
 		if($p_sDBKey !== 'default') {
 			if(!isset($oConfig->db->$p_sDBKey)) {
 				throw new PPI_Exception('Unable to find database connection information for key: ' . $p_sDBKey);
 			}
-			
+
 		// Look for db.default in the config, if it doesn't exist revert back to db.*
 		} else {
 			$dbInfo = isset($oConfig->db->default) ? $oConfig->db->default->toArray() : $oConfig->db->toArray();
 		}
-		
+
 		// Verification that all the required DB fields are setup properly
 		foreach(array('host', 'username', 'password', 'database', 'enabled') as $field) {
 			if(!isset($dbInfo[$field])) {
@@ -89,12 +89,12 @@ abstract class PPI_Model {
 				$persistent = true;
 			}
 			$this->rHandler = new PDO($this->makeDSN(),
-									 $this->sUserName, 
-									 $this->sPassword, 
+									 $this->sUserName,
+									 $this->sPassword,
 									 $persistent ? array(PDO::ATTR_PERSISTENT => true) : array()
 			);
 			$this->rHandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			
+
 		} catch (PDOException $e) {
 			throw new PPI_Exception('Database Connection Error: ' . $e->getMessage());
 		}
@@ -120,7 +120,7 @@ abstract class PPI_Model {
 			$this->find($p_iRecordID, true);
 		}
 	}
-	
+
 	/**
 	 * Create a DSN string
 	 * @todo Have this accept params
@@ -305,7 +305,7 @@ abstract class PPI_Model {
 		if (isset($p_aRecord[$this->sTableIndex]) && $p_aRecord[$this->sTableIndex] !== null) {
 			$this->update($p_aRecord, $this->sTableIndex . ' = ' . $p_aRecord[$this->sTableIndex]);
 			return $p_aRecord[$this->sTableIndex];
-			 
+
 		// No primary key found its an insert
 		} else {
 			return $this->insert($p_aRecord);
@@ -430,8 +430,7 @@ abstract class PPI_Model {
 	 * @return array
 	 */
 	function getRecord($p_mFilter, $p_sOrder = "", $p_iLimit = "", $p_sGroup = '') {
-		$aList = $this->getList($p_mFilter, $p_sOrder, $p_iLimit, $p_sGroup);
-		return isset($aList[0]) ? $aList[0] : array();
+		return $this->getList($p_mFilter, $p_sOrder, $p_iLimit, $p_sGroup)->fetch();
 	}
 
 	/**
@@ -457,7 +456,7 @@ abstract class PPI_Model {
 			} else {
 				$sFilter = '';
 			}
-			
+
 			// Order
 			$sOrder = is_array($p_sOrder) && !empty($p_sOrder) ? 'ORDER BY ' : '';
 			if($sOrder == '') {
@@ -495,7 +494,7 @@ abstract class PPI_Model {
 	/**
 	 * This will return you one row by getting a record by its primary key.
 	 * @param integer $search
-	 * @param boolean $p_bSetMetaData Default is false. If true will 
+	 * @param boolean $p_bSetMetaData Default is false. If true will
 set the meta data upon successfull fetch() of the record
 	 * @return array
 	 */
@@ -559,7 +558,7 @@ set the meta data upon successfull fetch() of the record
 	/**
 	 * Create an IN statement from an input such as a string or an array
 	 * @param mixed $p_mValues The values to be added to the IN()
-	 * @return mixed On error return false. On sucess return the 
+	 * @return mixed On error return false. On sucess return the
 IN() filled string
 	 */
 	function makeIN($p_mValues = '') {

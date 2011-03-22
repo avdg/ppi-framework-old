@@ -8,7 +8,6 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @copyright 2001-2010 Digiflex Development Team
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version   PHP 5.1.0
  * @link      www.ppiframework.com
 */
 class PPI_Autoload {

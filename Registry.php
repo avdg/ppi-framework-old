@@ -1,20 +1,19 @@
 <?php
 /**
- *
  * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   PPI
+ * @link      www.ppiframework.com
  */
-
 class PPI_Registry extends ArrayObject  {
     /**
      * Registry object provides storage for shared objects.
      * @var object $_instance
      */
     private static $_instance = null;
-    
+
     /**
      * Constructs a parent ArrayObject with default to allow acces as an object
      * @param array $array Initial data for the parent
@@ -22,9 +21,9 @@ class PPI_Registry extends ArrayObject  {
      */
     public function __construct($array = array(), $flags = parent::ARRAY_AS_PROPS) {
         parent::__construct($array, $flags);
-    }    
-    
-    
+    }
+
+
     /**
      * Retrieves the default instance of the registry, if it doesn't exist then we create it.
      *
@@ -106,7 +105,7 @@ class PPI_Registry extends ArrayObject  {
     public static function remove($index) {
     	self::$_instance->offsetUnset($index);
     }
-    
+
     /**
      * Checks if an offset exists in the registry
      *

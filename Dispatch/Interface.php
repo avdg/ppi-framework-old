@@ -1,13 +1,16 @@
-<?php 
+<?php
 /**
- * The Dispatch Interface
- * This is the interface that you can implement for your custom dispatch helper
- *
+ * @version   1.0
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @copyright Digiflex Development
+ * @package   Dispatch
+ * @link      www.ppiframework.com
  */
 interface PPI_Dispatch_Interface {
-	
+
 	function init();
-	
+
 	function dispatch();
-	
+
 }

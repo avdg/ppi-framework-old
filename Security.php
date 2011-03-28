@@ -1,17 +1,16 @@
 <?php
 /**
- *
  * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   PPI
- * 
- * @notes Security class for PHP
+ * @link      www.ppiframework.com
  *
+ * @notes Security class for PHP
  */
 class PPI_Security {
-	
+
 	/**
 	 * Create a new CSRF key and set it in the session
 	 * @return string The Token
@@ -21,7 +20,7 @@ class PPI_Security {
 		self::setCSRF($token);
 		return $token;
 	}
-	
+
 	/**
 	 * Validate CSRF key with one in the session
 	 * @param string $token
@@ -30,7 +29,7 @@ class PPI_Security {
 	static function checkCSRF($token) {
 		return self::getCSRF() === $token;
 	}
-	
+
 	/**
 	 * Set the CSRF in the session
 	 * @param string $token
@@ -38,7 +37,7 @@ class PPI_Security {
 	static function setCSRF($token) {
 		PPI_Helper::getSession()->set('PPI_Security::csrfToken', $token);
 	}
-	
+
 	/**
 	 * Get the CSRF token from the session
 	 * @return string
@@ -46,5 +45,5 @@ class PPI_Security {
 	static function getCSRF() {
 		return PPI_Helper::getSession()->get('PPI_Security::csrfToken');
 	}
-	
+
 }

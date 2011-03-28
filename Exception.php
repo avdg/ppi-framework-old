@@ -6,6 +6,7 @@
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   PPI
+ * @link      www.ppiframework.com
  */
 
 class PPI_Exception extends Exception {
@@ -88,8 +89,8 @@ class PPI_Exception extends Exception {
 		$oView->load('framework/404', array('heading' => 'Page cannot be found', 'message' => $message));
         exit;
 	}
-	
-	
+
+
 
 	/**
 	 * PPI_Exception::show_exceptioned_error()
@@ -104,8 +105,8 @@ class PPI_Exception extends Exception {
 			$sSiteMode = 'development';
 			$heading = "Exception";
 			require SYSTEMPATH.'View/fatal_code_error.php';
-			echo $header.$html.$footer;	
-			exit;	
+			echo $header.$html.$footer;
+			exit;
 		}
 		$sSiteMode = $oApp->getSiteMode();
 		if($sSiteMode == 'development') {
@@ -118,8 +119,8 @@ class PPI_Exception extends Exception {
 			$oView->load('error', array('message' => $p_aError['message']));
 		}
 		exit;
-	}	
-	
+	}
+
 
 	/**
 	 * Show an error message

@@ -1,15 +1,12 @@
 <?php
 /**
- *
  * @version    1.0
  * @author     Paul Dragoonis <dragoonis@php.net>
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright  Digiflex Development
  * @package    PPI
- * @subpackage core
  * @link       www.ppiframework.com/docs/session.html
  */
-
 class PPI_Session {
 
     private $_authKeyName = 'userAuthInfo';

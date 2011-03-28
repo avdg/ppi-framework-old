@@ -1,6 +1,14 @@
 <?php
+/**
+ * @version   1.0
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @copyright Digiflex Development
+ * @package   Dispatch
+ * @link      www.ppiframework.com
+ */
 class PPI_Dispatch_Standard extends PPI_Dispatch_Abstract implements PPI_Dispatch_Interface {
-	
+
 	function __construct($p_oRouter = null) {
 		/*
 		if($p_oRouter !== null && $p_oRouter instanceof PPI_Router_Interface) {
@@ -9,7 +17,7 @@ class PPI_Dispatch_Standard extends PPI_Dispatch_Abstract implements PPI_Dispatc
 		*/
 		parent::__construct();
 	}
-	
+
 	/**
 	 * Run the init() method and check for a misconfigured baseUrl from the config vs the current url
 	 * Check for a controller to dispatch by using the _Abstract version of checkControllers()
@@ -17,7 +25,7 @@ class PPI_Dispatch_Standard extends PPI_Dispatch_Abstract implements PPI_Dispatc
 	 * @return boolean
 	 */
 	function init() {
-		
+
 		if($this->_router !== null) {
 			$this->_router->init();
 		}
@@ -30,12 +38,12 @@ class PPI_Dispatch_Standard extends PPI_Dispatch_Abstract implements PPI_Dispatc
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Dispatch the set controller
 	 *
 	 */
-	function dispatch() {		
+	function dispatch() {
 		$oController = $this->getController();
 		$sMethod     = $this->getMethod();
 		$oController->$sMethod();

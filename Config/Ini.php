@@ -1,11 +1,11 @@
 <?php
 /**
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.0
- * @author Paul Dragoonis <dragoonis@php.net>
- * @since Version 1.0
- * 
- * Inspiration from Zend Framework, minified and custom tweaked
+ * @version   1.0
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @copyright Digiflex Development
+ * @package   Config
+ *
  */
 class PPI_Config_Ini extends PPI_Config_Generic
 {

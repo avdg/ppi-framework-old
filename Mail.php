@@ -1,6 +1,14 @@
 <?php
+/**
+ * @version   1.0
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @copyright Digiflex Development
+ * @package   PPI
+ * @link      www.ppiframework.com
+ */
 class PPI_Mail {
-	
+
     /**
      * PPI Mail Sending Functioin
      * @param array $p_aOptions The options for sending to the mail library
@@ -9,7 +17,7 @@ class PPI_Mail {
      * @return boolean The result of the mail sending process
      */
     static function sendMail(array $p_aOptions) {
-    	
+
 		$oConfig = PPI_Helper::getConfig();
         $oEmail  = new PPI_Model_Email_Advanced();
         if(!isset($p_aOptions['subject'], $p_aOptions['body'], $p_aOptions['toaddr'])) {
@@ -42,6 +50,6 @@ class PPI_Mail {
 
         // @todo - Log the email sending process.
 
-    }	
-	
+    }
+
 }

@@ -3,7 +3,7 @@
 /**
  * Autoload class
  *
- * @package   Core
+ * @package   PPI
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @copyright 2001-2010 Digiflex Development Team
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License

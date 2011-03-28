@@ -4,10 +4,9 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
- * 
- * @notes Inspiration from Zend Framework but minified and custom 
-tweaked
+ * @package   Config
+ *
+ * Inspiration from Zend Framework but minified and custom tweaked
  */
 class PPI_Config_Generic implements Countable, Iterator {
 

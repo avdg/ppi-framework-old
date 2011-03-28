@@ -1,34 +1,34 @@
 <?php
 /**
- *
  * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
+ * @link      www.ppiframework.com
  * @package   PPI
  */
 class PPI_View {
 
 	protected $_viewParams = array();
-	
+
 	/**
 	 * Are we loading a plugin view (TBC)
 	 * @var boolean $_plugin
 	 */
 	private $_plugin = false;
-	
+
 	/**
 	 * Default renderer, PHP helper
 	 * @var string $_defaultRenderer
 	 */
 	private $_defaultRenderer = 'php';
-	
+
 	/**
 	 * Master Template Override from config or setTemplateFile()
 	 * @var string $_templateOverride
 	 */
 	private $_templateOverride = null;
-	
+
 	/**
 	 * Template Renderer Override from config or useRenderer()
 	 * @var string $_rendererOverride
@@ -45,7 +45,7 @@ class PPI_View {
 	 * @param array $p_tplParams Optional user defined params
 	 */
 	function load($p_tplFile, $p_tplParams = array()) {
-		
+
 		// checking for config overrides or useRenderer() overrides
 		$oConfig = PPI_Helper::getConfig();
 		if($this->_rendererOverride !== null) {
@@ -73,7 +73,7 @@ class PPI_View {
 
 		$this->setupRenderer($oTpl, $p_tplFile, $p_tplParams, $oConfig);
 	}
-	
+
 	/**
 	 * Add a var to the view params
 	 *
@@ -106,7 +106,7 @@ class PPI_View {
 	 * @param array $p_tplParams Optional user defined parameres
 	 */
 	function setupRenderer(PPI_Interface_Template $oTpl, $p_tplFile, $p_tplParams = array(), $p_oConfig) {
-		
+
 		$oSession = PPI_Helper::getSession();
 
 		// Default View Values
@@ -134,12 +134,12 @@ class PPI_View {
 		}
 
 		// Flash Messages
-		if(!isset($p_oConfig->layout->useMessageFlash) || 
+		if(!isset($p_oConfig->layout->useMessageFlash) ||
 			($p_oConfig->layout->useMessageFlash && $p_oConfig->layout->useMessageFlash == true)) {
 			$oTpl->assign('ppiFlashMessage', PPI_Input::getFlashMessage());
 			PPI_Input::clearFlashMessage();
 		}
-		
+
 
 
 		// Master template override from config or setTemplateFile()
@@ -171,7 +171,7 @@ class PPI_View {
 		return array(
 			'isLoggedIn'      => !empty($authData),
 			'config'          => $p_oConfig,
-			'request'         => $request,			
+			'request'         => $request,
 			'input'           => PPI_Helper::getInput(),
                         'authData'        => $authData,
 			'baseUrl'         => $p_oConfig->system->base_url,
@@ -183,8 +183,8 @@ class PPI_View {
 			'stylesheetFiles' => PPI_View_Helper::getStylesheets(),
 			'javascriptFiles' => PPI_View_Helper::getJavascripts(),
                         'authInfo'        => $authData, // Do not use, just BC stuff
-			'aAuthInfo'       => $authData, // Do not use, just BC stuff.			
-			'bIsLoggedIn'     => !empty($authData), // Do not use, just BC stuff			
+			'aAuthInfo'       => $authData, // Do not use, just BC stuff.
+			'bIsLoggedIn'     => !empty($authData), // Do not use, just BC stuff
 			'oConfig'         => $p_oConfig, // Do not use, just BC stuff
 		);
 	}
@@ -248,16 +248,16 @@ class PPI_View {
 			case 'smarty':
 				throw new PPI_Exception('Not yet implemented.');
 				break;
-				
+
 			case 'twig':
 			default:
 				throw new PPI_Exception('Not yet implemented.');
-				break;				
+				break;
 
 		}
 
 	}
-	
+
 	/**
 	 * The internal render function, this is called by $this->load('template');
 	 * @todo finish this, have it accept 'template' at first.
@@ -266,13 +266,13 @@ class PPI_View {
 	 * @param array $p_aOptions Optional options
 	 */
 	protected function render($p_sTemplate, $p_aParams = array(), $p_aOptions = array()) {
-		
+
 		if(!isset($p_aOptions['use_frame']) || $p_aOptions['use_frame'] == true) {
 			// Load up the template
-			
+
 		} else {
 			// Render just this template.
-			
+
 		}
 	}
 }

@@ -1,16 +1,16 @@
 <?php
 /**
- *
  * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   Cache
+ * @link      www.ppiframework.com
  */
 class PPI_Cache {
 
-	private $_handler = null;	
-   
+	private $_handler = null;
+
 	function __construct($handler = null, array $p_aOptions = array()) {
 		if($handler !== null && $handler instanceof PPI_Cache_Interface) {
 			$this->_handler = $handler;
@@ -18,10 +18,11 @@ class PPI_Cache {
 			$this->init();
 		}
 	}
-	
+
 	/**
 	 * Initialise the cache handler
-	 * 
+	 * @param array $p_aOptions The options to go into the cache initialisation
+	 * @return void
 	 * @throws PPI_Exception
 	 *
 	 */
@@ -36,16 +37,16 @@ class PPI_Cache {
 				case 'memcached':
 					if(!extension_loaded($handlerName)) {
 						throw new PPI_Exception('Unable to use ' . $handlerName . ' for caching. Extension not loaded.');
-					}  				
+					}
 					$handler = 'PPI_Cache_Memcached';
 					break;
 			}
 		} else {
 			$handler = 'PPI_Cache_Disk';
 		}
-		$this->_handler = new $handler($p_aOptions);		
+		$this->_handler = new $handler($p_aOptions);
 	}
-	
+
     /**
      * Get a key value from the cache
      * @param string $p_sKey The Key
@@ -57,7 +58,7 @@ class PPI_Cache {
     	}
     	return $this->_handler->get($p_sKey);
     }
-    
+
     /**
      * Set a value in the cache
      * @param string $p_sKey The Key
@@ -67,10 +68,10 @@ class PPI_Cache {
     function set($p_sKey, $p_mValue) {
     	if($this->_handler === null) {
     		$this->init();
-    	}    	
+    	}
     	return $this->_handler->set($p_sKey, $p_mValue);
     }
-    
+
     /**
      * Check if a key exists in the cache
      * @param string $p_sKey The Key
@@ -79,10 +80,10 @@ class PPI_Cache {
     function exists($p_sKey) {
     	if($this->_handler === null) {
     		$this->init();
-    	}    	
+    	}
     	return $this->_handler->exists($p_sKey);
     }
-    
+
     /**
      * Remove a value from the cache by key
      * @param string $p_sKey The Key
@@ -91,8 +92,8 @@ class PPI_Cache {
     function remove($p_sKey) {
     	if($this->_handler === null) {
     		$this->init();
-    	}    	
+    	}
     	return $this->_handler->remove($p_sKey);
     }
-	
+
 }

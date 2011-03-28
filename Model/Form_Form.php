@@ -1,15 +1,15 @@
 <?php
-
 /**
  *
  * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   Model
+ * @link      www.ppiframework.com
  */
 class PPI_Model_Form_Form extends PPI_Model {
-	
+
 	private $_name 			= 'ppi_fb_form';
 	private $_primary 		= 'id';
 	private $_formName 		= '';
@@ -29,7 +29,7 @@ class PPI_Model_Form_Form extends PPI_Model {
 		$this->oRule  = new PPI_Model_Form_Rule($this->_formName);
 		parent::__construct($this->_name, $this->_primary);
 	}
-	
+
 	/**
 	 * Get the form information and set it to the class properties
 	 * @return void
@@ -48,14 +48,14 @@ class PPI_Model_Form_Form extends PPI_Model {
 			throw new PPI_Exception('Form: '.$this->_formName . ' doesn\'t exist');
 		}
 	}
-	
+
 	/**
 	 * Get all the fields from the form
 	 * @todo: Decide wether this will return the fields, set the object property or both.
 	 * @return void
 	 */
 	function getFields() {
-		
+
 		$aFieldTypes 	= $this->oField->getFieldTypes();
 		$aFields 		= $this->oField->select()
 							->columns('id, type_id, name, label')
@@ -63,22 +63,22 @@ class PPI_Model_Form_Form extends PPI_Model {
 							->where("form_name = '".$this->_formName."'")
 							->order('`order`')
 							->getList();
-							
-		// Do the field type mapping	
+
+		// Do the field type mapping
 		foreach($aFields as $key => $aField) {
 			$aFields[$key]['type'] = $aFieldTypes[$aField['type_id']]; // Set the field type
 			foreach(array('type_id', 'id') as $unsetField) {
 				unset($aFields[$key][$unsetField]);
 			}
 			$iFieldID = $aField['id'];
-			// Get all the attributes and assign it to the 
+			// Get all the attributes and assign it to the
 			$aFieldAttributes = $this->oField->getAttributes($iFieldID);
 			foreach($aFieldAttributes as $attrkey => $attrval) {
 				$aFields[$key][$attrkey] = $attrval;
-			}		
-			
+			}
+
 		}
-		$this->_formFields = $aFields;		
+		$this->_formFields = $aFields;
 	}
 
 	/**
@@ -95,21 +95,21 @@ class PPI_Model_Form_Form extends PPI_Model {
 							->where("r.form_name = '".$this->_formName."'")
 							->getList();
 		$aNewRules		= array();
-		// Do the field rule type mapping	
+		// Do the field rule type mapping
 		foreach($aRules as $key => $aRule) {
 			// Get the rule name and assign it
 			$aRules[$key]['name'] = $aRuleTypes[$aRule['rule_id']]['name'];
 			$aRules[$key]['field_name'] = $aRule['field_name'];
-			// If there is no rule message defined at the rule, we take it from the Rule Type 
+			// If there is no rule message defined at the rule, we take it from the Rule Type
 			$aRules[$key]['message'] = ($aRule['error_message'] != '') ? $aRule['error_message'] : $aRuleTypes[$aRule['rule_id']]['message'];
 			if($aRules[$key]['name'] == 'compare') {
 				$aRules[$key]['comparee'] = $aRule['value'];
 			}
-		}	
+		}
 		$this->_formRules = $aRules;
-		
-	}	
-	
+
+	}
+
 	/**
 	 * Build the entire form structure from the database
 	 * @return array
@@ -125,9 +125,9 @@ class PPI_Model_Form_Form extends PPI_Model {
 			$formStructure['fields'] = array();
 			foreach($this->_formFields as $key => $aField) {
 				$sFieldName = $aField['name'];
-				unset($aField['name']);				
+				unset($aField['name']);
 				$formStructure['fields'][$sFieldName] = $aField;
-			}				
+			}
 		}
 		if(count($this->_formRules) > 0) {
 			$formStructure['rules'] = array();
@@ -144,16 +144,16 @@ class PPI_Model_Form_Form extends PPI_Model {
 		}
 		return $formStructure;
 	}
-	
+
 	/**
 	 * Set the form name
 	 * @param string $p_sFormName
 	 * @return void
 	 */
 	function setFormName($p_sFormName) {
-		$this->_formName = $p_sFormName;	
+		$this->_formName = $p_sFormName;
 	}
-	
+
 	/**
 	 * Get the form name
 	 * @return void
@@ -161,7 +161,7 @@ class PPI_Model_Form_Form extends PPI_Model {
 	function getFormName() {
 		return $this->_formName;
 	}
-	
+
 	/**
 	 * Set the form id
 	 * @param integer $p_iFormID
@@ -170,7 +170,7 @@ class PPI_Model_Form_Form extends PPI_Model {
 	function setFormID($p_iFormID) {
 		$this->_formID = $p_iFormID;
 	}
-	
+
 	/**
 	 * Get the form id
 	 * @return integer
@@ -178,5 +178,5 @@ class PPI_Model_Form_Form extends PPI_Model {
 	function getFormID() {
 		return $this->_formID;
 	}
-	
+
 }

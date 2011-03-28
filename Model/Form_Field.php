@@ -1,38 +1,37 @@
 <?php
 /**
- *
  * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   Model
+ * @link      www.ppiframework.com
  */
-
 class PPI_Model_Form_Field extends PPI_Model {
-	
+
 	private $_fieldName;
 	private $_fieldID;
-	
+
 	/**
 	 * Primary key
 	 * @var string $_primary
 	 */
 	private $_primary = 'id';
-	
+
 	/**
 	 * Table Name
 	 * @var string $_name
 	 */
 	public $_name = 'ppi_fb_field';
-	
+
 	function __construct() {
 		parent::__construct($this->_name, $this->_primary);
 	}
-	
+
 	function getRules() {
-		
+
 	}
-	
+
 	/**
 	 * GEt attributes for a field
 	 * @param integer $p_iFieldID Field ID
@@ -49,7 +48,7 @@ class PPI_Model_Form_Field extends PPI_Model {
 		}
 		return $aAttributes;
 	}
-	
+
 	/**
 	 * Get a list of field types
 	 * @return array
@@ -62,12 +61,12 @@ class PPI_Model_Form_Field extends PPI_Model {
 			$aFields[$aField['id']] = $aField['type'];
 		}
 		return !empty($aFieldTypes) ? $aFields : array();
-	}	
-	
+	}
+
 	/**
 	 * Get a field from the db
 	 * @param integer $p_iFieldID The Field ID
-	 * @return 
+	 * @return
 	 */
 	function getField($p_iFieldID) {
 		return $this->select()
@@ -75,5 +74,5 @@ class PPI_Model_Form_Field extends PPI_Model {
 				->where("id = '".$p_iFieldID."'")
 				->getList($select);
 	}
-	
-}	
+
+}

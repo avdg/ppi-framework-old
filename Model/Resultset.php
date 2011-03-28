@@ -1,13 +1,12 @@
 <?php
 /**
- *
  * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   Model
+ * @link      www.ppiframework.com
  */
-
 class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
 
 	/**
@@ -19,7 +18,7 @@ class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
 	* The default fetch mode
 	*/
 	private $_fetchMode  = PDO::FETCH_ASSOC;
-	
+
 	/**
 	 * The number of rows returned from this query.
 	 *
@@ -156,7 +155,7 @@ class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
 
 	/**
 	 * Get the current pointer set - From the SPL Interface: Iterator
-	 * 
+	 *
 	 * @return integer
 	 */
 	function key() {
@@ -174,7 +173,7 @@ class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
 	/**
 	 * Rewind the pointer - From the SPL Interface: Iterator
 	 * @return void
-	 */	
+	 */
 	function rewind() {
 		$this->_dataPointer = 0;
 	}
@@ -182,7 +181,7 @@ class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
 	/**
 	 * Verify if there is another pointer next or we are at the end - From the SPL Interface: Iterator
 	 * @return boolean
-	 */	
+	 */
 	function valid() {
 		return $this->_dataPointer < $this->count();
 	}

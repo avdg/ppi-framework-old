@@ -36,7 +36,7 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	 * @param string $p_sKey The Key
 	 * @return boolean
 	 */
-	public function remove($p_sKey) {
+	function remove($p_sKey) {
 		return $this->removeKeyByPath($this->getKeyCachePath($p_sKey))
 		    && $this->removeKeyByPath($this->getKeyMetaCachePath($p_sKey));
 	}
@@ -46,7 +46,7 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	 * @param string $p_sPath
 	 * @return boolean
 	 */
-    public function removeKeyByPath($p_sPath) {
+    function removeKeyByPath($p_sPath) {
         return file_exists($p_sPath) && unlink($p_sPath);
     }
 
@@ -96,7 +96,7 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	 * @param string $p_mKey The Key(s)
 	 * @return boolean
 	 */
-	public function exists($p_sKey) {
+	function exists($p_sKey) {
         $sPath = $this->getKeyCachePath($p_sKey);
 	    if(file_exists($sPath) === false) {
 	        return false;
@@ -118,7 +118,7 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	 * @param integer $p_iTTL The Time To Live
 	 * @return boolean
 	 */
-	public function set($p_sKey, $p_mData, $p_iTTL = 0) {
+	function set($p_sKey, $p_mData, $p_iTTL = 0) {
 
         $sPath = $this->getKeyCachePath($p_sKey);
 	    if($this->exists($p_sKey)) {
@@ -134,9 +134,11 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	        }
 	    }
 	    if(is_writeable($sCacheDir) === false) {
-	        $aFileInfo = fileperms(dirname($sPath));
-	        ppi_dump($aFileInfo); exit;
-		    throw new PPI_Exception('Unable to create cache file: ' . $p_sKey. '. Cache directory not writeable.<br>(' . $this->_cacheDir . ')<br>Current permissions: ');
+	        $aFileInfo = pathinfo(dirname($sPath));
+	        chmod($sCacheDir, 775);
+	        if(is_writable($sCacheDir) === false) {
+		    	throw new PPI_Exception('Unable to create cache file: ' . $p_sKey. '. Cache directory not writeable.<br>(' . $this->_cacheDir . ')<br>Current permissions: ');
+	        }
 	    }
 
 	    $aMetaData = array(
@@ -153,11 +155,22 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	 * @param string $p_sKey The Key
 	 * @return mixed
 	 */
-	public function get($p_sKey, $p_mDefault = null) {
+	function get($p_sKey, $p_mDefault = null) {
 	    if($this->exists($p_sKey) === false) {
 	        return $p_mDefault;
 	    }
 	    return $this->getData($this->getKeyCachePath($p_sKey));
 	}
+
+	/**
+	 * Check if this adapter is enabled or not.
+	 *
+	 * @return boolean
+	 */
+	function enabled() { return true; }
+
+	function increment($p_sKey, $p_mIncrement) { }
+
+	function decrement($p_sKey, $p_mDecrement) { }
 
 }

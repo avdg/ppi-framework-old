@@ -1,14 +1,12 @@
 <?php
-
 /**
- *
  * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   Model
+ * @link      www.ppiframework.com
  */
-
 class PPI_Model_Select {
 
     const INNER_JOIN     = 'INNER JOIN';
@@ -81,43 +79,43 @@ class PPI_Model_Select {
 		$this->innerJoin($table, $on);
 		return $this;
 	}
-	
+
 	/**
 	 * Perform an INNER JOIN
 	 * @param string $table The Table
 	 * @param string $on The ON Clause
-	 */		
+	 */
 	function innerJoin($table, $on) {
 		$this->addJoin($table, $on, self::INNER_JOIN);
 		return $this;
 	}
-	
+
 	/**
 	 * Perform a LEFT JOIN
 	 * @param string $table The Table
 	 * @param string $on The ON Clause
-	 */		
+	 */
 	function leftJoin($table, $on) {
 		$this->addJoin($table, $on, self::LEFT_JOIN);
 		return $this;
 	}
-	
+
 	/**
 	 * Perform a RIGHT JOIN
 	 * @param string $table The Table
 	 * @param string $on The ON Clause
-	 */		
+	 */
 	function rightJoin($table, $on) {
 		$this->addJoin($table, $on, self::RIGHT_JOIN);
 		return $this;
 	}
-	
+
 	/**
 	 * Add a join to the joinOrder
 	 * @param string $table The Table Name
 	 * @param string $on The ON Clause
 	 * @param string $type ('left', 'right', 'inner')
-	 */	
+	 */
 	function addJoin($table, $on, $type) {
 		$this->_joinCount++;
 		array_push($this->_joinOrder, array(
@@ -162,9 +160,9 @@ class PPI_Model_Select {
 		$this->_limit = $limit;
 		return $this;
 	}
-	
+
 	/**
-	 * Set the columns on the SELECt 
+	 * Set the columns on the SELECt
 	 * @param string $columns The Columns
 	 */
 	function columns($columns) {
@@ -190,7 +188,7 @@ class PPI_Model_Select {
 		}
 		return $this->_query;
 	}
-	
+
 	/**
 	 * Generate the query
 	 */
@@ -209,12 +207,12 @@ class PPI_Model_Select {
 		if(!empty($this->_where)) {
 			$query .= ' ' . self::SQL_WHERE . ' (' . implode(' ' . self::SQL_AND . ' ', $this->_where) . ')';
 		}
-		
+
 		// group by
 		if($this->_group != '') {
 			$query .= ' ' . self::SQL_GROUP_BY . ' ' . $this->_group;
-		}		
-		
+		}
+
 		// order by
 		if($this->_order != '') {
 			$query .=  ' ' . self::SQL_ORDER_BY . ' ' . $this->_order;

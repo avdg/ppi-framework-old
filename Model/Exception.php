@@ -1,21 +1,21 @@
 <?php
-
 /**
  *
  * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   Model
+ * @link      www.ppiframework.com
  */
-class PPI_Model_Exception extends PPI_Model 
+class PPI_Model_Exception extends PPI_Model
 {
-	
+
 	public function __construct ()
 	{
 		parent::__construct('ppi_errors', 'id');
 	}
-	
+
 	/**
 	 * Delete an exception fromt he lgo
 	 * @param unknown_type $p_iRecordID
@@ -24,7 +24,7 @@ class PPI_Model_Exception extends PPI_Model
 	{
 		if (empty ($p_iRecordID))
 		 return false;
-		 
+
 		$sQuery = "
 		 DELETE FROM
 		  ppi_errors

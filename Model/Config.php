@@ -5,8 +5,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
- * @subpackage core
+ * @package   Model
  */
 
 class PPI_Model_Config extends PPI_Base {
@@ -68,9 +67,9 @@ class PPI_Model_Config extends PPI_Base {
 		}
 		return '';
 	}
-	
+
 	/**
-	 * Get the Role ID from the Role Name 
+	 * Get the Role ID from the Role Name
 	 * @param string $p_roleName Role Name
 	 * @return integer
 	 */

@@ -1,14 +1,12 @@
 <?php
-
 /**
- *
  * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   Model
+ * @link      www.ppiframework.com
  */
-
 class PPI_Model_ReCaptcha {
     /**
      * URI to the regular API
@@ -27,7 +25,7 @@ class PPI_Model_ReCaptcha {
      * @var string Verify Server
      */
     const VERIFY_SERVER = 'api-verify.recaptcha.net';
-    
+
     /**
      * Public key used when displaying the captcha
      * @var string $_publicKey
@@ -67,8 +65,8 @@ class PPI_Model_ReCaptcha {
     protected $_options = array(
         'theme' => 'red',
         'lang' => 'en',
-    );       
-    	
+    );
+
 	function __construct() {
 		global $oConfig;
         if ($oConfig->layout->captchaPublicKey !== '') {
@@ -80,10 +78,10 @@ class PPI_Model_ReCaptcha {
             $this->setPrivateKey($oConfig->layout->captchaPrivateKey);
         } else {
         	throw new PPI_Exception('Unable to use Captcha Service with no Private Key')	;
-		}		
-        $this->setIp($_SERVER['REMOTE_ADDR']);		
+		}
+        $this->setIp($_SERVER['REMOTE_ADDR']);
 	}
-	
+
 	function getHTML($error = null, $use_ssl = false) {
 		global $oConfig;
 		if ($use_ssl) {
@@ -96,13 +94,13 @@ class PPI_Model_ReCaptcha {
 	           $errorpart = "&amp;error=" . $error;
 	        }
 	        return '<script type="text/javascript" src="'. $server . '/challenge?k=' . $this->getPublicKey() . $errorpart . '"></script>
-	
+
 		<noscript>
 	  		<iframe src="'. $server . '/noscript?k=' . $this->getPublicKey() . $errorpart . '" height="300" width="500" frameborder="0"></iframe><br/>
 	  		<textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
 	  		<input type="hidden" name="recaptcha_response_field" value="manual_challenge"/>
 		</noscript>';
-	}	
+	}
 
    /**
      * Verify the user input
@@ -136,13 +134,13 @@ class PPI_Model_ReCaptcha {
 		}
 		fwrite($fs, $sHTTPReq);
 		$response = '';
-		
+
 		// Retreive the response from ReCaptcha
 		while(!feof($fs)) {
 			$response .= fgets($fs, 1160); // One TCP-IP packet
 		}
 		// Obtain the result and an optional error message
-		list(, $aAnswers) 			= explode("\r\n\r\n", $response, 2);	
+		list(, $aAnswers) 			= explode("\r\n\r\n", $response, 2);
 		list($sVerified, $sError) 	= explode("\n", $aAnswers);
 		if( trim($sVerified) == 'true') {
 		    $aResponse['valid'] = true;
@@ -165,8 +163,8 @@ class PPI_Model_ReCaptcha {
 		}
 		// Change this to $req = substr($req, 0, -1);
 		return substr($req,0,strlen($req)-1);
-	}		
-	
+	}
+
     /**
      * Set the ip property
      * @param string $ip
@@ -183,7 +181,7 @@ class PPI_Model_ReCaptcha {
      */
     public function getIp() {
         return $this->_ip;
-    }   
+    }
 
     /**
      * Get the public key
@@ -202,7 +200,7 @@ class PPI_Model_ReCaptcha {
         $this->_publicKey = $publicKey;
         return $this;
     }
-    
+
     /**
      * Get the private key
      * @return string

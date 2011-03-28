@@ -1,12 +1,12 @@
 <?php
-
 /**
  *
  * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   Model
+ * @link      www.ppiframework.com
  */
 class PPI_Model_Form  {
 	/**
@@ -84,13 +84,13 @@ class PPI_Model_Form  {
 
 	/**
 	 * Not sure what this is need to identify but i think it's the field name that's been assigned a recaptcha type
-	 * @var array $_captchaFields 
+	 * @var array $_captchaFields
 	 */
 	private $_captchaFields			= array();
 
 	/**
 	 * To determine wether or not tineMCE has been initiated on one of the fields
-	 * @var boolean $_isTinyMCEEnabled 
+	 * @var boolean $_isTinyMCEEnabled
 	 */
 	private $_isTinyMCEEnabled		= false;
 
@@ -305,13 +305,13 @@ class PPI_Model_Form  {
 				if($fieldOptions['type'] == 'dropdown' && !array_key_exists('options', $fieldOptions)) {
 					$structure['fields'][$fieldName]['options'] = array();
 				}
-				
+
 				if(strtolower($fieldOptions['type'])  === 'dropdown') {
 					$structure['fields'][$fieldName]['option_keys']   = array_keys($structure['fields'][$fieldName]['options']);
 					$structure['fields'][$fieldName]['option_values'] = array_values($structure['fields'][$fieldName]['options']);
 				}
-								
-				
+
+
 				// Set the extra attributes so that any additional keys to this fields array will be applied to the HTML
 				// 'class' => 'myclass' would be converted to class="myclass".
 				$aExtraOptions = array();
@@ -552,7 +552,7 @@ class PPI_Model_Form  {
 	function getFormName() {
 		return $this->_formName;
 	}
-	
+
 	/**
 	 * Get the form ID
 	 * @return integer

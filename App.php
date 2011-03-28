@@ -1,10 +1,8 @@
 <?php
-
 /**
  * This is the PPI Appliations Configuration class which is used in the Bootstrap
  *
- * @category  PPI
- * @package   PPI_App
+ * @package   PPI
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @copyright 2001-2010 Digiflex Development Team
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -35,6 +33,7 @@ class PPI_App {
      * Setter for the environment, passing in options determining how the app will behave
      *
      * @param array $p_aOptions The options
+     * @return void
      */
     function setEnv(array $p_aOptions) {
         if(isset($p_aOptions['config'])) {
@@ -62,6 +61,7 @@ class PPI_App {
      * Set the router object for the app bootup
      *
      * @param PPI_Router_Interface $p_oRouter The router object
+     * @return void
      */
     function setRouter(PPI_Router_Interface $p_oRouter) {
         $this->_router = $p_oRouter;
@@ -71,6 +71,7 @@ class PPI_App {
      * Set the dispatch object for the app bootup
      *
      * @param PPI_Dispatch_Interface $p_oDispatch The dispatch object
+     * @return void
      */
     function setDispatcher(PPI_Dispatch_Interface $p_oDispatch) {
         $this->_dispatcher = $p_oDispatch;
@@ -80,6 +81,7 @@ class PPI_App {
      * Set the session object for the app bootup
      *
      * @param PPI_Session_Interface $p_oSession The session object
+     * @return void
      */
     function setSession(PPI_Session_Interface $p_oSession) {
         $this->_session = $p_oSession;

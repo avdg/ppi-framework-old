@@ -1,14 +1,12 @@
 <?php
-
 /**
- *
  * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   Model
+ * @link      www.ppiframework.com
  */
-
 class PPI_Model_User extends APP_Model_Application {
 	public $_encryptionAlgorithm = 'sha1';
 	// @todo - Make sure this is default but config overridden
@@ -54,7 +52,7 @@ class PPI_Model_User extends APP_Model_Application {
 		} else {
 			//if password is being passed in for re-set, we need to encrypt it
 			if(isset($aData['password'])) {
-				$aData['password'] 	= $this->encryptAndSaltPassword($aData[$oConfig->system->usernameField], $aData['password']);
+				$aData['password'] 	= $this->encryptNewPassword($aData['password']);
 				unset($aData[$oConfig->system->usernameField]);
 			}
 		}
@@ -83,14 +81,17 @@ class PPI_Model_User extends APP_Model_Application {
 	function updatePassword($p_iUserID, $p_sPassword) {
 
 		// If we were able to get user details
-		if(count($aUser = $this->find($p_iUserID)) > 0) {
+		$aUser = $this->find($p_iUserID);
+		if(!empty($aUser)) {
+
 			// Using the username field from the config.
 			$usernameField = $this->getConfig()->system->usernameField;
 
 			// We update the users record, passing in the encrypted form of their new password.
 			$this->putRecord(array(
 				$this->getPrimaryKey() => $p_iUserID,
-				'password'             => $this->encryptAndSaltPassword($aUser[$usernameField], $p_sPassword)
+				$usernameField         => $aUser[$usernameField],
+				'password'             => $this->encryptNewPassword($aUser[$usernameField], $p_sPassword)
 			));
 			return true;
 		}
@@ -195,7 +196,8 @@ class PPI_Model_User extends APP_Model_Application {
 		if(!in_array($algo, $algos)) {
 			throw new PPI_Exception('Unable to use algorithm: ' . $algo . 'not supported in list of: ' . implode(', ', $algos));
 		}
-		$salt = substr(hash($algo, uniqid(rand(), true)), 0, 12);
+		$oConfig = $this->getConfig();
+		$salt = (!empty($oConfig->system->userAuthSalt)) ? $oConfig->system->userAuthSalt : '';
 		return $this->encryptPassword($salt, $password);
 	}
 

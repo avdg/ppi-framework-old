@@ -1,12 +1,11 @@
 <?php
-
 /**
  *
  * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   Model
  */
 
 class PPI_Model_Email_Template extends PPI_Model {
@@ -16,18 +15,18 @@ class PPI_Model_Email_Template extends PPI_Model {
     private $_subject;
     private $_replacerData;
     private $_templateName;
-    private $_headers;    
-    
+    private $_headers;
+
     function __construct() {
         parent::__construct('ppi_email_template', 'id');
-    }  
-      
+    }
+
     /**
      * Set the template to be used
      * @param string $p_sTemplate Template Name
      * @param array $p_aReplacerData Replacer Tags
      * @return $this (fluent interface)
-     */  
+     */
     function setTemplate($p_sTemplate, $p_aReplacerData = array()) {
         // get the template data, does the template exist ?
         $rows = parent::getList("name = '$p_sTemplate'");
@@ -43,8 +42,8 @@ class PPI_Model_Email_Template extends PPI_Model {
         $this->_sender            = $rows[0]['from'];
         $this->_templateName     = $p_sTemplate;
         return $this;
-    }   
-    
+    }
+
     /**
      * Replace the data from the templates
      * @return void
@@ -53,7 +52,7 @@ class PPI_Model_Email_Template extends PPI_Model {
 
         if(count($this->_replacerData) > 0) {
             foreach($this->_replacerData as $key => $replace) {
-                // Try to replace the subject    
+                // Try to replace the subject
                 if($this->_subject != '') {
                     $this->_subject = str_ireplace('['.$key.']', $this->_replacerData[$key], $this->_subject);
                 }
@@ -63,12 +62,12 @@ class PPI_Model_Email_Template extends PPI_Model {
             }
         }
     }
-    
+
     /**
      * Send the email out
      */
     function sendMail() {
-        // check required properties (to,from,subject,[body](warning(maybe)) 
+        // check required properties (to,from,subject,[body](warning(maybe))
         if(is_array($this->_recipient) && count($this->_recipient) < 1) {
             throw new PPI_Exception('Unable to send email: No recipient specified');
         } elseif(is_string($this->_recipient) && $this->_recipient == '') {
@@ -80,10 +79,10 @@ class PPI_Model_Email_Template extends PPI_Model {
         if($this->_subject == '') {
             throw new PPI_Exception('Unable to send email: No subject specified');
         }
-        
+
         $this->setHeaders();
         $this->replaceData();
-        
+
         // send the mail(s)
         if(is_array($this->_recipient)) {
             foreach($this->_recipient as $to) {
@@ -93,7 +92,7 @@ class PPI_Model_Email_Template extends PPI_Model {
             $ret = mail($this->_recipient, $this->_subject, $this->_body, $this->_headers);
         }
         // this needs tested on the live server so mail() can work.
-        
+
         // log the mail send - this is a bug, it will try to insert to ppi_email_templates - this should insert to email_log instead.
         /*
         $oLog = new PPI_Model_Log();
@@ -106,18 +105,18 @@ class PPI_Model_Email_Template extends PPI_Model {
         ));
         */
     }
-    
+
     /**
      * Set the email headers
      * @return void
      */
     function setHeaders() {
         $this->_headers     = "Content-Type: text/html; charset=iso-8859-1\n";
-        $this->_headers     .= "From: <".$this->_sender.">\nReply-to: <noreply@".getHostname().">\n";        
+        $this->_headers     .= "From: <".$this->_sender.">\nReply-to: <noreply@".getHostname().">\n";
         $this->_headers     .= "X-mailer: php\r\n";
         $this->_headers     .= "X-Priority: 1\r\n";
     }
-    
+
     /**
      * Set the Sender
      * @param string $p_sSender The Sender
@@ -127,7 +126,7 @@ class PPI_Model_Email_Template extends PPI_Model {
         $this->_sender = $p_sSender;
         return $this;
     }
-    
+
     /**
      * Set the Recipient
      * @param mixed $p_mRecipient The Recipient(s)
@@ -135,13 +134,13 @@ class PPI_Model_Email_Template extends PPI_Model {
      */
     function setRecipient($p_mRecipient) {
         if(is_array($p_mRecipient)) {
-            
+
         } elseif(is_string($p_mRecipient)) {
             $this->_recipient = $p_mRecipient;
         }
         return $this;
     }
-    
+
     /**
      * Set the Subject
      * @param string $p_sSubject The Subject
@@ -158,9 +157,9 @@ class PPI_Model_Email_Template extends PPI_Model {
      */
     function setReplacerData(array $p_aData) {
         $this->_replacerData = $p_aData;
-        return $this;        
-    }    
-    
+        return $this;
+    }
+
     /**
      * Get the addedit structure for Formbuilder
      * @param string $p_sMode The Mode
@@ -178,7 +177,7 @@ class PPI_Model_Email_Template extends PPI_Model {
                 'code'       => array('type' => 'required', 'message' => 'Template code cannot be blank'),
                 'description' => array('type' => 'required', 'message' => 'Description cannot be blank')
             )
-        ); 
-        return $structure;       
+        );
+        return $structure;
     }
 }

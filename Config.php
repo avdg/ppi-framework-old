@@ -5,20 +5,20 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   Config
  * @link      wwww.ppiframework.com
  */
 
 class PPI_Config {
-	
+
 	private $_oConfig    = null;
 	private $_configFile = null;
 
-	
+
 	/**
 	 * Initialise the config object
 	 *
-	 * Will check the file extension of your config filename and load up a specific parser 
+	 * Will check the file extension of your config filename and load up a specific parser
 	 * @param string $p_sConfigFile The config filename
 	 * @param array $p_aOptions The options
 	 */
@@ -43,7 +43,7 @@ class PPI_Config {
 
 		}
 	}
-	
+
 	/**
 	 * Get the current set config objct
 	 *

@@ -5,7 +5,7 @@
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @link      www.ppiframework.com
- * @package   PPI
+ * @package   View
  */
 class PPI_View {
 

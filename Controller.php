@@ -5,7 +5,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   Controller
  */
 class PPI_Controller {
 
@@ -21,7 +21,7 @@ class PPI_Controller {
 	/**
 	 * Perform redirect to internal framework url. Optionally redirect to external host
 	 * @param string $p_sURL Optional param for where to redirect to
-	 * @param boolean $p_bPrependBase Default is true. If true will prepend the framework's base Url. 
+	 * @param boolean $p_bPrependBase Default is true. If true will prepend the framework's base Url.
  	 *									If false will redirect to absolute external url.
  	 * @throws PPI_Exception
 	 */
@@ -37,7 +37,7 @@ class PPI_Controller {
 			throw new PPI_Exception('Unable to redirect to '.$sUrl.'. Headers already sent');
 		}
 	}
-	
+
 	/**
 	 * Load a view
 	 *
@@ -48,7 +48,7 @@ class PPI_Controller {
 	protected function load($p_tplFile, $p_tplParams = array()) {
 		$this->_view->load($p_tplFile, $p_tplParams);
 	}
-	
+
 	/**
 	 * Set a view variable or a list of view variables.
 	 *
@@ -64,19 +64,19 @@ class PPI_Controller {
 			$this->_view->set($p_mKeys, $p_mValue);
 		}
 	}
-	
+
 	/**
 	 * Load a view, but override the renderer to smarty
 	 *
 	 * @param string $p_tplFile The view filename. File extensions are optional.
 	 * @param array $p_tplParams Optional parameters to the view file.
 	 * @return void
-	 * 
+	 *
 	 */
 	protected function loadSmarty($p_tplFile, $p_tplParams = array()) {
 		$this->_view->loadsmarty($p_tplFile, $p_tplParams);
 	}
-	
+
     /**
      * PPI_View::addStylesheet()
      * Append to the list of stylesheets to be included
@@ -106,7 +106,7 @@ class PPI_Controller {
 	protected function setTemplateFile($p_sNewTemplateFile, $p_bUseSmarty = false) {
 		$this->_view->setTemplateFile($p_sNewTemplateFile, $p_bUseSmarty);
 	}
-			
+
 
 	/**
 	 * Setter for setting the flash message to appear on next page load.
@@ -141,7 +141,7 @@ class PPI_Controller {
 	protected function getCurrUrl() {
 		return PPI_Helper::getCurrUrl();
 	}
-	
+
 	/**
 	 * Get the full URL
 	 *
@@ -186,7 +186,7 @@ class PPI_Controller {
 	protected function getRegistry() {
 		return PPI_Helper::getRegistry();
 	}
-	
+
 	/**
 	 * Get the cache object from PPI_Helper
 	 *
@@ -214,7 +214,7 @@ class PPI_Controller {
 		$authData = $this->getSession()->getAuthData();
 		return $p_bUseArray ? $authData : (object) $authData;
 	}
-	
+
 	/**
 	 * Get a parameter from the URI
 	 *
@@ -225,7 +225,7 @@ class PPI_Controller {
 	protected function get($p_sVar, $p_mDefault = null) {
 		return $this->_input->get($p_sVar, $p_mDefault);
 	}
-	
+
 	/**
 	 * Access the HTTP POST variables
 	 *
@@ -235,8 +235,8 @@ class PPI_Controller {
 	 */
 	protected function post($p_sVar = null, $p_mDefault = null) {
 		return $this->_input->post($p_sVar, $p_mDefault);
-	}	
-	
+	}
+
 	/**
 	 * Does a particular post variable exist
 	 *
@@ -246,7 +246,7 @@ class PPI_Controller {
 	protected function hasPost($p_sKey) {
 		return $this->_input->hasPost($p_sKey);
 	}
-	
+
 	/**
 	 * Has the form been submitted ?
 	 *
@@ -255,7 +255,7 @@ class PPI_Controller {
 	protected function isPost() {
 		return $this->_input->isPost();
 	}
-	
+
 	/**
 	 * Obtain strippost from the input object
 	 * Will give all HTTP POST variables that match a specific prefix
@@ -266,17 +266,17 @@ class PPI_Controller {
 	protected function stripPost($p_sPrefix) {
 		return $this->_input->stripPost($p_sPrefix);
 	}
-	
+
 	/**
-	 * Remove a value from HTTP POST 
+	 * Remove a value from HTTP POST
 	 *
 	 * @param string $p_sKey
 	 * @return void
 	 */
 	protected function removePost($p_sKey) {
 		$this->_input->removePost($p_sKey);
-	}	
-	
+	}
+
 	/**
 	 * Empty the entire HTTP POST
 	 *
@@ -285,7 +285,7 @@ class PPI_Controller {
 	protected function emptyPost() {
 		$this->_input->emptyPost();
 	}
-	
+
 	protected function getPlugin($p_sPluginName) {
 		return PPI_Helper::getPlugin()->getPlugin($p_sPluginName);
 	}

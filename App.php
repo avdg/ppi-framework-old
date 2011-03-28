@@ -1,6 +1,9 @@
 <?php
 /**
- * This is the PPI Appliations Configuration class which is used in the Bootstrap
+  * This is the PPI Appliations Configuration class which is used in the Bootstrap
+ */
+
+/**
  *
  * @package   Core
  * @author    Paul Dragoonis <dragoonis@php.net>

@@ -2,7 +2,7 @@
 /**
  * This is the PPI Appliations Configuration class which is used in the Bootstrap
  *
- * @package   PPI
+ * @package   Core
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @copyright 2001-2010 Digiflex Development Team
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License

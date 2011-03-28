@@ -6,7 +6,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   View
  */
 
 require_once SYSTEMPATH . 'Vendor/Smarty/class.Smarty.php';
@@ -33,7 +33,7 @@ class PPI_Helper_Template_Smarty implements PPI_Interface_Template {
 		$this->_renderer->caching 		 = isset($oConfig->system->enable_caching) ? (bool) $oConfig->system->enable_caching : false;
 	}
 
-	
+
 	/**
 	 * Render the actual view file.
 	 *

@@ -6,7 +6,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   View
  */
 
 require_once SYSTEMPATH . 'Vendor/Twig/Autoloader.php';
@@ -40,7 +40,7 @@ class PPI_Helper_Template_Twig implements PPI_Interface_Template {
 	}
 
 	function getTemplateExtension() {
-		$oConfig = PPI_Helper::getConfig();		
+		$oConfig = PPI_Helper::getConfig();
 		return !empty($oConfig->layout->rendererExt) ? $oConfig->layout->rendererExt : '.html';
 	}
 

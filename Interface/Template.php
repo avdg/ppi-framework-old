@@ -6,7 +6,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   Core
  */
 
 interface PPI_Interface_Template {
@@ -22,7 +22,7 @@ interface PPI_Interface_Template {
 	/**
 	 * Render and load the actual view file
 	 *
-	 * @param string $p_sTemplateFile The template 
+	 * @param string $p_sTemplateFile The template
 	 */
 	function render($p_sTemplateFile);
 

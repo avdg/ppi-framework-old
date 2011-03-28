@@ -4,10 +4,9 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
- * @package   PPI
+ * @package   Core
  * @link      www.ppiframework.com
  *
- * @notes Security class for PHP
  */
 class PPI_Security {
 

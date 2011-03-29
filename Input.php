@@ -6,6 +6,7 @@
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   Core
+ * @link      www.ppiframework.com/docs/input.html
  */
 class PPI_Input {
 	private $aArguments;
@@ -26,9 +27,9 @@ class PPI_Input {
 		$tmp = array();
 		$count = count($this->aArguments);
 		for($i = 0 , $j = 1; $i < $count; $i+=1, $j++) {
-			if(!empty($this->aArguments[$i]) && isset ($this->aArguments[$j])) {
+			if(!empty($this->aArguments[$i]) && isset($this->aArguments[$j])) {
 				if(is_integer($this->aArguments[$j]) || $this->aArguments[$j] == '0') {
-					$tmp[$this->aArguments[$i]] = (int)$this->aArguments[$j];
+					$tmp[$this->aArguments[$i]] = (int) $this->aArguments[$j];
 				} else {
 					$tmp[$this->aArguments[$i]] = $this->aArguments[$j];
 				}
@@ -36,24 +37,24 @@ class PPI_Input {
 				$tmp[$this->aArguments[$i]] = '';
 			}
 		}
-		if (!empty($tmp)) {
-			foreach ($tmp as $item => $val) {
-				if ($item == $p_sIndex) {
-					if (is_integer ($val) OR $val == '0') {
-						return (int)$val;
-					} elseif (!empty ($val)) {
+		if(!empty($tmp)) {
+			foreach($tmp as $item => $val) {
+				if($item == $p_sIndex) {
+					if(is_integer ($val) OR $val == '0') {
+						return (int) $val;
+					} elseif(!empty($val)) {
 						return urldecode ($val);
 					}
 				}
 			}
 		}
 
-		if (empty ($p_sDefaultValue)) $p_sDefaultValue = "";
-		if (isset ($_GET[$p_sIndex])) {
-			if (is_integer ($_GET[$p_sIndex]) || $_GET[$p_sIndex] == '0') {
-				return (int)$_GET[$p_sIndex];
+		if(empty($p_sDefaultValue)) $p_sDefaultValue = "";
+		if(isset($_GET[$p_sIndex])) {
+			if(is_integer ($_GET[$p_sIndex]) || $_GET[$p_sIndex] == '0') {
+				return (int) $_GET[$p_sIndex];
 			}
-			return (!empty ($_GET[$p_sIndex])) ? urldecode($_GET[$p_sIndex]) : urldecode($p_sDefaultValue);
+			return (!empty($_GET[$p_sIndex])) ? urldecode($_GET[$p_sIndex]) : urldecode($p_sDefaultValue);
 		}
 		return urldecode($p_sDefaultValue);
 	}
@@ -85,13 +86,13 @@ class PPI_Input {
 	 * @return array|boolean
 	 */
 	function stripPost($p_sPrefix = '') {
-		if ($p_sPrefix == '') {
+		if($p_sPrefix == '') {
 			return array();
 		}
-		if (isset($_POST)) {
+		if(isset($_POST)) {
 			$aValues = array();
-			foreach ((array) $this->post() as $key => $val) {
-				if (strpos($key, $p_sPrefix) !== false) {
+			foreach($this->post() as $key => $val) {
+				if(strpos($key, $p_sPrefix) !== false) {
 					$key = str_replace($p_sPrefix, '', $key);
 					$aValues[$key] = $val;
 				}
@@ -109,7 +110,7 @@ class PPI_Input {
 	 * @param string $p_sEmail
 	 * @return boolean
 	 */
-	function is_validemail ($p_sEmail = '') {
+	function is_validemail($p_sEmail = '') {
 		return preg_match("/^[_A-Za-z0-9.-]+[^.]@[^.][A-Za-z0-9.-]{2,}[.][a-z]{2,4}$/", $p_sEmail);
 	}
 

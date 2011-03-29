@@ -9,11 +9,12 @@
  * @link      www.ppiframework.com/docs/input.html
  */
 class PPI_Input {
-	private $aArguments;
+
+	protected $_aArguments;
 
 	function __construct() {
 		$sUrl = $_SERVER['REQUEST_URI'];
-		$this->aArguments = explode ('/', $sUrl);
+		$this->_aArguments = explode ('/', $sUrl);
 	}
 
 	/**
@@ -25,16 +26,16 @@ class PPI_Input {
 	 */
 	function get($p_sIndex, $p_sDefaultValue = "") {
 		$tmp = array();
-		$count = count($this->aArguments);
+		$count = count($this->_aArguments);
 		for($i = 0 , $j = 1; $i < $count; $i+=1, $j++) {
-			if(!empty($this->aArguments[$i]) && isset($this->aArguments[$j])) {
-				if(is_integer($this->aArguments[$j]) || $this->aArguments[$j] == '0') {
-					$tmp[$this->aArguments[$i]] = (int) $this->aArguments[$j];
+			if(!empty($this->_aArguments[$i]) && isset($this->_aArguments[$j])) {
+				if(is_integer($this->_aArguments[$j]) || $this->_aArguments[$j] == '0') {
+					$tmp[$this->_aArguments[$i]] = (int) $this->_aArguments[$j];
 				} else {
-					$tmp[$this->aArguments[$i]] = $this->aArguments[$j];
+					$tmp[$this->_aArguments[$i]] = $this->_aArguments[$j];
 				}
 			} else {
-				$tmp[$this->aArguments[$i]] = '';
+				$tmp[$this->_aArguments[$i]] = '';
 			}
 		}
 		if(!empty($tmp)) {
@@ -59,17 +60,13 @@ class PPI_Input {
 		return urldecode($p_sDefaultValue);
 	}
 
-    function cleanPost() {
-
-    }
-
 	/**
 	 * Retreive information passed via the $_POST array.
 	 * Can specify a key and return that, else return the whole $_POST array
 	 *
 	 * @param string [$p_sIndex] Specific $_POST key
 	 * @param mixed [$p_sDefaultValue] null if not specified, mixed otherwise
-	 * @return string array
+	 * @return string|array Depending if you passed in a value for $p_sIndex
 	 */
 	function post($p_sIndex = null, $p_sDefaultValue = null, $p_aOptions = null) {
 		if($p_sIndex === null) {
@@ -82,7 +79,7 @@ class PPI_Input {
 	/**
 	 * Retreive all $_POST elements with have a specific prefix
 	 *
-	 * @param string $sPrefix
+	 * @param string $sPrefix The prefix to get values with
 	 * @return array|boolean
 	 */
 	function stripPost($p_sPrefix = '') {
@@ -97,7 +94,7 @@ class PPI_Input {
 					$aValues[$key] = $val;
 				}
 			}
-			if(count($aValues) > 0) {
+			if(!empty($aValues)) {
 				return $aValues;
 			}
 		}
@@ -163,8 +160,7 @@ class PPI_Input {
 	}
 
     /**
-     * PPI_Input::setFlashMessage()
-     * Set the flash message in the session
+     * Set the flash message(s) in the session
      * @param string $p_sMessage
      * @param bool $p_bSuccess
      * @return void
@@ -177,9 +173,9 @@ class PPI_Input {
     }
 
     /**
-     * PPI_Input::getFlashMessage()
+     * Get the flash message(s)
      *
-     * @return array|null If not set, it's null. If set
+     * @return array|null If not set, it's null.
      */
     static function getFlashMessage() {
         return PPI_Helper::getSession()->get('ppi_flash_message');
@@ -194,6 +190,10 @@ class PPI_Input {
         PPI_Helper::getSession()->remove('ppi_flash_message');
     }
 
+    /**
+     * Wipe the $_POST superglobal
+     * @return void
+     */
 	function emptyPost() {
 		$_POST = array();
 	}

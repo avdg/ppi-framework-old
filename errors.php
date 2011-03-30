@@ -70,7 +70,7 @@ function ppi_exception_handler($oException) {
 		if(!isset($oConfig->system->log_errors) || $oConfig->system->log_errors != false) {
 			
 			// get the email contents
-			$emailContent = $oException->getErrorForEmail($error);
+			$emailContent = $oException instanceof PPI_Exception ? $oException->getErrorForEmail($error) : '';
 			
 			$oLog = new PPI_Model_Log();
 			$oLog->addExceptionLog(array(

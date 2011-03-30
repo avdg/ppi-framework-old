@@ -50,21 +50,24 @@ class PPI_Autoload {
 	 * @return void
 	 */
 	static function autoload($className) {
+
 		foreach(self::$_libraries as $lib => $aOptions) {
 			$sPrefix = $aOptions['prefix'];
-			$sPath = $aOptions['path'];
+			$sPath   = $aOptions['path'];
+            
 	        if(strpos($className, $sPrefix) !== false) {
 				// Hack for the PPI framework until path generation is delegated off elsewhere.
 				// We take off the PPI_ and APP_ from the class name as they're not directly part of the include path
 				if($sPrefix == 'PPI_' || $sPrefix == 'APP_') {
 		            $className = substr($className, strlen($sPrefix), strlen($className));
 				}
-	         }
-	         $file = ($sPath . self::convertClassName($className) . '.php');
-	         if(file_exists($file)) {
-	             require_once($file);
-				 break;
-	         }
+	        }
+
+	        $file = ($sPath . self::convertClassName($className) . '.php');
+	        if(file_exists($file)) {
+	            require_once($file);
+			    break;
+	        }
 		}
 	}
 
@@ -88,7 +91,7 @@ class PPI_Autoload {
 	/**
 	 * Remove a library from the autoloader
 	 *
-	 * @param string $p_sKey
+	 * @param string $p_sKey The key
 	 * @return void
 	 */
 	static function remove($p_sKey) {
@@ -100,7 +103,7 @@ class PPI_Autoload {
 	/**
 	 * Checks if a library has been added
 	 *
-	 * @param string $p_sKey
+	 * @param string $p_sKey The key
 	 * @return boolean
 	 */
 	static function exists($p_sKey) {
@@ -111,7 +114,7 @@ class PPI_Autoload {
 	 * Converts the class name to a file path, currently only PEAR naming convention is supported
 	 * EG: PPI_Cache_Disk => PPI/Cache/Disk.php
 	 *
-	 * @param string $p_sClassName
+	 * @param string $p_sClassName The class name
 	 * @return string
 	 */
 	static function convertClassName($p_sClassName) {

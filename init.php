@@ -37,15 +37,10 @@ defined('SMARTY_EXT')           or define('SMARTY_EXT', '.tpl');
 defined('PPI_VERSION')     		or define('PPI_VERSION', '1.1');
 
 set_include_path('.' . PATH_SEPARATOR . SYSTEMPATH . PATH_SEPARATOR . get_include_path());
+
 // Autoload registration
 include_once('Autoload.php');
-
 PPI_Autoload::register();
-PPI_Autoload::add('Zend', array(
-	'path' => SYSTEMPATH . 'Vendor/',
-	'prefix' => 'Zend_'
-));
-
 
 // General stuff
 include_once('common.php');

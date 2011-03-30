@@ -127,9 +127,29 @@ class PPI_App {
             $registry->set('PPI_Session', $this->_session);
         }
 
+        // -------------- Library Autoloading Process --------------
+        if(!empty($this->_config->system->autoloadLibs)) {
+            foreach(explode(',', $this->_config->system->autoloadLibs) as $sLib) {
+                switch(strtolower(trim($sLib))) {
+                    case 'zf':
+                        PPI_Autoload::add('Zend', array(
+                            'path' => SYSTEMPATH . 'Vendor/',
+                            'prefix' => 'Zend_'
+                        ));
+                        break;
+
+                    case 'solar':
+                        Solar::start();
+                        break;
+                }
+
+            }
+        }
+
+        
         $registry->set('PPI_App', $this);
 
-        return $this;
+        return $this; // Fluent Interface
     }
 
     /**

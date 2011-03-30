@@ -14,7 +14,7 @@ class PPI_Input {
 
 	function __construct() {
 		$sUrl = $_SERVER['REQUEST_URI'];
-		$this->_aArguments = explode ('/', $sUrl);
+		$this->_aArguments = explode('/', $sUrl);
 	}
 
 	/**

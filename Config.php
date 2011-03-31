@@ -11,8 +11,19 @@
 
 class PPI_Config {
 
-	private $_oConfig    = null;
-	private $_configFile = null;
+    /**
+     * The config object doing the parsing
+     *
+     * @var null|PPI_Config_Ini
+     */
+	protected $_oConfig    = null;
+
+    /**
+     * The config file name
+     *
+     * @var string
+     */
+	protected $_configFile = null;
 
 
 	/**
@@ -21,6 +32,8 @@ class PPI_Config {
 	 * Will check the file extension of your config filename and load up a specific parser
 	 * @param string $p_sConfigFile The config filename
 	 * @param array $p_aOptions The options
+     * 
+     * @return void
 	 */
 	function __construct($p_sConfigFile, $p_aOptions = array()) {
 		if(!file_exists(CONFIGPATH . $p_sConfigFile)) {
@@ -45,7 +58,7 @@ class PPI_Config {
 	}
 
 	/**
-	 * Get the current set config objct
+	 * Get the current set config object
 	 *
 	 * @return object
 	 */

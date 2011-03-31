@@ -12,6 +12,7 @@ class PPI_Autoload {
     /**
      * The base list of libraries to check in the autoloader, these are the base two ones required
      * for the framework and the skeleton app classes to be autoloaded
+     *
      * @var array
      */
 	static protected $_libraries = array(
@@ -30,6 +31,7 @@ class PPI_Autoload {
 	/**
 	 * Register The PPI Autoload Function
 	 *
+     * @return void
 	 */
 	static function register() {
                 spl_autoload_register(array('PPI_Autoload', 'autoload'));
@@ -37,6 +39,7 @@ class PPI_Autoload {
 
 	/**
 	 * Unregister The PPI Autoload Function
+     * 
 	 * @return void
 	 */
 	static function unregister() {
@@ -73,11 +76,13 @@ class PPI_Autoload {
 
 	/**
 	 * Add a library to the autoloader
+     *
 	 * @example
 	 * PPI_Autoload::add('Zend', array(
 	 *     'path' => SYSTEMPATH . 'Vendor/',
 	 *     'prefix' => 'Zend_'
      * ));
+     * 
 	 * @param string $key The Key, This is used for exists() and remove()
 	 * @param array $p_aOptions
 	 */

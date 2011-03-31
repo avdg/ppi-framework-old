@@ -11,14 +11,60 @@
 
 class PPI_Exception extends Exception {
 
-
+    /**
+     * The backtrace
+     *
+     * @var string
+     */
 	public $_traceString = '';
+
+    /**
+     * The error line
+     *
+     * @var int|string
+     */
 	public $_line = '';
+
+    /**
+     * The error code
+     *
+     * @var int|string
+     */
 	public $_code = '';
+
+    /**
+     * The error message
+     *
+     * @var string
+     */
 	public $_message = '';
+
+    /**
+     * The error filename
+     *
+     * @var string
+     */
 	public $_file = '';
+
+    /**
+     * The backtrace as an array
+     *
+     * @var array
+     */
 	public $_traceArray = array();
+
+    /**
+     * Any SQL queries that have been ran
+     *
+     * @var array
+     */
 	public $_queries = array();
+
+    /**
+     * Singleton instance
+     *
+     * @var null
+     */
     private static $_instance = null;
 
     /**
@@ -32,6 +78,8 @@ class PPI_Exception extends Exception {
 
     /**
      * Set the default registry instance to a specified instance.
+     *
+     * @return void
      */
     public static function setInstance(PPI_Exception $instance) {
         self::$_instance = $instance;
@@ -93,8 +141,8 @@ class PPI_Exception extends Exception {
 
 
 	/**
-	 * PPI_Exception::show_exceptioned_error()
-	 * Show this exception
+     * Show this exception
+     *
 	 * @param string $p_aError Error information from the custom error log
 	 * @return void
 	 */
@@ -126,6 +174,7 @@ class PPI_Exception extends Exception {
 	 * Show an error message
 	 *
 	 * @param string $p_sMsg
+     * @return void
 	 */
 	function show_error($p_sMsg) {
         $oConfig = PPI_Helper::getConfig();

@@ -64,6 +64,7 @@ abstract class PPI_Dispatch_Abstract {
 
 	/**
 	 * Checks to theee if the base url has been misconfigured or not
+     *
 	 * Will return true if there is indeed a bad base url match.
 	 * Will return false if there is not bad base url match.
 	 * @return boolean
@@ -74,6 +75,7 @@ abstract class PPI_Dispatch_Abstract {
 
 	/**
 	 * Get the URI segments after the base url
+     *
 	 * @todo Add a 3rd param to explode() to make it faster
 	 * @return array
 	 */
@@ -90,6 +92,7 @@ abstract class PPI_Dispatch_Abstract {
 
 	/**
 	 * Checks if a controller exists, if so - dispatch it otherwise return false
+     *
 	 * @todo check if ($_SERVER ["REQUEST_URI"] == "/") {
 	 * @return boolean
 	 */
@@ -138,6 +141,7 @@ abstract class PPI_Dispatch_Abstract {
 	 * Set the controller class
 	 *
 	 * @param object $p_oController
+     * @return void
 	 */
 	function setController($p_oController) {
 		$this->_controller = $p_oController;
@@ -147,6 +151,7 @@ abstract class PPI_Dispatch_Abstract {
 	 * Set the controller class name
 	 *
 	 * @param string $p_sController
+     * @return void
 	 */
 	function setControllerName($p_sController) {
 		$this->_controllerName = $p_sController;

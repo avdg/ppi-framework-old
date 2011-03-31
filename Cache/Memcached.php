@@ -40,9 +40,9 @@ class PPI_Cache_Memcached implements PPI_Cache_Interface {
 	 * Set a value in the cache
 	 * @param string $p_sKey The Key
 	 * @param mixed $p_mData The Data
-	 * @param integer $p_iTTL The Time To Live
+	 * @param integer $p_mTTL The Time To Live
 	 */
-	function set($p_sKey, $p_mData, $p_iTTL = 0) {
+	function set($p_sKey, $p_mData, $p_mTTL = 0) {
 		if($this->_serverAdded === false) {
 			$this->addServer('localhost');
 		}
@@ -67,7 +67,7 @@ class PPI_Cache_Memcached implements PPI_Cache_Interface {
 	 * @param numeric $p_mDecrement The Decremental Value
 	 * @return numeric
 	 */
-	function decremenet($p_sKey, $p_mDecrement) {
+	function decrement($p_sKey, $p_mDecrement) {
 		return $this->_handler->decrement($p_sKey, $p_mDecrement);
 	}
 
@@ -90,7 +90,7 @@ class PPI_Cache_Memcached implements PPI_Cache_Interface {
 	 * @return boolean
 	 */
 	function remove($p_sKey) {
-		return $this->_handler->delete($key);
+		return $this->_handler->delete($p_sKey);
 	}
 
 	/**

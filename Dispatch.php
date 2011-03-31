@@ -9,7 +9,18 @@
  */
 class PPI_Dispatch {
 
+    /**
+     * The actual helper doing the dispatching
+     *
+     * @var object that implements PPI_Dispatch_Interface
+     */
 	protected $_helper = null;
+
+    /**
+     * The router doing the routing
+     * 
+     * @var PPI_Router
+     */
 	protected $_router = null;
 
     /**
@@ -23,6 +34,7 @@ class PPI_Dispatch {
 	/**
 	 * Call the dispatch process for the current  set helper
 	 *
+     * @return void
 	 */
 	function dispatch() {
 

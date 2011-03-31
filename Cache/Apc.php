@@ -34,7 +34,7 @@ class PPI_Cache_Apc implements PPI_Cache_Interface {
 	 * @param string $p_mKey The Key
 	 * @return boolean
 	 */
-	function exists($p_mKey) { return apc_exists($p_sKey); }
+	function exists($p_mKey) { return apc_exists($p_mKey); }
 
 	/**
 	 * Remove a key from the cache

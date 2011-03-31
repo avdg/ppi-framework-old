@@ -7,15 +7,32 @@
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   View
+ * @link      www.ppiframework.com
  */
 
 require_once SYSTEMPATH . 'Vendor/Smarty/class.Smarty.php';
 class PPI_Helper_Template_Smarty implements PPI_Interface_Template {
 
 
-	private $_renderer = null;
-	private $_viewPath = null;
-	private $_smartyPath = null;
+    /**
+     * Rendering engine, in this case it's Smarty
+     * @var null|Smarty
+     */
+	protected $_renderer = null;
+
+    /**
+     * The path of the /App/View/ folder
+     * @var null|string
+     */
+	protected $_viewPath = null;
+
+    /**
+     * The path to the Smarty library i.e: /Vendor/Smarty/
+     * @var null|string
+     */
+	protected $_smartyPath = null;
+
+
 	function __construct() {
 		$oConfig                         = PPI_Helper::getConfig();
 		$this->_renderer                 = new Smarty();
@@ -39,6 +56,7 @@ class PPI_Helper_Template_Smarty implements PPI_Interface_Template {
 	 *
 	 * @param string $p_sTplFile The template to load up. For example the master template.
 	 * @throws PPI_Exception
+     * @return void
 	 */
 	function render($p_sTplFile) {
 		// Optional extension for smarty templates
@@ -56,6 +74,7 @@ class PPI_Helper_Template_Smarty implements PPI_Interface_Template {
 	 *
 	 * @param string $key The variable name
 	 * @param string $val The variable value
+     * @return void
 	 */
 	function assign($key, $val) {
 		$this->_renderer->assign($key, $val);

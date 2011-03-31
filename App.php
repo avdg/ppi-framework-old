@@ -13,13 +13,60 @@
 */
 class PPI_App {
 
+    /**
+     * The error level to throw via error_reporting()
+     *
+     * @var int
+     */
     protected $_errorLevel       = E_ALL;
+
+    /**
+     * Whether to display errors or not. This gets fired into ini_set('display_errors')
+     *
+     * @var string
+     */
     protected $_showErrors       = 'On';
+
+    /**
+     * The block in the config file to get the config data from
+     *
+     * @var string
+     */
     protected $_configBlock      = 'development';
+
+    /**
+     * The site mode. Default is 'development'. This determines how PPI handles exceptions
+     *
+     * @var string
+     */
     protected $_siteMode         = 'development';
+
+    /**
+     * The config object
+     *
+     * @var null|PPI_Config
+     */
     protected $_config           = null;
+
+    /**
+     * The PPI_Dispatch object
+     *
+     * @var null|PPI_Dispatch
+     */
     protected $_dispatcher       = null;
+
+    /**
+     * The PPI_Router object
+     *
+     * @var null|PPI_Router
+     */
     protected $_router           = null;
+
+    /**
+     * The PPI_Session object
+     *
+     * @var null|PPI_Session
+     */
     protected $_session          = null;
 
     function __construct($p_aParams = array()) {
@@ -133,14 +180,19 @@ class PPI_App {
                 switch(strtolower(trim($sLib))) {
                     case 'zf':
                         PPI_Autoload::add('Zend', array(
-                            'path' => SYSTEMPATH . 'Vendor/',
+                            'path'   => SYSTEMPATH . 'Vendor/',
                             'prefix' => 'Zend_'
                         ));
                         break;
-
+/*
                     case 'solar':
+                        PPI_Autoload::add('Solar', array(
+                            'path'   => SYSTEMPATH . 'Vendor/',
+                            'prefix' => 'Solar_'
+                        ));
                         Solar::start();
                         break;
+ */
                 }
 
             }

@@ -42,6 +42,8 @@ class PPI_Dispatch_Standard extends PPI_Dispatch_Abstract implements PPI_Dispatc
 	/**
 	 * Dispatch the set controller
 	 *
+     * @return void
+     *
 	 */
 	function dispatch() {
 		$oController = $this->getController();

@@ -9,7 +9,18 @@
  */
 class PPI_Controller {
 
+    /**
+     * The input object
+     *
+     * @var PPI_Input
+     */
 	protected $_input = null;
+
+    /**
+     * The PPI_View object
+     *
+     * @var PPI_View
+     */
 	protected $_view = null;
 
 	function __construct () {
@@ -20,10 +31,12 @@ class PPI_Controller {
 
 	/**
 	 * Perform redirect to internal framework url. Optionally redirect to external host
+     *
 	 * @param string $p_sURL Optional param for where to redirect to
 	 * @param boolean $p_bPrependBase Default is true. If true will prepend the framework's base Url.
  	 *									If false will redirect to absolute external url.
  	 * @throws PPI_Exception
+     * @return boolean
 	 */
 	protected function redirect($p_sURL = '', $p_bPrependBase = true) {
 		$sUrl = ($p_bPrependBase === true) ? $this->getConfig()->system->base_url . $p_sURL : $p_sURL;
@@ -54,6 +67,7 @@ class PPI_Controller {
 	 *
 	 * @param mixed $p_mKeys
 	 * @param mixed $p_mValue
+     * @return void
 	 */
 	protected function set($p_mKeys, $p_mValue = null) {
 		if(is_array($p_mKeys)) {
@@ -78,8 +92,8 @@ class PPI_Controller {
 	}
 
     /**
-     * PPI_View::addStylesheet()
      * Append to the list of stylesheets to be included
+     * 
      * @param mixed $p_mStylesheet This can be an existing array of stylesheets or a string.
      * @return void
      */
@@ -88,8 +102,8 @@ class PPI_Controller {
     }
 
     /**
-     * PPI_View::addJavascript()
      * Append to the list of javascript files to be included
+     * 
      * @param mixed $p_mJavascript
      * @return void
      */
@@ -99,6 +113,7 @@ class PPI_Controller {
 
 	/**
 	 * Override the default template file, with optional include for the .php or .tpl extension
+     * 
 	 * @param string $p_sNewTemplateFile New Template Filename
 	 * @todo have this lookup the template engines default extension and remove the smarty param
      * @return void
@@ -110,6 +125,7 @@ class PPI_Controller {
 
 	/**
 	 * Setter for setting the flash message to appear on next page load.
+     * 
 	 * @return void
 	 */
 	protected function setFlashMessage($p_sMessage, $p_bSuccess = true) {
@@ -117,17 +133,17 @@ class PPI_Controller {
 	}
 
 	/**
-	 * PPI_Controller::getFlashMessage()
 	 * Getter for the flash message.
-	 * @return void
+     * 
+	 * @return string
 	 */
 	protected function getFlashMessage() {
-		PPI_Input::getFlashMessage($p_sMessage, $p_bSuccess);
+		return PPI_Input::getFlashMessage();
 	}
 
 	/**
-	 * PPI_Controller::clearFlashMessage()
 	 * Clear the flash message from the session
+     * 
 	 * @return void
 	 */
 	protected function clearFlashMessage() {
@@ -136,7 +152,9 @@ class PPI_Controller {
 
     /**
      * Get the full current URI
+     *
      * @todo Maybe just strip off baseUrl from the URL and that's our URI
+     * @return string
      */
 	protected function getCurrUrl() {
 		return PPI_Helper::getCurrUrl();
@@ -152,8 +170,8 @@ class PPI_Controller {
 	}
 
 	/**
-	 * PPI_Controller::getBaseUrl()
 	 * Get the base url set in the config
+     * 
 	 * @return string
 	 */
 	protected function getBaseUrl() {
@@ -170,8 +188,8 @@ class PPI_Controller {
 	}
 
 	/**
-	 * PPI_Controller::getSession()
 	 * Returns the session object
+     * 
 	 * @return object PPI_Model_Session
 	 */
 	protected function getSession() {
@@ -179,8 +197,8 @@ class PPI_Controller {
 	}
 
 	/**
-	 * PPI_Controller::getSession()
 	 * Returns the session object
+     * 
 	 * @return object PPI_Model_Session
 	 */
 	protected function getRegistry() {
@@ -198,6 +216,7 @@ class PPI_Controller {
 
 	/**
 	 * Checks if the current user is logged in
+     * 
 	 * @return boolean
 	 */
 	protected function isLoggedIn() {
@@ -207,6 +226,7 @@ class PPI_Controller {
 
 	/**
 	 * Gets the current logged in users authentication data
+     * 
      * @param boolean $p_bUseArray Default is true. If false then will return an object instead
 	 * @return array|object
 	 */
@@ -286,6 +306,12 @@ class PPI_Controller {
 		$this->_input->emptyPost();
 	}
 
+    /**
+     * Get a plugin by name. 
+     *
+     * @param string $p_sPluginName
+     * @return
+     */
 	protected function getPlugin($p_sPluginName) {
 		return PPI_Helper::getPlugin()->getPlugin($p_sPluginName);
 	}

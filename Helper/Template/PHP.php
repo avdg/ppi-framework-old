@@ -7,6 +7,7 @@
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   View
+ * @package   www.ppiframework.com
  */
 
 class PPI_Helper_Template_PHP implements PPI_Interface_Template {
@@ -41,6 +42,7 @@ class PPI_Helper_Template_PHP implements PPI_Interface_Template {
 	 *
 	 * @param string $key The variable name
 	 * @param string $val The variable value
+     * @return void
 	 */
 	function assign($key, $val) {
 		$this->_viewVars[$key] = $val;

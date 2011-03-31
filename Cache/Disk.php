@@ -169,8 +169,22 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	 */
 	function enabled() { return true; }
 
+    /**
+     * Increment the value in the cache
+     *
+     * @param  $p_sKey The key
+     * @param  $p_mIncrement The value to increment by
+     * @return void
+     */
 	function increment($p_sKey, $p_mIncrement) { }
 
+    /**
+     * Decrement the value in the cache
+     *
+     * @param  $p_sKey The Key
+     * @param  $p_mDecrement The value to decrement by
+     * @return void
+     */
 	function decrement($p_sKey, $p_mDecrement) { }
 
 }

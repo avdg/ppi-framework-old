@@ -15,6 +15,12 @@ class PPI_Controller_User extends APP_Controller_Application {
 		parent::__construct();
 	}
 
+    /**
+     * This method is called after the user logs in successfully, it will determine the location
+     * where they are redirected to.
+     *
+     * @return void
+     */
 	protected function postLoginRedirect() {
 		$oSession = $this->getSession();
 		// Do we have a return Url ?
@@ -28,6 +34,8 @@ class PPI_Controller_User extends APP_Controller_Application {
 
 	/**
 	 * This function cannot be called directly, it must be extended by a child class and then called.
+     *
+     * @return void
 	 */
 	protected function login() {
 
@@ -63,6 +71,8 @@ class PPI_Controller_User extends APP_Controller_Application {
 
 	/**
 	 * This function cannot be called directly, it must be extended by a child class and then called.
+     *
+     * @return void
 	 */
 	protected function recover() {
 		// Take in the username field, which could be the username or the email.
@@ -158,6 +168,8 @@ class PPI_Controller_User extends APP_Controller_Application {
 
 	/**
 	 * This function cannot be called directly, it must be extended by a child class and then called.
+     *
+     * @return void
 	 */
 	protected function register() {
 

@@ -21,6 +21,7 @@ class PPI_Cache {
 
 	/**
 	 * Initialise the cache handler
+     *
 	 * @param array $p_aOptions The options to go into the cache initialisation
 	 * @return void
 	 * @throws PPI_Exception
@@ -49,6 +50,7 @@ class PPI_Cache {
 
     /**
      * Get a key value from the cache
+     *
      * @param string $p_sKey The Key
      * @return mixed
      */
@@ -61,6 +63,7 @@ class PPI_Cache {
 
     /**
      * Set a value in the cache
+     *
      * @param string $p_sKey The Key
      * @param mixed $p_mValue The Value
      * @return boolean
@@ -74,6 +77,7 @@ class PPI_Cache {
 
     /**
      * Check if a key exists in the cache
+     *
      * @param string $p_sKey The Key
      * @return boolean
      */
@@ -86,6 +90,7 @@ class PPI_Cache {
 
     /**
      * Remove a value from the cache by key
+     *
      * @param string $p_sKey The Key
      * @return boolean
      */

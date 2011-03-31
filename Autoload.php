@@ -26,12 +26,13 @@ class PPI_Autoload {
 		)
 	);
 
+       
 	function __construct() {}
 
 	/**
 	 * Register The PPI Autoload Function
 	 *
-     * @return void
+         * @return void
 	 */
 	static function register() {
                 spl_autoload_register(array('PPI_Autoload', 'autoload'));
@@ -39,7 +40,7 @@ class PPI_Autoload {
 
 	/**
 	 * Unregister The PPI Autoload Function
-     * 
+         * 
 	 * @return void
 	 */
 	static function unregister() {

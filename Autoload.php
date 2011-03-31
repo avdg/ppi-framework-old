@@ -77,13 +77,13 @@ class PPI_Autoload {
 
 	/**
 	 * Add a library to the autoloader
-     *
+         *
 	 * @example
 	 * PPI_Autoload::add('Zend', array(
 	 *     'path' => SYSTEMPATH . 'Vendor/',
 	 *     'prefix' => 'Zend_'
-     * ));
-     * 
+         * ));
+         * 
 	 * @param string $key The Key, This is used for exists() and remove()
 	 * @param array $p_aOptions
 	 */

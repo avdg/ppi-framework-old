@@ -130,12 +130,24 @@ class PPI_Model_Select {
     const SQL_DESC       = 'DESC';
 
 	protected $_connection;
-	protected $_logConnection;
-	protected $_name;
-	protected $_primary;
 
+    /**
+     * @var The table in the FROM section of the SQL
+     */
+	protected $_name;
+
+    /**
+     * The array of where clauses
+     *
+     * @var array
+     */
 	protected $_where	= array();
-	protected $_whereParts = array();
+    
+    /**
+     * The ORDER BY part of the SQL
+     *
+     * @var string
+     */
 	protected $_order = '';
 	// this error when we try to assign it to self::$_name;
 
@@ -173,7 +185,6 @@ class PPI_Model_Select {
      * @var string
      */
 	protected $_query = '';
-	protected $_queryRet = null;
 
     /**
      * The current fetchmode

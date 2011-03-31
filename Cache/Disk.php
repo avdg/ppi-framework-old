@@ -10,8 +10,18 @@
 
 class PPI_Cache_Disk implements PPI_Cache_Interface {
 
+    /**
+     * The folder where the cache contents will be placed
+     *
+     * @var string
+     */
 	protected $_cacheDir = null;
 
+    /**
+     * The options passed in upon instantiation
+     *
+     * @var array
+     */
 	protected $_options = array();
 
 	function __construct(array $p_aOptions = array()) {

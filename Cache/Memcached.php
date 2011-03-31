@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * @version   1.0
@@ -11,9 +10,28 @@
 
 class PPI_Cache_Memcached implements PPI_Cache_Interface {
 
-	private $_handler;
-	private $_serverAdded = false;
+    /**
+     * The memcache(d) driver
+     *
+     * @var Memcache|Memcached
+     */
+	protected $_handler;
 
+    /**
+     * If a server has been added. Default is false
+     *
+     * @var bool
+     */
+	protected $_serverAdded = false;
+
+    /**
+     * The PPI_Cache_Memcached constructor
+     *
+     * @todo use $this->enabled()
+     * @todo Investigate if we can use memcache(d) or just one (with API usage complying to the interface)
+     * @throws PPI_Exception
+     *
+     */
 	function __construct() {
 		if(extension_loaded('Memcached')) {
 			$this->_handler = new Memcached();
@@ -26,6 +44,7 @@ class PPI_Cache_Memcached implements PPI_Cache_Interface {
 
 	/**
 	 * Get a value from cache
+     *
 	 * @param string $p_sKey The Key
 	 * @return mixed
 	 */
@@ -38,9 +57,11 @@ class PPI_Cache_Memcached implements PPI_Cache_Interface {
 
 	/**
 	 * Set a value in the cache
+     *
 	 * @param string $p_sKey The Key
 	 * @param mixed $p_mData The Data
 	 * @param integer $p_mTTL The Time To Live
+     * @return boolean
 	 */
 	function set($p_sKey, $p_mData, $p_mTTL = 0) {
 		if($this->_serverAdded === false) {
@@ -50,9 +71,9 @@ class PPI_Cache_Memcached implements PPI_Cache_Interface {
 	}
 
 	/**
-	 * Incremenet a cache value
+	 * Increment a cache value
 	 *
-	 * @param stirng $p_sKey The Key
+	 * @param string $p_sKey The Key
 	 * @param numeric $p_mIncrement The incremental value
 	 * @return numeric
 	 */
@@ -73,12 +94,14 @@ class PPI_Cache_Memcached implements PPI_Cache_Interface {
 
 	/**
 	 * Clear the cache
+     * 
 	 * @return boolean
 	 */
 	function clear() { $this->_handler->flush(); }
 
 	/**
 	 * Check if a key exists in the cache
+     * 
 	 * @param string $p_mKey The Key
 	 * @return boolean
 	 */
@@ -86,6 +109,7 @@ class PPI_Cache_Memcached implements PPI_Cache_Interface {
 
 	/**
 	 * Remove a key from the cache
+     * 
 	 * @param string $p_sKey The Key
 	 * @return boolean
 	 */
@@ -95,6 +119,7 @@ class PPI_Cache_Memcached implements PPI_Cache_Interface {
 
 	/**
 	 * Add a memcached server to connect to
+     * 
 	 * @param string $host The Hostname
 	 * @param integer $port The Port
 	 * @param integer $weight The Weight

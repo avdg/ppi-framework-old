@@ -8,7 +8,7 @@
  * @package   Config
  */
 
-class PPI_Model_Config extends PPI_Base {
+class PPI_Model_Config {
 
 	private $bRead       = null;
 	private $_oConfig    = null;

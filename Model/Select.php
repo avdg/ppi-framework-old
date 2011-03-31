@@ -9,52 +9,208 @@
  */
 class PPI_Model_Select {
 
+    /**
+     * The inner join
+     */
     const INNER_JOIN     = 'INNER JOIN';
+
+    /**
+     * The left join
+     */
     const LEFT_JOIN      = 'LEFT JOIN';
+
+    /**
+     * The right join
+     */
     const RIGHT_JOIN     = 'RIGHT JOIN';
+
+    /**
+     * The full join
+     */
     const FULL_JOIN      = 'FULL JOIN';
+
+    /**
+     * The ross join
+     */
     const CROSS_JOIN     = 'CROSS JOIN';
+
+    /**
+     * The natural join
+     */
     const NATURAL_JOIN   = 'NATURAL JOIN';
 
+    /**
+     * The SQL Wildcard
+     */
     const SQL_WILDCARD   = '*';
+
+    /**
+     * The SQL Select
+     */
     const SQL_SELECT     = 'SELECT';
+
+    /**
+     * The SQL Union
+     */
     const SQL_UNION      = 'UNION';
+
+    /**
+     * The SQL Union All
+     */
     const SQL_UNION_ALL  = 'UNION ALL';
+
+    /**
+     * The SQL From
+     */
     const SQL_FROM       = 'FROM';
+
+    /**
+     * The SQL Where
+     */
     const SQL_WHERE      = 'WHERE';
+
+    /**
+     * The SQL Distinct
+     */
     const SQL_DISTINCT   = 'DISTINCT';
+
+    /**
+     * The SQL Group By
+     */
     const SQL_GROUP_BY   = 'GROUP BY';
+
+    /**
+     * The SQL Limit
+     */
 	const SQL_LIMIT		 = 'LIMIT';
+
+    /**
+     * The SQL Order By
+     */
     const SQL_ORDER_BY   = 'ORDER BY';
+
+    /**
+     * The SQL Having
+     */
     const SQL_HAVING     = 'HAVING';
+
+    /**
+     * The SQL For Update
+     */
     const SQL_FOR_UPDATE = 'FOR UPDATE';
+
+    /**
+     * The SQL AND
+     */
     const SQL_AND        = 'AND';
+
+    /**
+     * The SQL AS
+     */
     const SQL_AS         = 'AS';
+
+    /**
+     * The SQL or
+     */
     const SQL_OR         = 'OR';
+
+    /**
+     * The SQL ON
+     */
     const SQL_ON         = 'ON';
+
+    /**
+     * The SQL Desc
+     */
     const SQL_ASC        = 'ASC';
+
+    /**
+     * The SQL Desc
+     */
     const SQL_DESC       = 'DESC';
 
-	private $_connection;
-	private $_logConnection;
+	protected $_connection;
+	protected $_logConnection;
 	protected $_name;
-	private $_primary;
-	private $_where	= array();
-	private $_whereParts = array();
-	private $_order = '';
+	protected $_primary;
+
+	protected $_where	= array();
+	protected $_whereParts = array();
+	protected $_order = '';
 	// this error when we try to assign it to self::$_name;
-	private $_from = '';
-	private $_columns = self::SQL_WILDCARD;
-	private $_limit = array();
-	private $_group = '';
-	private $_query = '';
-	private $_queryRet = null;
-	private $_fetchMode = 'assoc';
-	private $_innerJoin = array();
-	private $_joinOrder = array();
-	private $_joinCount = 0;
-	private $_queries = array();
-	private $_model;
+
+    /**
+     * The table in the FROM section
+     *
+     * @var string
+     */
+	protected $_from = '';
+
+    /**
+     * The columns in the SELECt
+     *
+     * @var string
+     */
+	protected $_columns = self::SQL_WILDCARD;
+
+    /**
+     * The LIMIT string
+     *
+     * @var array
+     */
+	protected $_limit = array();
+
+    /**
+     * The SQL group by
+     *
+     * @var string
+     */
+	protected $_group = '';
+
+    /**
+     * The whole query
+     *
+     * @var string
+     */
+	protected $_query = '';
+	protected $_queryRet = null;
+
+    /**
+     * The current fetchmode
+     *
+     * @var string
+     */
+	protected $_fetchMode = 'assoc';
+
+    /**
+     * The list of inner joins
+     *
+     * @var array
+     */
+	protected $_innerJoin = array();
+
+    /**
+     * The order in which to generate the joins
+     *
+     * @var array
+     */
+	protected $_joinOrder = array();
+
+    /**
+     * The amount of joins
+     *
+     * @var int
+     */
+	protected $_joinCount = 0;
+
+	protected $_queries = array();
+
+    /**
+     * The model that this class was initialised from
+     *
+     * @var
+     */
+	protected $_model;
 
 
 	function __construct($model) {
@@ -63,7 +219,9 @@ class PPI_Model_Select {
 
 	/**
 	 * Set the FROM table
+     *
 	 * @param string $name The Table Name
+     * @return $this
 	 */
 	function from($name = '') {
 		$this->_from = ($name != '') ? $name : $this->_name;
@@ -72,8 +230,10 @@ class PPI_Model_Select {
 
 	/**
 	 * Perform an INNER JOIN
+     *
 	 * @param string $table The Table
 	 * @param string $on The ON Clause
+     * @return $this
 	 */
 	function join($table, $on) {
 		$this->innerJoin($table, $on);
@@ -82,8 +242,10 @@ class PPI_Model_Select {
 
 	/**
 	 * Perform an INNER JOIN
+     *
 	 * @param string $table The Table
 	 * @param string $on The ON Clause
+     * @return $this
 	 */
 	function innerJoin($table, $on) {
 		$this->addJoin($table, $on, self::INNER_JOIN);
@@ -92,8 +254,10 @@ class PPI_Model_Select {
 
 	/**
 	 * Perform a LEFT JOIN
+     *
 	 * @param string $table The Table
 	 * @param string $on The ON Clause
+     * @return $this
 	 */
 	function leftJoin($table, $on) {
 		$this->addJoin($table, $on, self::LEFT_JOIN);
@@ -102,8 +266,10 @@ class PPI_Model_Select {
 
 	/**
 	 * Perform a RIGHT JOIN
+     *
 	 * @param string $table The Table
 	 * @param string $on The ON Clause
+     * @return $this
 	 */
 	function rightJoin($table, $on) {
 		$this->addJoin($table, $on, self::RIGHT_JOIN);
@@ -112,9 +278,11 @@ class PPI_Model_Select {
 
 	/**
 	 * Add a join to the joinOrder
+     *
 	 * @param string $table The Table Name
 	 * @param string $on The ON Clause
 	 * @param string $type ('left', 'right', 'inner')
+     * @return void
 	 */
 	function addJoin($table, $on, $type) {
 		$this->_joinCount++;
@@ -127,7 +295,9 @@ class PPI_Model_Select {
 
 	/**
 	 * Set the where clause(s)
+     *
 	 * @param mixed $clause The Clause(s)
+     * @return $this
 	 */
 	function where($clause = null) {
 		$this->_where = array_merge($this->_where, (array) $clause);
@@ -136,7 +306,9 @@ class PPI_Model_Select {
 
 	/**
 	 * Set the ORDER BY
+     *
 	 * @param string $order The ORDER BY
+     * @return $this
 	 */
 	function order($order = '') {
 		$this->_order = $order;
@@ -145,7 +317,9 @@ class PPI_Model_Select {
 
 	/**
 	 * Set the GROUP BY
+     *
 	 * @param string $group The GROUP BY
+     * @return $this
 	 */
 	function group($group = '') {
 		$this->_group = $group;
@@ -154,7 +328,9 @@ class PPI_Model_Select {
 
 	/**
 	 * Set the LIMIT
+     *
 	 * @param string $limit
+     * @return $this
 	 */
 	function limit($limit) {
 		$this->_limit = $limit;
@@ -162,8 +338,10 @@ class PPI_Model_Select {
 	}
 
 	/**
-	 * Set the columns on the SELECt
+	 * Set the columns on the SELECT
+     *
 	 * @param string $columns The Columns
+     * @return $this
 	 */
 	function columns($columns) {
 		$this->_columns = ($columns != '') ? $columns : self::SQL_WILDCARD;
@@ -172,6 +350,7 @@ class PPI_Model_Select {
 
 	/**
 	 * Get the rows back from $this->query()
+     *
 	 * @return PPI_Model_Resultset
 	 */
 	function getList() {
@@ -181,6 +360,8 @@ class PPI_Model_Select {
 
 	/**
 	 * Magic string cast function, return the query name
+     *
+     * @return string
 	 */
 	function __toString() {
 		if($this->_query == '') {
@@ -191,8 +372,10 @@ class PPI_Model_Select {
 
 	/**
 	 * Generate the query
+     *
+     * @return void
 	 */
-	private function generateQuery() {
+	protected function generateQuery() {
 		$query = '';
 		// Security Cleanup prior to query generation
 		// select + from
@@ -234,16 +417,16 @@ class PPI_Model_Select {
 	}
 
 	/**
-	 * Log the error in the d
+	 * Log the error in the database
+     *
+     * @throws PPI_Exception
+     * @return void
+     *
 	 */
-	private function logError() {
+	protected function logError() {
 		// check if we need to email
 		// product debugging information
 		throw new PPI_Exception("SQL Error: " . mysql_error($this->_connection), $this->_queries);
-	}
-
-	private function generateObjectQuery() {
-		$this->_query = $query;
 	}
 
 	/**
@@ -251,7 +434,7 @@ class PPI_Model_Select {
 	 *
 	 * @return PPI_Model_Resultset
 	 */
-	private function query() {
+	protected function query() {
 		return $this->_model->query($this->_query);
 
 	}

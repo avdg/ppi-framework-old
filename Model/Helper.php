@@ -9,7 +9,12 @@
  */
 class PPI_Model_Helper {
 
-    private static $_instance = null;
+    /**
+     * The singleton instance variable
+     *
+     * @var null|PPI_Model_Helper
+     */
+    protected static $_instance = null;
 
 
 	function __construct() {
@@ -54,6 +59,7 @@ class PPI_Model_Helper {
 
 	/**
 	 * This function returns the role name of the user
+     *
 	 * @return string
 	 */
 	static function getRoleType() {
@@ -64,6 +70,7 @@ class PPI_Model_Helper {
 
 	/**
 	 * This function returns the role number of the user
+     *
 	 * @todo Do a lookup for the guest user ID instead of defaulting to 1
 	 * @return integer
 	 */
@@ -72,6 +79,14 @@ class PPI_Model_Helper {
 	       return ($aUserInfo !== false && count($aUserInfo) > 0) ? $aUserInfo['role_id'] : 1;
 	}
 
+    /**
+     * Convert the role name by specifying the role id
+     *
+     * @static
+     * @throws PPI_Exception
+     * @param  integer $p_iRoleID The Role ID
+     * @return string
+     */
 	static function getRoleNameFromID($p_iRoleID) {
 		$oConfig = PPI_Helper::getConfig();
 		$aRoles = array_flip(getRoles());
@@ -82,7 +97,15 @@ class PPI_Model_Helper {
 	}
 
 
-	function getRoleIDFromName($p_sRoleName) {
+    /**
+     * Convert the role ID by specifying the role name
+     *
+     * @static
+     * @throws PPI_Exception
+     * @param  string $p_sRoleName The role name
+     * @return integer
+     */
+	static function getRoleIDFromName($p_sRoleName) {
 		$oConfig = PPI_Helper::getConfig();
 		$aRoles = $oConfig->system->roleMapping->toArray();
 		if(array_key_exists($p_sRoleName, $aRoles)) {
@@ -93,6 +116,7 @@ class PPI_Model_Helper {
 
 	/**
 	 * Function to recursively trim strings
+     * 
 	 * @param mixed $input The input to be trimmed
 	 * @return mixed
 	 */
@@ -106,7 +130,8 @@ class PPI_Model_Helper {
 	}
 
     /**
-     * PPI Mail Sending Functioin
+     * PPI Mail Sending Function
+     * 
      * @param array $p_aOptions The options for sending to the mail library
      * @uses $p_aOptions[subject, body, toaddr] are all mandatory.
      * @uses Options available are toname

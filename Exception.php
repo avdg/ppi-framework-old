@@ -94,6 +94,12 @@ class PPI_Exception extends Exception {
         return self::$_instance;
     }
 
+    /**
+     * Initialise the PPI_Exception object and start setting up debug info such as backtraces.
+     *
+     * @param string $message
+     * @param null|array $sqlQueries
+     */
 	function __construct($message = '', $sqlQueries = null) {
 		parent::__construct($message);
 		$this->_traceString = $this->getTraceAsString();
@@ -123,8 +129,8 @@ class PPI_Exception extends Exception {
     * This function shows a 404 error
     *
     * @access	public
-    * @todo change this to a new function name
-    * @todo make this do 404 on the HTTP status line
+    * @todo     change this to a new function name
+    * @todo     make this do 404 on the HTTP status line
     * @param    string argument name
     * @return	void
     */

@@ -1,6 +1,5 @@
 <?php
 /**
- * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
@@ -9,19 +8,85 @@
  */
 abstract class PPI_Model {
 
+    /**
+     * The last query executed
+     *
+     * @var string
+     */
 	protected $sLastQuery;
+
+    /**
+     * The last database error reported
+     *
+     * @var string
+     */
 	protected $sLastError;
+
+    /**
+     * The current table's name
+     *
+     * @var string
+     */
 	protected $sTableName;
+
+    /**
+     * The current table's primary key field name
+     *
+     * @var string
+     */
 	protected $sTableIndex;
 	protected $sDbConnection;
 	protected $parent_name;
+
+    /**
+     * The currently in use database hostname
+     *
+     * @var string
+     */
 	protected $sHostName;
+
+    /**
+     * The currently in use database username
+     *
+     * @var string
+     */
 	protected $sUserName;
+
+    /**
+     * The currently in use database password
+     *
+     * @var string
+     */
 	protected $sPassword;
+
+    /**
+     * The currently in use database name
+     *
+     * @var string
+     */
 	protected $sDataBase;
+
+    /**
+     * The default and current fetch mode for PDO
+     *
+     * @var int
+     */
 	protected $sFetchMode      = PDO::FETCH_ASSOC;
 	private $aQueries          = array();
+
+    /**
+     * Attributes storing the users meta data if you use __get(),__set() stuff
+     *
+     * @var array
+     */
 	private $metaAttributes    = array();
+
+    /**
+     * The PDO Instance
+     *
+     * @var null|PDO
+     */
+    protected $rHandler = null;
 
 	/**
 	 * Constructor for the SQL API.
@@ -122,6 +187,7 @@ abstract class PPI_Model {
 
 	/**
 	 * Create a DSN string
+     *
 	 * @todo Have this accept params
 	 * @return string The DSN
 	 */
@@ -132,6 +198,7 @@ abstract class PPI_Model {
 
 	/**
 	 * Returns the PPI Select object to allow object-oriented query selecting
+     *
 	 * @return PPI_Model_Select
 	 */
 	function select() {
@@ -139,8 +206,8 @@ abstract class PPI_Model {
 	}
 
     /**
-     * PPI_Model::appendQueryList()
      * Append to a list of queries in the registry
+     *
      * @param string $p_sQuery The Query
      * @return void
      */
@@ -152,6 +219,7 @@ abstract class PPI_Model {
 	/**
 	 * Performs the actual query with some error handling.
 	 * Returns what mysql_query() returns on success, else false.
+     *
 	 * @param string $p_sQuery The Query
 	 * @param boolean $p_bLogQuery Default is true. If true will log the query.
 	 * @throws PPI_Exception
@@ -171,7 +239,7 @@ abstract class PPI_Model {
 	}
 
 	/**
-	 * PPI_Model::delete()
+	 * Deletes a record by primary key
 	 *
 	 * @param integer $p_iRecordID Optional Record ID to delete. If nothing passed then will look for record ID in meta data
 	 * @throws PPI_Exception
@@ -190,6 +258,7 @@ abstract class PPI_Model {
 
 	/**
 	 * Wrapper for PDO::exec. This will execute a query such as a DELETE or UPDATE.
+     *
 	 * @param string $p_sQuery The Query
 	 * @return integer The affected rows
 	 */
@@ -199,6 +268,7 @@ abstract class PPI_Model {
 
 	/**
 	 * Wrapper for PDO::exec. This will execute a query such as a DELETE or UPDATE.
+     * 
 	 * @param string $p_sQuery The Query
 	 * @return integer The affected rows
 	 */
@@ -215,6 +285,7 @@ abstract class PPI_Model {
 
 	/**
 	 * Set a piece of meta data
+     *
 	 * @param string $p_sName The name of the meta data
 	 * @param mixed $p_mValue The value of the meta data
 	 * @return Return the current class, useful for method chaining
@@ -228,7 +299,9 @@ abstract class PPI_Model {
 
 	/**
 	 * Checks if meta data has been set
+     *
 	 * @param string $p_sName The field name
+     * @return boolean
 	 */
 	function __isset($p_sName) {
 	    return array_key_exists($p_sName, $this->metaAttributes);
@@ -236,7 +309,9 @@ abstract class PPI_Model {
 
 	/**
 	 * Unset meta handler so you can unset the meta data
+     *
 	 * @param string $p_sName The field name
+     * @return void
 	 */
 	function __unset($p_sName) {
 		if(array_key_exists($p_sName, $this->metaAttributes)) {
@@ -246,6 +321,7 @@ abstract class PPI_Model {
 
 	/**
 	 * Obtain the value of the meta data set
+     *
 	 * @param string $p_sName The Property Name
 	 * @return mixed
 	 */
@@ -255,6 +331,7 @@ abstract class PPI_Model {
 
 	/**
 	 * Fire off the meta attributes to putRecord and clear the attributes
+     *
 	 * @param boolean True will clear the meta data after saving
 	 * @return array
 	 */
@@ -264,6 +341,7 @@ abstract class PPI_Model {
 
 	/**
 	 * Go through each attribute and add it as meta data
+     *
 	 * @param array $p_aAttributes The attributes to be set
 	 * @return void
 	 */
@@ -275,7 +353,8 @@ abstract class PPI_Model {
 
 	/**
 	 * Obtain the metaAttributes that have been set. Optionally clear them at the same time.
-	 * @param boolean $p_bClearAttrs Wether to clean the attributes before returning them
+     *
+	 * @param boolean $p_bClearAttrs Whether to clean the attributes before returning them
 	 * @return array
 	 */
 	function getMetaAttributes($p_bClearAttrs = false) {
@@ -294,6 +373,7 @@ abstract class PPI_Model {
 	 * This will be called unless the update function has been overloaded by the applications model
 	 * If the record doesn't exist, then we will perform the insert function
 	 * This will be called unless the insert function has been overloaded by the applications model
+     *
 	 * @param array $p_aRecord
 	 * @param array $p_aOptions
 	 * @throws PDO_Exception
@@ -312,8 +392,8 @@ abstract class PPI_Model {
 	}
 
 	/**
-	 * PPI_Model::insert()
-	 * Insert records to the current table
+	 * Insert a record into the current table
+     *
 	 * @param array $p_aRecord
 	 * @return integer Last Insert ID
 	 */
@@ -332,6 +412,7 @@ abstract class PPI_Model {
 
 	/**
 	 * Performs extended inserts
+     *
 	 * @param array $p_aRecords Multi Dimensional array of records to insert
 	 * @return integer
 	 */
@@ -382,6 +463,7 @@ abstract class PPI_Model {
 
 	/**
 	 * Update a record
+     *
 	 * @param array $p_aRecord Record Data
 	 * @param string $p_mWhere Optional where clause
 	 * @return integer
@@ -408,6 +490,7 @@ abstract class PPI_Model {
 
 	/**
 	 * This function is used to backtick all fields
+     *
 	 * @param array $p_aKeys The array of key names
 	 * @return array
 	 */
@@ -420,6 +503,7 @@ abstract class PPI_Model {
 
 	/**
 	 * This function is the same as getList() however it will return you its first row directly as an array
+     *
 	 * @see $this->getList()
 	 * @todo Perform a fetchMode check to check the return type
 	 * @param mixed $p_mFilter The filter.
@@ -436,6 +520,7 @@ abstract class PPI_Model {
 	 * From the instance information, retreives information from the table.
 	 * Building up query of orders, limits and clauses it returns a data structure of the records found.
 	 * If you do not have instance information, or would like to access another table then $p_aExtras should be populated.
+     * 
 	 * @param string $p_mFilter WHERE
 	 * @param string $p_sOrder ORDER BY
 	 * @param string $p_iLimit LIMIT
@@ -483,6 +568,7 @@ abstract class PPI_Model {
 
 	/**
 	 * Fetch a singular row from the getList()
+     * 
 	 * @see PPI_Model->getList()
 	 */
 	function fetch($p_mFilter = '', $p_sOrder = '', $p_iLimit = '', $p_sGroup = '') {
@@ -492,9 +578,9 @@ abstract class PPI_Model {
 
 	/**
 	 * This will return you one row by getting a record by its primary key.
+     *
 	 * @param integer $search
-	 * @param boolean $p_bSetMetaData Default is false. If true will
-set the meta data upon successfull fetch() of the record
+	 * @param boolean $p_bSetMetaData Default is false. If true will set the meta data upon successfull fetch() of the record
 	 * @return array
 	 */
 	function find($search, $p_bSetMetaData = false) {
@@ -530,6 +616,7 @@ set the meta data upon successfull fetch() of the record
 
 	/**
 	 * This sets the fetch mode for PDO to retreive records
+     *
 	 * @param string $p_sMode
 	 * @return void
 	 */
@@ -556,9 +643,9 @@ set the meta data upon successfull fetch() of the record
 
 	/**
 	 * Create an IN statement from an input such as a string or an array
+     *
 	 * @param mixed $p_mValues The values to be added to the IN()
-	 * @return mixed On error return false. On sucess return the
-IN() filled string
+	 * @return mixed On error return false. On sucess return the IN() filled string
 	 */
 	function makeIN($p_mValues = '') {
 
@@ -602,8 +689,8 @@ IN() filled string
 	}
 
 	/**
-	 * PPI_Model::findMinMax()
 	 * Handler function for MIN() and MAX()
+     * 
 	 * @param string $p_sType Type ('MIN' or 'MAX')
 	 * @param string $p_sField The field to perform the minmax on
 	 * @param string $p_sClause Optional clause to apply to the query
@@ -620,11 +707,11 @@ IN() filled string
 	}
 
 	/**
-	 * PPI_Model::isRecordExist()
 	 * Check if record(s) exist
+     *
 	 * @param mixed $p_sRecordName
 	 * @param mixed $p_sRecordValue
-	 * @return
+	 * @return boolean
 	 */
 	function isRecordExist($p_sRecordName, $p_sRecordValue) {
 		if($p_sRecordName != '' && $p_sRecordValue != '') {
@@ -633,8 +720,10 @@ IN() filled string
 		}
 		return false;
 	}
+
 	/**
 	 * This checks if the table for your model exists
+     *
 	 * @param string $p_sTableName
 	 * @return boolean
 	 */
@@ -644,6 +733,7 @@ IN() filled string
 
 	/**
 	 * This checks if a DB exists or not.
+     *
 	 * @param string $p_sDBName
 	 * @return boolean
 	 */
@@ -665,6 +755,7 @@ IN() filled string
 
 	/**
 	 * Counts the number of records returned from your table
+     *
 	 * @param string $p_sFilter The Clause
 	 * @param string $p_iLimit The Limit
 	 * @param string $p_sGroup The Group By
@@ -695,26 +786,57 @@ IN() filled string
 	}
 
 	/**
-	 * Truncate the table assigned to this model
-	 */
+     * Truncate the table assigned to this model
+     *
+     * @return int
+     */
 	function truncate() {
 		return $this->exec("TRUNCATE TABLE `{$this->sTableName}`");
 	}
 
 
-	/* Returns the string representation for an ORDER BY */
+	/**
+     * Returns the string representation for an ORDER BY
+     *
+     * @param string $p_sFieldID
+     * @param string $p_sDirection
+     * @return string
+     */
 	function getOrder ($p_sFieldID = "", $p_sDirection="") { return $p_sFieldID." ".$p_sDirection; }
-	/* Returns the string representation for a LIMIT */
+
+	/**
+     * Returns the string representation for a LIMIT
+     *
+     * @param string $p_iStart
+     * @param string $p_iEnd
+     * @return string
+     */
 	function getLimit ($p_iStart = "", $p_iEnd = "") { return "LIMIT ".$p_iStart.",".$p_iEnd; }
-	/* Return the last query performed */
+
+	/**
+     * Return the last query performed
+     *
+     * @return string
+     */
 	function getLastQuery () { return $this->sLastQuery; }
-	/* return the last mysql_error() generated */
+
+	/**
+     * Return the last mysql_error() generated
+     *
+     * @return string
+     */
 	function getLastError () { return $this->sLastError; }
-	/* return the connection handler generated from mysql_connect() */
+
+	/**
+     * return the connection handler generated from mysql_connect()
+     *
+     * @return PDO
+     */
 	function getHandler() { return $this->rHandler; }
 
 	/**
-	 * Get the primary key assigned to this midel
+	 * Get the primary key assigned to this Model
+     * 
 	 * @return string
 	 */
 	function getPrimaryKey() {
@@ -723,6 +845,7 @@ IN() filled string
 
 	/**
 	 * Get the table name assigned to this Model
+     *
 	 * @return string
 	 */
 	function getTableName() {
@@ -731,7 +854,9 @@ IN() filled string
 
 	/**
 	 * Sanitize DB input
+     *
 	 * @param mixed $var
+     * @return string
 	 */
 	function quote($var) {
 		if(is_int($var) || is_float($var)) { return $var; }
@@ -739,28 +864,35 @@ IN() filled string
 	}
 
 	/**
-	 * Get the config object
-	 */
+     * Get the config object
+     *
+     * @return object
+     */
 	function getConfig() {
 		return PPI_Helper::getConfig();
 	}
 
 	/**
-	 * Get the registry object
-	 */
+     * Get the registry object
+     *
+     * @return object
+     */
 	function getRegistry() {
 		return PPI_Helper::getRegistry();
 	}
 
 	/**
 	 * Get the session object
+     *
+     * @return object
 	 */
 	function getSession() {
 		return PPI_Helper::getSession();
 	}
 
 	/**
-	 * Check if a chatset exists
+	 * Check if a charset exists
+     *
 	 * @param string $charset The Charset
 	 * @return boolean
 	 */
@@ -769,9 +901,9 @@ IN() filled string
 	}
 
 	/**
-	 * PPI_Model::isValidCharset()
+	 * Check if a charset exists in the current database
 	 *
-	 * @param string $charset
+	 * @param string $charset The Charset
 	 * @return bool
 	 */
 	function isValidCharset($charset) {

@@ -1,6 +1,5 @@
 <?php
 /**
- * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
@@ -11,18 +10,21 @@ abstract class PPI_Dispatch_Abstract {
 
 	/**
 	 * The Config object
+     *
 	 * @var object
 	 */
 	protected $_config;
 
 	/**
 	 * The Input object
+     *
 	 * @var object
 	 */
 	protected $_input;
 
 	/**
 	 * The Full Url
+     *
 	 * @var string
 	 */
 	protected $_fullUrl;
@@ -55,6 +57,9 @@ abstract class PPI_Dispatch_Abstract {
 	 */
 	protected $_router;
 
+    /**
+     * The constructor
+     */
 	function __construct() {
 		$this->_config = PPI_Helper::getConfig();
 		$this->_input  = PPI_Helper::getInput();
@@ -64,9 +69,9 @@ abstract class PPI_Dispatch_Abstract {
 
 	/**
 	 * Checks to theee if the base url has been misconfigured or not
-     *
 	 * Will return true if there is indeed a bad base url match.
 	 * Will return false if there is not bad base url match.
+     *
 	 * @return boolean
 	 */
 	function checkBadBaseUrl() {
@@ -179,6 +184,7 @@ abstract class PPI_Dispatch_Abstract {
 	 * Set the method for the chosen controller
 	 *
 	 * @param string $p_sMethod
+     * @return void
 	 */
 	function setMethod($p_sMethod) {
 		$this->_method = $p_sMethod;

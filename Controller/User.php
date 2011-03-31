@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * @version   1.0
@@ -8,9 +7,11 @@
  * @copyright Digiflex Development
  * @package   Controller
  */
-
 class PPI_Controller_User extends APP_Controller_Application {
 
+    /**
+     * The constructor
+     */
 	function __construct() {
 		parent::__construct();
 	}

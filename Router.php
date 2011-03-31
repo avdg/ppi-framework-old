@@ -11,6 +11,13 @@
  */
 class PPI_Router implements PPI_Router_Interface {
 
+    /**
+     * The array of routes
+     *
+     * @var null|array
+     */
+    static $_routes = null;
+
 	/**
 	 * The file to get the routes from
 	 *
@@ -20,15 +27,24 @@ class PPI_Router implements PPI_Router_Interface {
 
 	/**
 	 * The filename of the cache file on disk of the routes
+     * 
 	 * @todo if we are using raw PHP then we don't need to cache
 	 * @var string $_routingCachingFile
 	 */
 	static $_routingCachingFile = null;
 
+    /**
+     * The constructor
+     */
 	function __construct() {
 
 	}
 
+    /**
+     * Initialise the router and start grabbing routes
+     *
+     * @return void
+     */
 	function init() {
 		ppi_dump('heheheh', true);
 		$this->_routes = $this->getRoutes();
@@ -66,6 +82,7 @@ class PPI_Router implements PPI_Router_Interface {
 
 	/**
 	 * Parse through the routes and return the routes
+     *
 	 * @return array The Routes
 	 */
 	function parseRoutes() {
@@ -74,9 +91,11 @@ class PPI_Router implements PPI_Router_Interface {
 
 	/**
 	 * Cache the routes to disk
+     * 
+     * @return int
 	 */
 	function saveRoutes() {
-		file_put_contents(self::routingCacheFile, serialize(self::$_routes));
+		return file_put_contents(self::routingCacheFile, serialize(self::$_routes));
 	}
 
 }

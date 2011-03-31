@@ -9,28 +9,37 @@
  */
 class PPI_View {
 
+    /**
+     * The variables to be rendered into the view file
+     *
+     * @var array
+     */
 	protected $_viewParams = array();
 
 	/**
 	 * Are we loading a plugin view (TBC)
+     *
 	 * @var boolean $_plugin
 	 */
 	private $_plugin = false;
 
 	/**
 	 * Default renderer, PHP helper
+     *
 	 * @var string $_defaultRenderer
 	 */
 	private $_defaultRenderer = 'php';
 
 	/**
 	 * Master Template Override from config or setTemplateFile()
+     * 
 	 * @var string $_templateOverride
 	 */
 	private $_templateOverride = null;
 
 	/**
 	 * Template Renderer Override from config or useRenderer()
+     * 
 	 * @var string $_rendererOverride
 	 */
 	private $_rendererOverride = null;
@@ -39,10 +48,12 @@ class PPI_View {
 
 	/**
 	 * Load function called from controllers
+     * 
 	 * @todo Make this alias to $this->render()
 	 * @todo look into making this dynamic name rather than 'smarty', 'twig', 'php'
 	 * @param string $p_tplFile The template filename
 	 * @param array $p_tplParams Optional user defined params
+     * @return void
 	 */
 	function load($p_tplFile, $p_tplParams = array()) {
 
@@ -79,6 +90,7 @@ class PPI_View {
 	 *
 	 * @param string $p_sKey
 	 * @param mixed $p_mVal
+     * @return void
 	 */
 	function set($p_sKey, $p_mVal) {
 		$this->_viewParams[$p_sKey] = $p_mVal;
@@ -89,11 +101,18 @@ class PPI_View {
 	 *
 	 * @param string $p_tplFile The template filename
 	 * @param array $p_tplParams Optional user defined params
+     * @return void
 	 */
 	function loadSmarty($p_tplFile, $p_tplParams = array()) {
 		$this->setupRenderer(new PPI_Helper_Template_Smarty(), $p_tplFile, $p_tplParams, PPI_Helper::getConfig());
 	}
 
+    /**
+     * Specify the renderer to use at runtime
+     *
+     * @param string $p_sRendererName The renderer name
+     * @return void
+     */
 	function useRenderer($p_sRendererName) {
 		$this->_rendererOverride = $p_sRendererName;
 	}
@@ -104,6 +123,7 @@ class PPI_View {
 	 * @param object $oTpl Templating renderer. Instance of PPI_Interface_Template
 	 * @param string $p_tplFile The template file to render
 	 * @param array $p_tplParams Optional user defined parameres
+     * @return void
 	 */
 	function setupRenderer(PPI_Interface_Template $oTpl, $p_tplFile, $p_tplParams = array(), $p_oConfig) {
 
@@ -156,6 +176,7 @@ class PPI_View {
 
 	/**
 	 * Obtain the list of default view variables
+     *
 	 * @todo review making var names not HNC prefixed.
 	 * @param array $options
 	 * @return array
@@ -173,7 +194,7 @@ class PPI_View {
 			'config'          => $p_oConfig,
 			'request'         => $request,
 			'input'           => PPI_Helper::getInput(),
-                        'authData'        => $authData,
+            'authData'        => $authData,
 			'baseUrl'         => $p_oConfig->system->base_url,
 			'fullUrl'         => PPI_Helper::getFullUrl(),
 			'currUrl'         => PPI_Helper::getCurrUrl(),
@@ -182,7 +203,7 @@ class PPI_View {
 			'responseCode'    => PPI_Helper::getRegistry()->get('PPI_View::httpResponseCode', 200),
 			'stylesheetFiles' => PPI_View_Helper::getStylesheets(),
 			'javascriptFiles' => PPI_View_Helper::getJavascripts(),
-                        'authInfo'        => $authData, // Do not use, just BC stuff
+            'authInfo'        => $authData, // Do not use, just BC stuff
 			'aAuthInfo'       => $authData, // Do not use, just BC stuff.
 			'bIsLoggedIn'     => !empty($authData), // Do not use, just BC stuff
 			'oConfig'         => $p_oConfig, // Do not use, just BC stuff
@@ -191,7 +212,9 @@ class PPI_View {
 
 	/**
 	 * To get a view variable that is set to get rendered. (TBC)
+     *
 	 * @param string $key The Key
+     * @return mixed
 	 */
 	function get($key) {
 		if(!array_key_exists($key, $this->_viewParams)) {
@@ -201,8 +224,8 @@ class PPI_View {
 	}
 
     /**
-     * PPI_View::addStylesheet()
      * Append to the list of stylesheets to be included
+     * 
      * @param mixed $p_mStylesheet This can be an existing array of stylesheets or a string.
      * @return void
      */
@@ -211,8 +234,8 @@ class PPI_View {
     }
 
     /**
-     * PPI_View::addJavascript()
      * Append to the list of javascript files to be included
+     *
      * @param mixed $p_mJavascript
      * @return void
      */
@@ -222,6 +245,7 @@ class PPI_View {
 
 	/**
 	 * Override the default template file, with optional include for the .php or .tpl extension
+     *
 	 * @param string $p_sNewTemplateFile New Template Filename
 	 * @todo have this lookup the template engines default extension and remove the smarty param
      * @return void
@@ -236,8 +260,11 @@ class PPI_View {
 
 	/**
 	 * Create an override for the renderer
+     * 
 	 * @todo add Twig to this list.
-	 * @param string $p_sRendererName
+	 * @param string $p_sRendererName The renderer name
+     * @throws PPI_Exception
+     * @return void
 	 */
 	function setRenderer($p_sRendererName) {
 		switch($p_sRendererName) {
@@ -260,10 +287,12 @@ class PPI_View {
 
 	/**
 	 * The internal render function, this is called by $this->load('template');
+     * 
 	 * @todo finish this, have it accept 'template' at first.
 	 * @param string $p_sTemplate The template name to render
 	 * @param array $p_aParams Optional parameters
 	 * @param array $p_aOptions Optional options
+     * @return void
 	 */
 	protected function render($p_sTemplate, $p_aParams = array(), $p_aOptions = array()) {
 

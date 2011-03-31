@@ -1,6 +1,5 @@
 <?php
 /**
- * @version    1.0
  * @author     Paul Dragoonis <dragoonis@php.net>
  * @license    http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright  Digiflex Development
@@ -9,27 +8,28 @@
  */
 class PPI_Session {
 
+    /**
+     * This is the key that will hold users authentication information
+     *
+     * @var string
+     */
     private $_authKeyName = 'userAuthInfo';
 
     /**
      * Default value for the session name for the app.
-     * This can be overritten by the config
+     * This can be overridden by the config
+     *
      * @var string $_sessionName
      */
 	private $_sessionName = 'myproject';
 
 	/**
 	 * The default namespace name for the framework.
-	 * This can be overitten by the config: system.sessionNamespace
+	 * This can be overridden by the config: system.sessionNamespace
+     * 
 	 * @var string $_frameworkSessionName
 	 */
     private $_frameworkSessionName = '__PPI';
-
-    /**
-     * The PPI_Session instance
-     * @var object $_instance
-     */
-    private static $_instance = null;
 
     /**
      * Setup the session namespace
@@ -69,6 +69,7 @@ class PPI_Session {
 
 	/**
 	 * Get the auth data, if it doesn't exist we return a blank array
+     *
 	 * @param boolean $p_bUseArray Default is true. If true returns array, else object.
 	 * @return array
 	 */
@@ -80,6 +81,7 @@ class PPI_Session {
 
 	/**
 	 * Check if a key exists
+     *
 	 * @param string $p_sKey The key
 	 * @return boolean
 	 */
@@ -89,6 +91,7 @@ class PPI_Session {
 
 	/**
 	 * Remove all set keys from the session
+     * 
 	 * @return void
 	 */
 	function removeAll() {
@@ -103,6 +106,7 @@ class PPI_Session {
 	 * $session->remove('userInfo', 'email');
 	 * </code>
 	 * Remove a specific key, or just data within that key.
+     *
 	 * @param string $p_sKey The initial key set
 	 * @param string $p_sName A key within the initial key set.
 	 * @return void

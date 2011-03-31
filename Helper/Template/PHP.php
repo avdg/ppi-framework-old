@@ -1,25 +1,30 @@
 <?php
-
 /**
- *
- * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   View
  * @package   www.ppiframework.com
  */
-
 class PPI_Helper_Template_PHP implements PPI_Interface_Template {
 
-	private $_viewVars = array();
+    /**
+     * The variables that are to be rendered in the View file
+     *
+     * @var array
+     */
+	protected $_viewVars = array();
 
+    /**
+     * The constructor
+     */
 	function __construct() {}
 
 	/**
 	 * Actually load in the view and render it.
 	 *
 	 * @param string $p_sTemplateFile The filename to load, such as the master template
+     * @return void
 	 */
 	function render($p_sTemplateFile) {
 		// Optional extension for php templates

@@ -1,6 +1,5 @@
 <?php
 /**
- * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
@@ -9,6 +8,12 @@
  */
 class PPI_Dispatch_Standard extends PPI_Dispatch_Abstract implements PPI_Dispatch_Interface {
 
+    /**
+     * Optionally pass in a routing driver to take care of the routing.
+     * @todo This feature is experimental and isn't ready for production yet
+     *
+     * @param null|PPI_Router_Interface $p_oRouter
+     */
 	function __construct($p_oRouter = null) {
 		/*
 		if($p_oRouter !== null && $p_oRouter instanceof PPI_Router_Interface) {
@@ -43,7 +48,6 @@ class PPI_Dispatch_Standard extends PPI_Dispatch_Abstract implements PPI_Dispatc
 	 * Dispatch the set controller
 	 *
      * @return void
-     *
 	 */
 	function dispatch() {
 		$oController = $this->getController();

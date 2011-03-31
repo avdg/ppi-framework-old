@@ -1,17 +1,14 @@
 <?php
+require_once SYSTEMPATH . 'Vendor/Smarty/class.Smarty.php';
+
 /**
- *
- * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   View
  * @link      www.ppiframework.com
  */
-
-require_once SYSTEMPATH . 'Vendor/Smarty/class.Smarty.php';
 class PPI_Helper_Template_Smarty implements PPI_Interface_Template {
-
 
     /**
      * Rendering engine, in this case it's Smarty
@@ -32,6 +29,9 @@ class PPI_Helper_Template_Smarty implements PPI_Interface_Template {
 	protected $_smartyPath = null;
 
 
+    /**
+     * Setup all the rendering variables
+     */
 	function __construct() {
 		$oConfig                         = PPI_Helper::getConfig();
 		$this->_renderer                 = new Smarty();

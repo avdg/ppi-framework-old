@@ -1,6 +1,5 @@
 <?php
 /**
- * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
@@ -9,8 +8,20 @@
  */
 interface PPI_Dispatch_Interface {
 
+    /**
+     * The init() function of the driver.
+     *
+     * @abstract
+     * @return void
+     */
 	function init();
 
+    /**
+     * Actually perform the dispatch
+     *
+     * @abstract
+     * @return void
+     */
 	function dispatch();
 
 }

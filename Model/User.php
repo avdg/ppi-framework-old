@@ -51,9 +51,10 @@ class PPI_Model_User extends APP_Model_Application {
 			}
 		} else {
 			//if password is being passed in for re-set, we need to encrypt it
-			if(isset($aData['password'])) {
-				$aData['password'] 	= $this->encryptNewPassword($aData['password']);
+			if(isset($aData['password'], $aData['salt'])) {
+				$aData['password'] 	= $this->encryptPassword($aData['salt'], $aData['password']);
 				unset($aData[$oConfig->system->usernameField]);
+                unset($aData['salt']);
 			}
 		}
 		return parent::putRecord($aData);
@@ -84,14 +85,22 @@ class PPI_Model_User extends APP_Model_Application {
 		$aUser = $this->find($p_iUserID);
 		if(!empty($aUser)) {
 
-			// Using the username field from the config.
-			$usernameField = $this->getConfig()->system->usernameField;
+            $oConfig = $this->getConfig();
 
-			// We update the users record, passing in the encrypted form of their new password.
+			// Using the username field from the config.
+			$usernameField = $oConfig->system->usernameField;
+
+            // Get the salt from the config
+            $salt = $oConfig->system->userAuthSalt;
+            if(empty($salt)) {
+                throw new PPI_Exception('Unable to update password. No salt found in config value: system.userAuthSalt');
+            }
+
+			// We update the users record.
 			$this->putRecord(array(
 				$this->getPrimaryKey() => $p_iUserID,
-				$usernameField         => $aUser[$usernameField],
-				'password'             => $this->encryptNewPassword($aUser[$usernameField], $p_sPassword)
+                'salt'                 => $salt,
+				'password'             => $p_sPassword
 			));
 			return true;
 		}
@@ -107,16 +116,17 @@ class PPI_Model_User extends APP_Model_Application {
 	 * @return boolean
 	 */
 	function login($username, $password) {
-		$user = $this->fetch($this->getConfig()->system->usernameField . ' = ' . $this->quote($username));
+        $oConfig = $this->getConfig();
+		$user = $this->fetch($oConfig->system->usernameField . ' = ' . $this->quote($username));
 		if(!empty($user)) {
-			if($this->encryptPassword(substr($user['password'], 0, 12), $password) === $user['password']) {
+			if($this->encryptPassword($oConfig->system->userAuthSalt, $password) === $user['password']) {
 				if(array_key_exists('password', $user)) {
 					unset($user['password']);
 				}
 				$user['role_name'] = PPI_Helper_User::getRoleNameFromID($user['role_id']);
 				$user['role_name_nice'] = PPI_Helper_User::getRoleNameNice($user['role_name']);
 				$this->getSession()->setAuthData($user);
-			return true;
+			    return true;
 			}
 		}
 		return false;

@@ -40,7 +40,20 @@ class PPI_Model_User extends APP_Model_Application {
 			$aData['active']            = isset($oConfig->system->defaultUserActive) && $oConfig->system->defaultUserActive != false ? 1 : 0;
 			$aData['created']           = time();
 			$aData['activation_code'] 	= base64_encode(time());
-			$aData['password'] 			= $this->encryptNewPassword($aData['password']);
+
+            // ----- Password Stuff ----
+            if(isset($aData['salt'])) {
+                $sSalt = $aData['salt'];
+                unset($aData['salt']);
+
+            // If no salt has been set then we get it from the config.
+            } else {
+                $sSalt = $oConfig->system->userAuthSalt;
+            }
+            if(empty($sSalt)) {
+                throw new PPI_Exception('No salt found when trying to register user');
+            }
+			$aData['password'] = $this->encryptPassword($sSalt, $aData['password']);
 
 			// If no role_id has been set, lets set it from the config.
 			if(!isset($aData['role_id'])) {

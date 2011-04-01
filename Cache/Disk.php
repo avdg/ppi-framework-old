@@ -2,7 +2,7 @@
 /**
  *
  * @version   1.0
- * @author    Paul Dragoonis <dragoonis@php.net>
+ * @author	Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Digiflex Development
  * @package   Cache
@@ -10,24 +10,24 @@
 
 class PPI_Cache_Disk implements PPI_Cache_Interface {
 
-    /**
-     * The folder where the cache contents will be placed
-     *
-     * @var string
-     */
+	/**
+	 * The folder where the cache contents will be placed
+	 *
+	 * @var string
+	 */
 	protected $_cacheDir = null;
 
-    /**
-     * The options passed in upon instantiation
-     *
-     * @var array
-     */
+	/**
+	 * The options passed in upon instantiation
+	 *
+	 * @var array
+	 */
 	protected $_options = array();
 
 	function __construct(array $p_aOptions = array()) {
-	    $this->_options = $p_aOptions;
-	    $this->_cacheDir = isset($p_aOptions['cache_dir'])
-	       ? $p_aOptions['cache_dir'] : APPFOLDER . 'Cache/Disk/';
+		$this->_options = $p_aOptions;
+		$this->_cacheDir = isset($p_aOptions['cache_dir'])
+		   ? $p_aOptions['cache_dir'] : APPFOLDER . 'Cache/Disk/';
 	}
 
 	/**
@@ -37,8 +37,8 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	 * @return mixed
 	 */
 	protected function getData($p_sPath) {
-	    $sContent = file_get_contents($p_sPath);
-	    return $sContent != '' ? unserialize($sContent) : '';
+		$sContent = file_get_contents($p_sPath);
+		return $sContent != '' ? unserialize($sContent) : '';
 	}
 
 	/**
@@ -48,7 +48,7 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	 */
 	function remove($p_sKey) {
 		return $this->removeKeyByPath($this->getKeyCachePath($p_sKey))
-		    && $this->removeKeyByPath($this->getKeyMetaCachePath($p_sKey));
+			&& $this->removeKeyByPath($this->getKeyMetaCachePath($p_sKey));
 	}
 
 	/**
@@ -56,16 +56,16 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	 * @param string $p_sPath
 	 * @return boolean
 	 */
-    function removeKeyByPath($p_sPath) {
-        return file_exists($p_sPath) && unlink($p_sPath);
-    }
+	function removeKeyByPath($p_sPath) {
+		return file_exists($p_sPath) && unlink($p_sPath);
+	}
 
 
 	/**
 	 * Get the full path to a cache item
 	 * @param string $p_sKey
 	 * @return string
-     */
+	 */
 	protected function getKeyCachePath($p_sKey) {
 		return $this->_cacheDir . 'default--' . $p_sKey;
 	}
@@ -77,7 +77,7 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	 * @return string
 	 */
 	protected function getKeyMetaCachePath($p_sKey) {
-	    return $this->getKeyCachePath($p_sKey) . '.metadata';
+		return $this->getKeyCachePath($p_sKey) . '.metadata';
 	}
 
 	/**
@@ -87,7 +87,7 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	 * @return array
 	 */
 	protected function getMetaData($p_sKey) {
-	    return $this->getData($this->getKeyMetaCachePath($p_sKey));
+		return $this->getData($this->getKeyMetaCachePath($p_sKey));
 	}
 
 	/**
@@ -98,7 +98,7 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	 * @return integer
 	 */
 	protected function setData($p_sPath, $p_mData) {
-	    return file_put_contents($p_sPath, serialize($p_mData), LOCK_EX) > 0;
+		return file_put_contents($p_sPath, serialize($p_mData), LOCK_EX) > 0;
 	}
 
 	/**
@@ -107,18 +107,18 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	 * @return boolean
 	 */
 	function exists($p_sKey) {
-        $sPath = $this->getKeyCachePath($p_sKey);
-	    if(file_exists($sPath) === false) {
-	        return false;
-	    }
-        $aMetaData = $this->getMetaData($p_sKey);
-	    // See if the item has a ttl and if it has expired then we delete it.
-	    if($aMetaData['ttl'] > 0 && (int) $aMetaData['expire_time'] < time()) {
-	        // Remove the cache item and its metadata file.
-	        $this->remove($p_sKey);
-	        return false;
-	    }
-	    return true;
+		$sPath = $this->getKeyCachePath($p_sKey);
+		if(file_exists($sPath) === false) {
+			return false;
+		}
+		$aMetaData = $this->getMetaData($p_sKey);
+		// See if the item has a ttl and if it has expired then we delete it.
+		if($aMetaData['ttl'] > 0 && (int) $aMetaData['expire_time'] < time()) {
+			// Remove the cache item and its metadata file.
+			$this->remove($p_sKey);
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -130,34 +130,34 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	 */
 	function set($p_sKey, $p_mData, $p_iTTL = 0) {
 
-        $sPath = $this->getKeyCachePath($p_sKey);
-	    if($this->exists($p_sKey)) {
-	        $this->remove($p_sKey);
-	    }
+		$sPath = $this->getKeyCachePath($p_sKey);
+		if($this->exists($p_sKey)) {
+			$this->remove($p_sKey);
+		}
 
-	    $sCacheDir = dirname($sPath);
-	    if(!is_dir($sCacheDir)) {
-	        try {
-	           mkdir($sCacheDir);
-	        } catch(PPIException $e) {
-	            throw new PPI_Exception('Unable to create directory:<br>(' . $sCacheDir . ')');
-	        }
-	    }
-	    if(is_writeable($sCacheDir) === false) {
-	        $aFileInfo = pathinfo(dirname($sPath));
-	        chmod($sCacheDir, 775);
-	        if(is_writable($sCacheDir) === false) {
-		    	throw new PPI_Exception('Unable to create cache file: ' . $p_sKey. '. Cache directory not writeable.<br>(' . $this->_cacheDir . ')<br>Current permissions: ');
-	        }
-	    }
+		$sCacheDir = dirname($sPath);
+		if(!is_dir($sCacheDir)) {
+			try {
+			   mkdir($sCacheDir);
+			} catch(PPIException $e) {
+				throw new PPI_Exception('Unable to create directory:<br>(' . $sCacheDir . ')');
+			}
+		}
+		if(is_writeable($sCacheDir) === false) {
+			$aFileInfo = pathinfo(dirname($sPath));
+			chmod($sCacheDir, 775);
+			if(is_writable($sCacheDir) === false) {
+				throw new PPI_Exception('Unable to create cache file: ' . $p_sKey. '. Cache directory not writeable.<br>(' . $this->_cacheDir . ')<br>Current permissions: ');
+			}
+		}
 
-	    $aMetaData = array(
-	       'expire_time' => time() + (int) $p_iTTL,
-	       'ttl'         => $p_iTTL
-	    );
+		$aMetaData = array(
+		   'expire_time' => time() + (int) $p_iTTL,
+		   'ttl'		 => $p_iTTL
+		);
 
-	    return $this->setData($sPath, $p_mData)
-	       && $this->setData($this->getKeyMetaCachePath($p_sKey), $aMetaData);
+		return $this->setData($sPath, $p_mData)
+		   && $this->setData($this->getKeyMetaCachePath($p_sKey), $aMetaData);
 	}
 
 	/**
@@ -166,10 +166,10 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	 * @return mixed
 	 */
 	function get($p_sKey, $p_mDefault = null) {
-	    if($this->exists($p_sKey) === false) {
-	        return $p_mDefault;
-	    }
-	    return $this->getData($this->getKeyCachePath($p_sKey));
+		if($this->exists($p_sKey) === false) {
+			return $p_mDefault;
+		}
+		return $this->getData($this->getKeyCachePath($p_sKey));
 	}
 
 	/**
@@ -179,22 +179,22 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	 */
 	function enabled() { return true; }
 
-    /**
-     * Increment the value in the cache
-     *
-     * @param  $p_sKey The key
-     * @param  $p_mIncrement The value to increment by
-     * @return void
-     */
+	/**
+	 * Increment the value in the cache
+	 *
+	 * @param  $p_sKey The key
+	 * @param  $p_mIncrement The value to increment by
+	 * @return void
+	 */
 	function increment($p_sKey, $p_mIncrement) { }
 
-    /**
-     * Decrement the value in the cache
-     *
-     * @param  $p_sKey The Key
-     * @param  $p_mDecrement The value to decrement by
-     * @return void
-     */
+	/**
+	 * Decrement the value in the cache
+	 *
+	 * @param  $p_sKey The Key
+	 * @param  $p_mDecrement The value to decrement by
+	 * @return void
+	 */
 	function decrement($p_sKey, $p_mDecrement) { }
 
 }

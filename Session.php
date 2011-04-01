@@ -49,6 +49,9 @@ class PPI_Session {
 
         $this->_defaults['sessionNamespace'] = $this->_defaults['frameworkSessionNamespace'] . '_' . $this->_defaults['sessionNamespace'];
 
+        session_name($this->_defaults['sessionNamespace']);
+        session_start();
+
         if(!array_key_exists($this->_defaults['sessionNamespace'], $_SESSION)) {
         	$_SESSION[$this->_defaults['sessionNamespace']] = array();
         }

@@ -160,12 +160,6 @@ class PPI_App {
 
         // ------------- Initialise the session -----------------
         if(!headers_sent()) {
-            if(!isset($this->_config->system->sessionNamespace)) {
-                die('Required config value not found. system.sessionNamespace');
-            } else {
-                session_name($this->_config->system->sessionNamespace);
-            }
-            session_start();
 
 	        // Fire up the default session handler
 	        if($this->_session === null) {

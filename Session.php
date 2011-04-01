@@ -9,6 +9,13 @@
 class PPI_Session {
 
     /**
+     * The config object, optionally passed.
+     *
+     * @var null|object
+     */
+    protected $_config = null;
+
+    /**
      * The session defaults
      *
      * @var array
@@ -24,29 +31,31 @@ class PPI_Session {
      */
     function __construct(array $p_aOptions = array()) {
 
-        if(!isset($p_aOptions['config'])) {
-            $p_aOptions['config'] = PPI_Helper::getConfig();
+        if(isset($p_aOptions['config'])) {
+            $this->_config = $p_aOptions['config'];
         }
-        $this->_config = $p_aOptions['config'];
         unset($p_aOptions['config']);
 
         $this->_defaults = ($p_aOptions + $this->_defaults);
 
-        // If we didn't override the userAuthKey and it exists in the config, lets grab it.
-        if(!isset($p_aOptions['userAuthKey']) && isset($this->_config->system->userAuthKey)) {
-            $this->_defaults['userAuthKey'] = $this->_config->system->userAuthKey;
-        }
+        if($this->_config !== null) {
 
-        // If we didn't override the sessionNamespace and it exists in the config, lets grab it.
-        if(!isset($p_aOptions['sessionNamespace']) && isset($this->_config->system->sessionNamespace)) {
-            $this->_defaults['sessionNamespace'] = $this->_config->system->sessionNamespace;
-        }
+            // If we didn't override the userAuthKey and it exists in the config, lets grab it.
+            if(!isset($p_aOptions['userAuthKey']) && isset($this->_config->system->userAuthKey)) {
+                $this->_defaults['userAuthKey'] = $this->_config->system->userAuthKey;
+            }
 
-        // If we didn't override the sessionNamespace and it exists in the config, lets grab it.
-        if(!isset($p_aOptions['frameworkSessionNamespace']) && isset($this->_config->system->frameworkSessionNamespace)) {
-            $this->_defaults['frameworkSessionNamespace'] = $this->_config->system->frameworkSessionNamespace;
-        }
+            // If we didn't override the sessionNamespace and it exists in the config, lets grab it.
+            if(!isset($p_aOptions['sessionNamespace']) && isset($this->_config->system->sessionNamespace)) {
+                $this->_defaults['sessionNamespace'] = $this->_config->system->sessionNamespace;
+            }
 
+            // If we didn't override the sessionNamespace and it exists in the config, lets grab it.
+            if(!isset($p_aOptions['frameworkSessionNamespace']) && isset($this->_config->system->frameworkSessionNamespace)) {
+                $this->_defaults['frameworkSessionNamespace'] = $this->_config->system->frameworkSessionNamespace;
+            }
+            
+        }
         $this->_defaults['sessionNamespace'] = $this->_defaults['frameworkSessionNamespace'] . '_' . $this->_defaults['sessionNamespace'];
 
         session_name($this->_defaults['sessionNamespace']);

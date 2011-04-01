@@ -11,95 +11,95 @@
 
 class PPI_Exception extends Exception {
 
-    /**
-     * The backtrace
-     *
-     * @var string
-     */
+	/**
+	 * The backtrace
+	 *
+	 * @var string
+	 */
 	public $_traceString = '';
 
-    /**
-     * The error line
-     *
-     * @var int|string
-     */
+	/**
+	 * The error line
+	 *
+	 * @var int|string
+	 */
 	public $line = '';
 
-    /**
-     * The error code
-     *
-     * @var int|string
-     */
+	/**
+	 * The error code
+	 *
+	 * @var int|string
+	 */
 	public $code = '';
 
-    /**
-     * The error message
-     *
-     * @var string
-     */
+	/**
+	 * The error message
+	 *
+	 * @var string
+	 */
 	public $message = '';
 
-    /**
-     * The error filename
-     *
-     * @var string
-     */
+	/**
+	 * The error filename
+	 *
+	 * @var string
+	 */
 	public $file = '';
 
-    /**
-     * The backtrace as an array
-     *
-     * @var array
-     */
+	/**
+	 * The backtrace as an array
+	 *
+	 * @var array
+	 */
 	public $_traceArray = array();
 
-    /**
-     * Any SQL queries that have been ran
-     *
-     * @var array
-     */
+	/**
+	 * Any SQL queries that have been ran
+	 *
+	 * @var array
+	 */
 	public $_queries = array();
 
-    /**
-     * Singleton instance
-     *
-     * @var null
-     */
-    private static $_instance = null;
+	/**
+	 * Singleton instance
+	 *
+	 * @var null
+	 */
+	private static $_instance = null;
 
-    /**
-     * Initialize the default registry instance.
+	/**
+	 * Initialize the default registry instance.
 
-     * @return void
-     */
-    protected static function init() {
-        self::setInstance(new PPI_Exception());
-    }
+	 * @return void
+	 */
+	protected static function init() {
+		self::setInstance(new PPI_Exception());
+	}
 
-    /**
-     * Set the default registry instance to a specified instance.
-     *
-     * @return void
-     */
-    public static function setInstance(PPI_Exception $instance) {
-        self::$_instance = $instance;
-    }
-    /**
-     * Retrieves the default exception instance.
-     */
-    public static function getInstance() {
-        if (self::$_instance === null) {
-            self::init();
-        }
-        return self::$_instance;
-    }
+	/**
+	 * Set the default registry instance to a specified instance.
+	 *
+	 * @return void
+	 */
+	public static function setInstance(PPI_Exception $instance) {
+		self::$_instance = $instance;
+	}
+	/**
+	 * Retrieves the default exception instance.
+	 */
+	public static function getInstance() {
+		if (self::$_instance === null) {
+			self::init();
+		}
+		return self::$_instance;
+	}
 
-    /**
-     * Initialise the PPI_Exception object and start setting up debug info such as backtraces.
-     *
-     * @param string $message
-     * @param null|array $sqlQueries
-     */
+	/**
+	 * Initialise the PPI_Exception object and start setting up debug info such as backtraces.
+	 *
+	 * @param string $message
+	 * @param null|array $sqlQueries
+	 */
 	function __construct($message = '', $sqlQueries = null) {
 		parent::__construct($message);
 		$this->_traceString = $this->getTraceAsString();
@@ -108,11 +108,11 @@ class PPI_Exception extends Exception {
 	}
 
 	/**
-     * This function shows a 403 error
-     *
-     * @access	public
-     * @return	void
-     */
+	 * This function shows a 403 error
+	 *
+	 * @access public
+	 * @return void
+	 */
 	function show_403($p_sMessage = "") {
 		$heading = "403 Forbidden";
 		$message = (!empty ($p_sMessage) ) ? $p_sMessage : "You are not allowed to access the requested location";
@@ -122,14 +122,14 @@ class PPI_Exception extends Exception {
 
 
 	/**
-    * This function shows a 404 error
-    *
-    * @access	public
-    * @todo     change this to a new function name
-    * @todo     make this do 404 on the HTTP status line
-    * @param    string argument name
-    * @return	void
-    */
+	 * This function shows a 404 error
+	 *
+	 * @access   public
+	 * @todo     change this to a new function name
+	 * @todo     make this do 404 on the HTTP status line
+	 * @param    string argument name
+	 * @return   void
+	 */
 	static function show_404($p_sLocation = "", $p_bUseImage = false) {
 		$heading = "Page cannot be found";
 		$message = !empty($p_sLocation) ? $p_sLocation : "The page you requested was not found.";
@@ -140,17 +140,17 @@ class PPI_Exception extends Exception {
 			'heading'       => 'Page cannot be found', 'message' => $message,
 			'errorPageType' => '404'
 		));
-        exit;
+		exit;
 	}
 
 	/**
 	 * Show an error message
 	 *
 	 * @param string $p_sMsg
-     * @return void
+	 * @return void
 	 */
 	function show_error($p_sMsg) {
-        $oConfig = PPI_Helper::getConfig();
+		$oConfig = PPI_Helper::getConfig();
 		$heading = "PHP Error";
 		$baseUrl = $oConfig->system->base_url;
 		require SYSTEMPATH.'View/code_error.php';

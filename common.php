@@ -38,7 +38,6 @@ function getRoleIDFromName($p_sRoleName) {
  *
  */
 function getRoles() {
-
 	return PPI_Helper::getConfig()->system->roleMapping->toArray();
 }
 
@@ -156,101 +155,100 @@ function ppi_info() {
 
 	$sHtml = <<<EOF
 
-      <style>
-        .ppi_info
+<style>
+	.ppi_info
 	{
-	 /*  background-color:#2B2B2B; */
-	   border: 1px thin black;
+	/*  background-color:#2B2B2B; */
+	  border: 1px thin black;
 
-	   color: black;
-	   font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
-	   text-shadow: #fff 0px 0px 0px; font-size:12px;
-	   line-height:1.9em;
+	  color: black;
+	  font-family: "Lucida Grande", Lucida, Verdana, sans-serif;
+	  text-shadow: #fff 0px 0px 0px; font-size:12px;
+	  line-height:1.9em;
 	}
+</style>
 
-      </style>
+<table width="600" cellpadding="3" border="0" align="center" class="ppi_info">
+<tbody>
+	<tr>
+		<td colspan="2">
+		<h1>PPI framework version {$sVersion}</h1>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+		<br />
+		</td>
+	</tr>
+	<tr>
+		<td>Base url: </td>
+		<td>{$sBaseUrl}</td>
+	</tr>
+	<tr>
+		<td>Site type:</td>
+		<td>{$sSiteType}</td>
+	</tr>
+	<tr>
+		<td>Default DB Fetch Mode</td>
+		<td>{$oConfig->db->mysql_default_fetch}</td>
+	</tr>
+	<tr>
+		<td>Maintenance mode: </td>
+		<td>{$sMaintenanceMode}</td>
+	</tr>
+	<tr>
+		<td>Allowed hosts:<br />
+		<small>(if in Maintenance mode)</small>
+		</td>
+		<td><strong>{$sAllowedHosts}</strong></td>
+	</tr>
+	<tr>
+		<td>Ppi session name: </td>
+		<td>{$oConfig->system->session_namespace}</td>
+	</tr>
+	<tr>
+		<td>Autoload plugin mode: </td>
+		<td>{$sAutoloadplugins}</td>
+	</tr>
 
-      <table width="600" cellpadding="3" border="0" align="center" class="ppi_info">
-       <tbody>
-         <tr>
-	 <td colspan="2">
-	    <h1>PPI framework version {$sVersion}</h1>
-	 </td>
-       </tr>
-       <tr>
-         <td colspan="2">
-	    <br />
-	 </td>
-       </tr>
-       <tr>
-         <td>Base url: </td>
-	 <td>{$sBaseUrl}</td>
-       </tr>
-       <tr>
-         <td>Site type:</td>
-	 ``<td>{$sSiteType}</td>
-       </tr>
-       <tr>
-         <td>Default DB Fetch Mode</td>
-	 ``<td>{$oConfig->db->mysql_default_fetch}</td>
-       </tr>
-       <tr>
-         <td>Maintenance mode: </td>
-	 <td>{$sMaintenanceMode}</td>
-       </tr>
-      <tr>
-         <td>Allowed hosts:<br />
-	 <small>(if in Maintenance mode)</small>
-	 </td>
-	 <td><strong>{$sAllowedHosts}</strong></td>
-       </tr>
-        <tr>
-         <td>Ppi session name: </td>
-	 <td>{$oConfig->system->session_namespace}</td>
-       </tr>
-      <tr>
-         <td>Autoload plugin mode: </td>
-	 <td>{$sAutoloadplugins}</td>
-	 </tr>
+	<tr>
+		<td>Base path: </td>
+		<td>{$sBasePath}</td>
+	</tr>
+	<tr>
+		<td>View path: </td>
+		<td>{$sViewPath}</td>
+	</tr>
+	<tr>
+		<td>Model path: </td>
+		<td>{$sModelPath}</td>
+	</tr>
+	<tr>
+		<td>View path: </td>
+		<td>{$sViewPath}</td>
+	</tr>
 
-       <tr>
-         <td>Base path: </td>
-	 <td>{$sBasePath}</td>
-       </tr>
-       <tr>
-         <td>View path: </td>
-	 <td>{$sViewPath}</td>
-       </tr>
-       <tr>
-         <td>Model path: </td>
-	 <td>{$sModelPath}</td>
-       </tr>
-       <tr>
-         <td>View path: </td>
-	 <td>{$sViewPath}</td>
-       </tr>
-
-       <tr>
-         <td>Plugin path: </td>
-	 <td>{$sPluginPath}</td>
-       </tr>
-        <tr>
-         <td>Plugin Controller path: </td>
-	 <td>{$sPluginControllerPath}</td>
-       </tr>
-        <tr>
-         <td>Plugin Model path: </td>
-	 <td>{$sPluginModelPath}</td>
-       </tr>
-        <tr>
-         <td>Plugin View path: </td>
-	 <td>{$sPluginViewPath}</td>
-       </tr>
-      </tbody>
-   </table>
+	<tr>
+		<td>Plugin path: </td>
+		<td>{$sPluginPath}</td>
+	</tr>
+	<tr>
+		<td>Plugin Controller path: </td>
+		<td>{$sPluginControllerPath}</td>
+	</tr>
+	<tr>
+		<td>Plugin Model path: </td>
+		<td>{$sPluginModelPath}</td>
+	</tr>
+	<tr>
+		<td>Plugin View path: </td>
+		<td>{$sPluginViewPath}</td>
+	</tr>
+</tbody>
+</table>
 EOF;
-	echo $sHtml;
-	// phpinfo();
+      echo $sHtml;
+      // phpinfo();
 }
 
 function getHTTPHostname() {

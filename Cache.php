@@ -14,16 +14,16 @@ class PPI_Cache {
 	 *
 	 * @var array
 	 */
-    protected $_defaults = array(
-        'handler'  => 'disk'
-    );
+	protected $_defaults = array(
+		'handler'  => 'disk'
+	);
 
-    /**
-     * The handler in use
-     *
-     * @var null|PPI_Cache_Interface
-     */
-    protected $_handler = null;
+	/**
+	 * The handler in use
+	 *
+	 * @var null|PPI_Cache_Interface
+	 */
+	protected $_handler = null;
 
 	/**
 	 * The options to the cache layer. This can be an array of options
@@ -38,79 +38,78 @@ class PPI_Cache {
 			$options = array('handler' => $options);
 		}
 
-        if(isset($options['handler'])) {
-            // If it's a pre instantiated cache handler then use that
-            if(!is_string($options['handler']) && $options['handler'] instanceof PPI_Cache_Interface) {
-                $this->_handler = $options['handler'];
-                unset($options['handler']);
-            }
-        }
+		if(isset($options['handler'])) {
+			// If it's a pre instantiated cache handler then use that
+			if(!is_string($options['handler']) && $options['handler'] instanceof PPI_Cache_Interface) {
+				$this->_handler = $options['handler'];
+				unset($options['handler']);
+			}
+		}
 
-        $this->_defaults = ($options + $this->_defaults);
+		$this->_defaults = ($options + $this->_defaults);
 
-        // If no handler was passed in, then we setup that handler now by the string name: i.e: 'disk'
-        if($this->_handler === null) {
-            $this->setupHandler($this->_defaults['handler']);
-        }
+		// If no handler was passed in, then we setup that handler now by the string name: i.e: 'disk'
+		if($this->_handler === null) {
+			$this->setupHandler($this->_defaults['handler']);
+		}
 	}
 
 	/**
 	 * Initialise the cache handler
-     *
+	 *
 	 * @param string $handler The handler name
 	 * @return void
 	 * @throws PPI_Exception
 	 */
 	function setupHandler($handler) {
 		$handler = strtolower($handler);
-        $handler = 'PPI_Cache_' . ucfirst($handler);
+		$handler = 'PPI_Cache_' . ucfirst($handler);
 		$this->_handler = new $handler($this->_defaults);
-        if($this->_handler->enabled() === false) {
-            throw new PPI_Exception('The cache driver ' . $handler . ' is currently disabled.');
-        }
+		if($this->_handler->enabled() === false) {
+			throw new PPI_Exception('The cache driver ' . $handler . ' is currently disabled.');
+		}
 		$this->_handler->init();
 	}
 
-    /**
-     * Get a key value from the cache
-     *
-     * @param string $key The Key
-     * @return mixed
-     */
-    function get($key) {
-    	return $this->_handler->get($key);
-    }
+	/**
+	 * Get a key value from the cache
+	 *
+	 * @param string $key The Key
+	 * @return mixed
+	 */
+	function get($key) {
+		return $this->_handler->get($key);
+	}
 
-    /**
-     * Set a value in the cache
-     *
-     * @param string $key The Key
-     * @param mixed $value The Value
-     * @param integer $ttl The TTL
-     * @return boolean
-     */
-    function set($key, $value, $ttl = 0) {
-    	return $this->_handler->set($key, $value, $ttl);
-    }
+	/**
+	 * Set a value in the cache
+	 *
+	 * @param string $key The Key
+	 * @param mixed $value The Value
+	 * @param integer $ttl The TTL
+	 * @return boolean
+	 */
+	function set($key, $value, $ttl = 0) {
+		return $this->_handler->set($key, $value, $ttl);
+	}
 
-    /**
-     * Check if a key exists in the cache
-     *
-     * @param string $key The Key
-     * @return boolean
-     */
-    function exists($key) {
-    	return $this->_handler->exists($key);
-    }
+	/**
+	 * Check if a key exists in the cache
+	 *
+	 * @param string $key The Key
+	 * @return boolean
+	 */
+	function exists($key) {
+		return $this->_handler->exists($key);
+	}
 
-    /**
-     * Remove a value from the cache by key
-     *
-     * @param string $key The Key
-     * @return boolean
-     */
-    function remove($key) {
-    	return $this->_handler->remove($key);
-    }
-
+	/**
+	 * Remove a value from the cache by key
+	 *
+	 * @param string $key The Key
+	 * @return boolean
+	 */
+	function remove($key) {
+		return $this->_handler->remove($key);
+	}
 }

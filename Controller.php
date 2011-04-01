@@ -7,16 +7,16 @@
  */
 class PPI_Controller {
 
-    /**
-     * The PPI_View object
-     *
-     * @var PPI_View
-     */
+	/**
+	 * The PPI_View object
+	 *
+	 * @var PPI_View
+	 */
 	protected $_view = null;
 
-    /**
-     * The constructor
-     */
+	/**
+	 * The constructor
+	 */
 	function __construct () {
 		$this->_view     = PPI_Helper::getView();
 		$this->_request  = PPI_Helper::getRequest();
@@ -25,13 +25,13 @@ class PPI_Controller {
 
 	/**
 	 * Perform redirect to internal framework url. Optionally redirect to external host
-     *
+	 *
 	 * @todo Make this auto-detect the first X chars starting with http:// and remove the prependbase char
 	 * @param string $p_sURL Optional param for where to redirect to
 	 * @param boolean $p_bPrependBase Default is true. If true will prepend the framework's base Url.
- 	 *									If false will redirect to absolute external url.
- 	 * @throws PPI_Exception
-     * @return boolean
+	 *                                                 If false will redirect to absolute external url.
+	 * @throws PPI_Exception
+	 * @return boolean
 	 */
 	protected function redirect($p_sURL = '', $p_bPrependBase = true) {
 		$sUrl = ($p_bPrependBase === true) ? $this->getConfig()->system->base_url . $p_sURL : $p_sURL;
@@ -73,7 +73,7 @@ class PPI_Controller {
 	 *
 	 * @param mixed $p_mKeys
 	 * @param mixed $p_mValue
-     * @return void
+	 * @return void
 	 */
 	protected function set($p_mKeys, $p_mValue = null) {
 
@@ -97,15 +97,15 @@ class PPI_Controller {
 		$this->_view->loadsmarty($p_tplFile, $p_tplParams);
 	}
 
-    /**
-     * Append to the list of stylesheets to be included
-     *
-     * @param mixed $p_mStylesheet This can be an existing array of stylesheets or a string.
-     * @return void
-     */
-    protected function addStylesheet($p_mStylesheet) {
-        $this->_response->addCSS(func_get_args());
-    }
+	/**
+	 * Append to the list of stylesheets to be included
+	 *
+	 * @param mixed $p_mStylesheet This can be an existing array of stylesheets or a string.
+	 * @return void
+	 */
+	protected function addStylesheet($p_mStylesheet) {
+		$this->_response->addCSS(func_get_args());
+	}
 
 	protected function addCSS() {
 		$this->_response->addCSS(func_get_args());
@@ -120,14 +120,14 @@ class PPI_Controller {
 		$this->_response->clearCSS();
 	}
 
-    /**
-     * Append to the list of javascript files to be included
-     *
-     * @return void
-     */
-    protected function addJavascript() {
-        $this->_response->addJS(func_get_args());
-    }
+	/**
+	 * Append to the list of javascript files to be included
+	 *
+	 * @return void
+	 */
+	protected function addJavascript() {
+		$this->_response->addJS(func_get_args());
+	}
 
 	/**
 	 * Add a javascript file
@@ -140,10 +140,10 @@ class PPI_Controller {
 
 	/**
 	 * Override the default template file, with optional include for the .php or .tpl extension
-     *
+	 *
 	 * @todo have this lookup the template engines default extension and remove the smarty param
 	 * @param string $p_sNewTemplateFile New Template Filename
-     * @return void
+	 * @return void
 	 */
 	protected function setTemplateFile($p_sNewTemplateFile) {
 		$this->_view->setTemplateFile($p_sNewTemplateFile);
@@ -162,7 +162,7 @@ class PPI_Controller {
 
 	/**
 	 * Setter for setting the flash message to appear on next page load.
-     *
+	 *
 	 * @param string $message
 	 * @param boolean $success
 	 * @return void
@@ -173,7 +173,7 @@ class PPI_Controller {
 
 	/**
 	 * Setter for setting the flash message to appear on next page load.
-     *
+	 *
 	 * @param string $message
 	 * @param boolean $success
 	 * @return void
@@ -184,7 +184,7 @@ class PPI_Controller {
 
 	/**
 	 * Getter for the flash message.
-     *
+	 * 
 	 * @return string
 	 */
 	protected function getFlashMessage() {
@@ -193,19 +193,19 @@ class PPI_Controller {
 
 	/**
 	 * Clear the flash message from the session
-     *
+	 *
 	 * @return void
 	 */
 	protected function clearFlashMessage() {
 		$this->_response->clearFlash();
 	}
 
-    /**
-     * Get the full current URI
-     *
-     * @todo Maybe just strip off baseUrl from the URL and that's our URI
-     * @return string
-     */
+	/**
+	 * Get the full current URI
+	 *
+	 * @todo Maybe just strip off baseUrl from the URL and that's our URI
+	 * @return string
+	 */
 	protected function getCurrUrl() {
 		throw new PPI_Exception('Deprecated function - use getUri() instead');
 	}
@@ -248,7 +248,7 @@ class PPI_Controller {
 
 	/**
 	 * Get the base url set in the config
-     *
+	 * 
 	 * @return string
 	 */
 	protected function getBaseUrl() {
@@ -267,7 +267,7 @@ class PPI_Controller {
 
 	/**
 	 * Returns the session object
-     *
+	 *
 	 * @param mixed $p_mOptions
 	 * @return object PPI_Model_Session
 	 */
@@ -277,7 +277,7 @@ class PPI_Controller {
 
 	/**
 	 * Returns the session object
-     *
+	 *
 	 * @return object PPI_Model_Session
 	 */
 	protected function getRegistry() {
@@ -305,7 +305,7 @@ class PPI_Controller {
 
 	/**
 	 * Checks if the current user is logged in
-     *
+	 *
 	 * @return boolean
 	 */
 	protected function isLoggedIn() {
@@ -315,8 +315,8 @@ class PPI_Controller {
 
 	/**
 	 * Gets the current logged in users authentication data
-     *
-     * @param boolean $p_bUseArray Default is true. If false then will return an object instead
+	 *
+	 * @param boolean $p_bUseArray Default is true. If false then will return an object instead
 	 * @return array|object
 	 */
 	protected function getAuthData($p_bUseArray = true) {

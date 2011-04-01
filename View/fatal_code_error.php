@@ -35,29 +35,29 @@ $header = <<<OUTPUT
 OUTPUT;
 
 $html = <<<OUTPUT
-        <table id="code_error">
-          <tr>
-            <td class="title">File: </td>
-             <td>{$p_aError['file']}</td>
-          </tr>
-<!--
-          <tr>
-            <td class="title">errno: </td>
-             <td>{$p_aError['code']}</td>
-          </tr>
--->
-          <tr>
-            <td class="title">line: </td>
-             <td>{$p_aError['line']}</td>
-          </tr>
-          <tr>
-				<td class="title">message: </td>
-				<td>{$p_aError['message']}</td>
-          </tr>
-          <tr>
-          </tr>
-        </table>
-		<h3>Backtrace</h3>
+<table id="code_error">
+	<tr>
+		<td class="title">File: </td>
+		<td>{$p_aError['file']}</td>
+	</tr>
+	<!--
+	<tr>
+		<td class="title">errno: </td>
+		<td>{$p_aError['code']}</td>
+	</tr>
+	-->
+	<tr>
+		<td class="title">line: </td>
+		<td>{$p_aError['line']}</td>
+	</tr>
+	<tr>
+		<td class="title">message: </td>
+		<td>{$p_aError['message']}</td>
+	</tr>
+	<tr>
+	</tr>
+</table>
+<h3>Backtrace</h3>
 OUTPUT;
 $html .= nl2br($p_aError['backtrace']) . '<br><br>';
 if(isset($p_aError['sql']) && !empty($p_aError['sql'])) {

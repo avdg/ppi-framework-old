@@ -94,7 +94,7 @@ class PPI_Controller {
 
     /**
      * Append to the list of stylesheets to be included
-     * 
+     *
      * @param mixed $p_mStylesheet This can be an existing array of stylesheets or a string.
      * @return void
      */
@@ -104,7 +104,7 @@ class PPI_Controller {
 
     /**
      * Append to the list of javascript files to be included
-     * 
+     *
      * @param mixed $p_mJavascript
      * @return void
      */
@@ -114,7 +114,7 @@ class PPI_Controller {
 
 	/**
 	 * Override the default template file, with optional include for the .php or .tpl extension
-     * 
+     *
 	 * @param string $p_sNewTemplateFile New Template Filename
 	 * @todo have this lookup the template engines default extension and remove the smarty param
      * @return void
@@ -126,7 +126,7 @@ class PPI_Controller {
 
 	/**
 	 * Setter for setting the flash message to appear on next page load.
-     * 
+     *
 	 * @return void
 	 */
 	protected function setFlashMessage($p_sMessage, $p_bSuccess = true) {
@@ -135,7 +135,7 @@ class PPI_Controller {
 
 	/**
 	 * Getter for the flash message.
-     * 
+     *
 	 * @return string
 	 */
 	protected function getFlashMessage() {
@@ -144,7 +144,7 @@ class PPI_Controller {
 
 	/**
 	 * Clear the flash message from the session
-     * 
+     *
 	 * @return void
 	 */
 	protected function clearFlashMessage() {
@@ -172,7 +172,7 @@ class PPI_Controller {
 
 	/**
 	 * Get the base url set in the config
-     * 
+     *
 	 * @return string
 	 */
 	protected function getBaseUrl() {
@@ -190,16 +190,16 @@ class PPI_Controller {
 
 	/**
 	 * Returns the session object
-     * 
+     *
 	 * @return object PPI_Model_Session
 	 */
-	protected function getSession() {
-		return PPI_Helper::getSession();
+	protected function getSession($p_mOptions = null) {
+		return PPI_Helper::getSession($p_mOptions);
 	}
 
 	/**
 	 * Returns the session object
-     * 
+     *
 	 * @return object PPI_Model_Session
 	 */
 	protected function getRegistry() {
@@ -211,13 +211,13 @@ class PPI_Controller {
 	 *
 	 * @return object
 	 */
-	protected function getCache() {
-		return PPI_Helper::getCache();
+	protected function getCache($p_mOptions = null) {
+		return PPI_Helper::getCache($p_mOptions);
 	}
 
 	/**
 	 * Checks if the current user is logged in
-     * 
+     *
 	 * @return boolean
 	 */
 	protected function isLoggedIn() {
@@ -227,7 +227,7 @@ class PPI_Controller {
 
 	/**
 	 * Gets the current logged in users authentication data
-     * 
+     *
      * @param boolean $p_bUseArray Default is true. If false then will return an object instead
 	 * @return array|object
 	 */
@@ -308,7 +308,7 @@ class PPI_Controller {
 	}
 
     /**
-     * Get a plugin by name. 
+     * Get a plugin by name.
      *
      * @param string $p_sPluginName
      * @return

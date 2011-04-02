@@ -93,10 +93,16 @@ class PPI_Helper {
 	/**
 	 * Get the session object
 	 *
-	 * @return object
+	 * @param mixed $p_mOptions The information to get a different cache object
+	 * @return PPI_Session
 	 */
-	static function getSession() {
-		return self::getObjectFromRegistry('PPI_Session');
+	static function getSession($p_mOptions = null) {
+		if (!is_array($p_mOptions)) {
+			$config  = self::getConfig();
+			$options = isset($config->session) ? $config->session->toArray() : array();
+			$p_mOptions = $options;
+		}
+		return new PPI_Session($p_mOptions);
 	}
 
 	/**

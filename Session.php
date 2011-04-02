@@ -25,41 +25,23 @@ class PPI_Session {
         'sessionNamespace'           => '__MYAPP',
         'frameworkSessionNamespace'  => '__PPI'
     );
+
+	static protected $_started = false;
     /**
      * Constructor to optionally pass in session default options
      *
      */
     function __construct(array $p_aOptions = array()) {
 
-        if(isset($p_aOptions['config'])) {
-            $this->_config = $p_aOptions['config'];
+		$this->_defaults = ($p_aOptions + $this->_defaults);
+
+		$this->_defaults['sessionNamespace'] = $this->_defaults['frameworkSessionNamespace'] . '_' . $this->_defaults['sessionNamespace'];
+
+	    if(self::$_started === false) {
+		    self::$_started = true;
+            session_name($this->_defaults['sessionNamespace']);
+            session_start();
         }
-        unset($p_aOptions['config']);
-
-        $this->_defaults = ($p_aOptions + $this->_defaults);
-
-        if($this->_config !== null) {
-
-            // If we didn't override the userAuthKey and it exists in the config, lets grab it.
-            if(!isset($p_aOptions['userAuthKey']) && isset($this->_config->system->userAuthKey)) {
-                $this->_defaults['userAuthKey'] = $this->_config->system->userAuthKey;
-            }
-
-            // If we didn't override the sessionNamespace and it exists in the config, lets grab it.
-            if(!isset($p_aOptions['sessionNamespace']) && isset($this->_config->system->sessionNamespace)) {
-                $this->_defaults['sessionNamespace'] = $this->_config->system->sessionNamespace;
-            }
-
-            // If we didn't override the sessionNamespace and it exists in the config, lets grab it.
-            if(!isset($p_aOptions['frameworkSessionNamespace']) && isset($this->_config->system->frameworkSessionNamespace)) {
-                $this->_defaults['frameworkSessionNamespace'] = $this->_config->system->frameworkSessionNamespace;
-            }
-            
-        }
-        $this->_defaults['sessionNamespace'] = $this->_defaults['frameworkSessionNamespace'] . '_' . $this->_defaults['sessionNamespace'];
-
-        session_name($this->_defaults['sessionNamespace']);
-        session_start();
 
         if(!array_key_exists($this->_defaults['sessionNamespace'], $_SESSION)) {
         	$_SESSION[$this->_defaults['sessionNamespace']] = array();
@@ -79,7 +61,7 @@ class PPI_Session {
 
 	/**
 	 * Clear the set authentication information
-     * 
+     *
 	 * @return void
 	 */
 	function clearAuthData() {
@@ -110,7 +92,7 @@ class PPI_Session {
 
 	/**
 	 * Remove all set keys from the session
-     * 
+     *
 	 * @return void
 	 */
 	function removeAll() {

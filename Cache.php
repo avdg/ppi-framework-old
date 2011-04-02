@@ -8,19 +8,34 @@
  */
 class PPI_Cache {
 
+    protected $_defaults = array(
+        'handler'  => 'disk'
+    );
+
     /**
-     * The cache driver chosen, must implement the PPI_Cache_Interface interface
+     * The handler in use
      *
      * @var null|PPI_Cache_Interface
      */
-	protected $_handler = null;
+    protected $_handler = null;
 
-	function __construct($handler = null, array $p_aOptions = array()) {
-		if($handler !== null && $handler instanceof PPI_Cache_Interface) {
-			$this->_handler = $handler;
-		} else {
-			$this->init();
-		}
+	function __construct(array $p_aOptions = array()) {
+
+        if(isset($p_aOptions['handler'])) {
+
+            // If it's a pre instantiated cache handler then use that
+            if(!is_string($p_aOptions['handler']) && $p_aOptions['handler'] instanceof PPI_Cache_Interface) {
+                $this->_handler = $p_aOptions['handler'];
+                unset($p_aOptions['handler']);
+            }
+        }
+
+        $this->_defaults = ($p_aOptions + $this->_defaults);
+
+        // If no handler was passed in, then we setup that handler now by the string name: i.e: 'disk'
+        if($this->_handler === null) {
+            $this->setupHandler($this->_defaults['handler']);
+        }
 	}
 
 	/**
@@ -31,25 +46,16 @@ class PPI_Cache {
 	 * @throws PPI_Exception
 	 *
 	 */
-	function init(array $p_aOptions = array()) {
-		$oConfig = PPI_Helper::getConfig();
-		if(!empty($oConfig->system->cacheHandler)) {
-                        $handlerName = $oConfig->system->cacheHandler;
-			$handler = 'PPI_Cache_' . ucfirst($handlerName);
-			switch($handlerName) {
-				case 'apc':
-				case 'memcache':
-				case 'memcached':
-					if(!extension_loaded($handlerName)) {
-						throw new PPI_Exception('Unable to use ' . $handlerName . ' for caching. Extension not loaded.');
-					}
-					$handler = 'PPI_Cache_Memcached';
-					break;
-			}
-		} else {
-			$handler = 'PPI_Cache_Disk';
-		}
-		$this->_handler = new $handler($p_aOptions);
+	function setupHandler($p_sHandler) {
+		$p_sHandler = strtolower($p_sHandler);
+		if(in_array($p_sHandler, array('apc', 'memcache', 'memcached')) && !extension_loaded($p_sHandler)) {
+			throw new PPI_Exception('Unable to use ' . $p_sHandler . ' for caching. Extension not loaded.');
+        }
+        $handler = 'PPI_Cache_' . ucfirst($p_sHandler);
+		$this->_handler = new $handler($this->_defaults);
+        if($this->_handler->enabled() === false) {
+            throw new PPI_Exception('The cache driver ' . $handler . ' is currently disabled.');
+        }
 	}
 
     /**
@@ -59,9 +65,6 @@ class PPI_Cache {
      * @return mixed
      */
     function get($p_sKey) {
-    	if($this->_handler === null) {
-    		$this->init();
-    	}
     	return $this->_handler->get($p_sKey);
     }
 
@@ -73,9 +76,6 @@ class PPI_Cache {
      * @return boolean
      */
     function set($p_sKey, $p_mValue) {
-    	if($this->_handler === null) {
-    		$this->init();
-    	}
     	return $this->_handler->set($p_sKey, $p_mValue);
     }
 
@@ -86,9 +86,6 @@ class PPI_Cache {
      * @return boolean
      */
     function exists($p_sKey) {
-    	if($this->_handler === null) {
-    		$this->init();
-    	}
     	return $this->_handler->exists($p_sKey);
     }
 
@@ -99,9 +96,6 @@ class PPI_Cache {
      * @return boolean
      */
     function remove($p_sKey) {
-    	if($this->_handler === null) {
-    		$this->init();
-    	}
     	return $this->_handler->remove($p_sKey);
     }
 

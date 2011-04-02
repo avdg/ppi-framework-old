@@ -8,58 +8,59 @@
  */
 class PPI_Helper {
 
-   /**
-    * 
-    *
-    * @var null
-    */
-    private static $_instance = null;
+	/**
+	 *
+	 *
+	 * @var null
+	 */
+	private static $_instance = null;
 
-    /**
-     * The initialise function to create the instance
-     * @return void
-     */
-    protected static function init() {
-        self::setInstance(new PPI_Helper());
-    }
+	/**
+	 * The initialise function to create the instance
+	 * @return void
+	 */
+	protected static function init() {
+		self::setInstance(new PPI_Helper());
+	}
 
 
-    /**
-     * The function used to initially set the instance
-     *
-     * @param PPI_Helper $instance
-     * @throws PPI_Exception
-     * @return void
-     */
-    static function setInstance(PPI_Helper $instance) {
-        if (self::$_instance !== null) {
-            throw new PPI_Exception('PPI_Helper is already initialised');
-        }
-        self::$_instance = $instance;
-    }
+	/**
+	 * The function used to initially set the instance
+	 *
+	 * @param PPI_Helper $instance
+	 * @throws PPI_Exception
+	 * @return void
+	 */
+	static function setInstance(PPI_Helper $instance) {
+		if (self::$_instance !== null) {
+			throw new PPI_Exception('PPI_Helper is already initialised');
+		}
+		self::$_instance = $instance;
+	}
 
-    /**
-     * Obtain the instance if it exists, if not create it
-     *
-     * @return PPI_Helper
-     */
-    static function getInstance() {
-        if (self::$_instance === null) {
-            self::init();
-        }
-        return self::$_instance;
-    }
+	/**
+	 * Obtain the instance if it exists, if not create it
+	 *
+	 * @return PPI_Helper
+	 */
+	static function getInstance() {
+		if (self::$_instance === null) {
+			self::init();
+		}
+		return self::$_instance;
+	}
 
 	/**
 	 * Function to recursively trim strings
+	 *
 	 * @param mixed $input The input to be trimmed
 	 * @return mixed
 	 */
 	function arrayTrim($input){
-    	if (!is_array($input)) {
-	        return trim($input);
-    	}
-	    return array_map(array($this, 'arrayTrim'), $input);
+		if (!is_array($input)) {
+			return trim($input);
+		}
+		return array_map(array($this, 'arrayTrim'), $input);
 	}
 
 	/**
@@ -101,10 +102,19 @@ class PPI_Helper {
 	/**
 	 * Get the cache object
 	 *
-	 * @return object
+	 * @param mixed $p_mOptions The information to get a different cache object
+	 * @return PPI_Cache
 	 */
-	static function getCache() {
-		return self::getObjectFromRegistry('PPI_Cache');
+	static function getCache($p_mOptions = null) {
+		if (!is_array($p_mOptions)) {
+			$config  = self::getConfig();
+			$options = isset($config->cache) ? $config->cache->toArray() : array();
+			if (is_string($p_mOptions) && $p_mOptions !== '') {
+				$options['handler'] = $p_mOptions;
+			}
+			$p_mOptions = $options;
+		}
+		return new PPI_Cache($p_mOptions);
 	}
 
 	/**
@@ -146,7 +156,7 @@ class PPI_Helper {
 
 	/**
 	 * Obtain the extension from a filename
-         * @todo Move to PPI_File
+     * @todo Move to PPI_File
 	 * @param string $fileName The file's filename
 	 * @return string
 	 */
@@ -159,6 +169,7 @@ class PPI_Helper {
 
 	/**
 	 * Check if a file has a particular extension. If it does not have the extension then we add it.
+     *
 	 * @todo Make this look for the last "." then take it from there so we're not vulnerable to file.php.txt
 	 * @param string $p_sTemplateFile Filename
 	 * @param string $p_sExtension Extension
@@ -173,6 +184,7 @@ class PPI_Helper {
 
 	/**
 	 * Get the current full url
+     *
 	 * @todo match this with $this->getCurrUrl()
 	 * @return string
 	 */

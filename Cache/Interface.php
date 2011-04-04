@@ -22,6 +22,14 @@ interface PPI_Cache_Interface {
 	function get($p_sKey);
 
 	/**
+	 * Perform any initialisation steps on the driver. (such as ->connect())
+	 *
+	 * @abstract
+	 * @return void
+	 */
+	function init();
+
+	/**
 	 * Set cache contents
 	 *
 	 * @abstract

@@ -64,6 +64,7 @@ class PPI_Cache {
         if($this->_handler->enabled() === false) {
             throw new PPI_Exception('The cache driver ' . $handler . ' is currently disabled.');
         }
+		$this->_handler->init();
 	}
 
     /**

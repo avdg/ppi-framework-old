@@ -30,6 +30,8 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 		   ? $p_aOptions['cache_dir'] : APPFOLDER . 'Cache/Disk/';
 	}
 
+	function init() {}
+
 	/**
 	 * Get the data from the specified path
 	 *

@@ -42,6 +42,8 @@ class PPI_Cache_Memcached implements PPI_Cache_Interface {
 		}
 	}
 
+	function init() {}
+
 	/**
 	 * Get a value from cache
 	 *
@@ -125,6 +127,7 @@ class PPI_Cache_Memcached implements PPI_Cache_Interface {
 	 * @param integer $weight The Weight
 	 */
 	function addServer($host, $port = 11211, $weight = 10) {
+
 		$this->_serverAdded = true;
 		$this->_handler->addServer($host, $port, true, $weight);
 	}

@@ -18,6 +18,8 @@ class PPI_Cache_Apc implements PPI_Cache_Interface {
 	 */
 	function get($p_sKey) { return apc_fetch($p_sKey); }
 
+	function init() {}
+
 	/**
 	 * Set a value in the cache
 	 * @param string $p_sKey The Key

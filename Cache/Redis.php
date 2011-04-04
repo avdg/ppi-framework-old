@@ -17,10 +17,20 @@ class PPI_Cache_Redis implements PPI_Cache_Interface {
 	);
 
 	/**
+	 * The Redis handler
+	 *
+	 * @var null|Redis
+	 */
+	protected $_handler = null;
+
+	/**
 	 * @param array $p_aOptions The options that override the default
 	 */
 	function __construct(array $p_aOptions = array()) {
 		$this->_defaults = ($p_aOptions + $this->_defaults);
+	}
+
+	function init() {
 		list($ip, $port) = explode(':', $this->_defaults['server']);
 		$this->_handler = new Redis();
 		$this->_handler->connect($ip, $port);

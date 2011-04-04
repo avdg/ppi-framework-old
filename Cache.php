@@ -19,7 +19,18 @@ class PPI_Cache {
      */
     protected $_handler = null;
 
-	function __construct(array $p_aOptions = array()) {
+	/**
+	 * The options to the cache layer. This can be an array of options
+	 * or a string of the driver name eg: new PPI_Cache('apc');
+	 *
+	 * @param array|string $p_aOptions
+	 */
+	function __construct($p_aOptions = array()) {
+
+		// We now let you specify the handler as a string for quickness.
+		if(is_string($p_aOptions)) {
+			$p_aOptions = array('handler' => $p_aOptions);
+		}
 
         if(isset($p_aOptions['handler'])) {
 
@@ -48,9 +59,6 @@ class PPI_Cache {
 	 */
 	function setupHandler($p_sHandler) {
 		$p_sHandler = strtolower($p_sHandler);
-		if(in_array($p_sHandler, array('apc', 'memcache', 'memcached')) && !extension_loaded($p_sHandler)) {
-			throw new PPI_Exception('Unable to use ' . $p_sHandler . ' for caching. Extension not loaded.');
-        }
         $handler = 'PPI_Cache_' . ucfirst($p_sHandler);
 		$this->_handler = new $handler($this->_defaults);
         if($this->_handler->enabled() === false) {

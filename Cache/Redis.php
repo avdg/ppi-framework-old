@@ -33,7 +33,9 @@ class PPI_Cache_Redis implements PPI_Cache_Interface {
 	function init() {
 		list($ip, $port) = explode(':', $this->_defaults['server']);
 		$this->_handler = new Redis();
-		$this->_handler->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_PHP)
+		$this->_handler->setOption(Redis::OPT_SERIALIZER, extension_loaded('igbinary') 
+			? Redis::SERIALIZER_IGBINAR 
+			: Redis::SERIALIZER_PHP);
 		$this->_handler->connect($ip, $port);
 	}
 

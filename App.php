@@ -178,6 +178,20 @@ class PPI_App {
                             'prefix' => 'Zend_'
                         ));
                         break;
+
+	                case 'github':
+		                $githubAutoloader = SYSTEMPATH . 'Vendor/Github/Autoloader.php';
+		                if(!file_exists($githubAutoloader)) {
+			                throw new PPI_Exception('Unable to autoload github, the github autoloader was no found.');
+		                }
+						include_once(SYSTEMPATH . 'Vendor/Github/Autoloader.php');
+			            Github_Autoloader::register();
+		                break;
+
+	                // @todo - test this.
+	                case 'swift':
+		                include_once(SYSTEMPATH . 'Vendor/Swift/swift_required_pear.php');
+		                break;
 /*
                     case 'solar':
                         PPI_Autoload::add('Solar', array(
@@ -192,7 +206,7 @@ class PPI_App {
             }
         }
 
-        
+
         $registry->set('PPI_App', $this);
 
         return $this; // Fluent Interface

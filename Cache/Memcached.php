@@ -69,7 +69,7 @@ class PPI_Cache_Memcached implements PPI_Cache_Interface {
 		if($this->_serverAdded === false) {
 			$this->addServer('localhost');
 		}
-		return $this->_handler->set($p_sKey, $p_mData,0, (is_numeric($p_mTTL) ? $p_mTTL : strtotime($p_mTTL)));
+		return $this->_handler->set($p_sKey, $p_mData, (is_numeric($p_mTTL) ? $p_mTTL : strtotime($p_mTTL)));
 	}
 
 	/**

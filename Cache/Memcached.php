@@ -129,7 +129,7 @@ class PPI_Cache_Memcached implements PPI_Cache_Interface {
 	function addServer($host, $port = 11211, $weight = 10) {
 
 		$this->_serverAdded = true;
-		$this->_handler->addServer($host, $port, true, $weight);
+		$this->_handler->addServer($host, $port, $weight);
 	}
 
 	/**

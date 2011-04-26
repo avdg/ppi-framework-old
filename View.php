@@ -32,14 +32,14 @@ class PPI_View {
 
 	/**
 	 * Master Template Override from config or setTemplateFile()
-     * 
+     *
 	 * @var string $_templateOverride
 	 */
 	private $_templateOverride = null;
 
 	/**
 	 * Template Renderer Override from config or useRenderer()
-     * 
+     *
 	 * @var string $_rendererOverride
 	 */
 	private $_rendererOverride = null;
@@ -48,7 +48,7 @@ class PPI_View {
 
 	/**
 	 * Load function called from controllers
-     * 
+     *
 	 * @todo Make this alias to $this->render()
 	 * @todo look into making this dynamic name rather than 'smarty', 'twig', 'php'
 	 * @param string $p_tplFile The template filename
@@ -82,7 +82,7 @@ class PPI_View {
 				break;
 		}
 
-		$this->setupRenderer($oTpl, $p_tplFile, $p_tplParams, $oConfig);
+		$this->setupRenderer($oTpl, $p_tplFile, array_merge($p_tplParams, $this->_viewParams), $oConfig);
 	}
 
 	/**
@@ -225,7 +225,7 @@ class PPI_View {
 
     /**
      * Append to the list of stylesheets to be included
-     * 
+     *
      * @param mixed $p_mStylesheet This can be an existing array of stylesheets or a string.
      * @return void
      */
@@ -260,7 +260,7 @@ class PPI_View {
 
 	/**
 	 * Create an override for the renderer
-     * 
+     *
 	 * @todo add Twig to this list.
 	 * @param string $p_sRendererName The renderer name
      * @throws PPI_Exception
@@ -287,7 +287,7 @@ class PPI_View {
 
 	/**
 	 * The internal render function, this is called by $this->load('template');
-     * 
+     *
 	 * @todo finish this, have it accept 'template' at first.
 	 * @param string $p_sTemplate The template name to render
 	 * @param array $p_aParams Optional parameters

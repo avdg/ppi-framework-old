@@ -164,6 +164,7 @@ class PPI_Exception extends Exception {
 				$oModel->insert($logInfo);
 				$oEmail = new PPI_Email_PHPMailer();
 				$oConfig = PPI_Helper::getConfig();
+				$url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 				if(isset($oConfig->system->error->email)) {
 
 				$emailBody = <<<EOT
@@ -173,6 +174,7 @@ An error has occured. The following information will help you debug:
 Message: {$p_aError['message']}
 Line: {$p_aError['line']}
 File: {$p_aError['file']}
+URL:  {$url}
 Backtrace: {$p_aError['backtrace']}
 
 EOT;

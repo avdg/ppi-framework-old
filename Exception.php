@@ -153,7 +153,54 @@ class PPI_Exception extends Exception {
 	 * @return void
 	 */
 	function show_exceptioned_error($p_aError = "") {
+
 		$p_aError['sql'] = PPI_Helper::getRegistry()->get('PPI_Model::Query_Backtrace', array());
+		if(!empty($p_aError)) {
+			$logInfo = $p_aError;
+			try{
+				unset($logInfo['code']);
+				$logInfo['sql'] = serialize($logInfo['sql']);
+				$oModel = new PPI_Model_Shared('ppi_exception', 'id');
+				$oModel->insert($logInfo);
+				$oEmail = new PPI_Email_PHPMailer();
+				$oConfig = PPI_Helper::getConfig();
+				if(isset($oConfig->system->error->email)) {
+
+				$emailBody = <<<EOT
+Hey Support Team,
+An error has occured. The following information will help you debug:
+
+Message: {$p_aError['message']}
+Line: {$p_aError['line']}
+File: {$p_aError['file']}
+Backtrace: {$p_aError['backtrace']}
+
+EOT;
+					$aErrorConfig = $oConfig->system->error->email->toArray();
+					$aEmails = array_map('trim', explode(',', $aErrorConfig['to']));
+					foreach($aEmails as $email) {
+						$name = '';
+						if(strpos($email, ':') !== false) {
+							list($name, $email) = explode(':', $email, 2);
+						}
+						$oEmail->AddAddress($email, $name);
+					}
+
+					$fromEmail = $aErrorConfig['from'];
+					$fromName = '';
+					if(strpos($fromEmail, ':') !== false) {
+						list($fromName, $fromEmail) = explode(':', $fromEmail, 2);
+					}
+					$oEmail->SetFrom($fromEmail, $fromName);
+					$oEmail->Subject = $aErrorConfig['subject'];
+					$oEmail->Body = $emailBody;
+					$oEmail->Send();
+				}
+
+
+			} catch(PPI_Exception $e) {} catch(Exception $e) {}
+		}
+
 		$oApp = PPI_Helper::getRegistry()->get('PPI_App', false);
 		if($oApp === false) {
 			$sSiteMode = 'development';
@@ -170,7 +217,7 @@ class PPI_Exception extends Exception {
 			echo $header.$html.$footer;
 		} else {
 			$oView = new PPI_View();
-			$oView->load('error', array('message' => $p_aError['message']));
+			$oView->load('framework/error', array('message' => $p_aError['message']));
 		}
 		exit;
 	}

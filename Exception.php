@@ -165,17 +165,23 @@ class PPI_Exception extends Exception {
 				$oEmail = new PPI_Email_PHPMailer();
 				$oConfig = PPI_Helper::getConfig();
 				$url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+				$userAgent = $_SERVER['HTTP_USER_AGENT'];
+				$ip = $_SERVER['REMOTE_ADDR'];
+				$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'Not Available';
 				if(isset($oConfig->system->error->email)) {
 
 				$emailBody = <<<EOT
 Hey Support Team,
 An error has occured. The following information will help you debug:
 
-Message: {$p_aError['message']}
-Line: {$p_aError['line']}
-File: {$p_aError['file']}
-URL:  {$url}
-Backtrace: {$p_aError['backtrace']}
+Message:    {$p_aError['message']}
+Line:       {$p_aError['line']}
+File:       {$p_aError['file']}
+URL:        {$url}
+User Agent: {$userAgent}
+IP:         {$ip}
+Referer:    {$referer}
+Backtrace:  {$p_aError['backtrace']}
 
 EOT;
 					$aErrorConfig = $oConfig->system->error->email->toArray();

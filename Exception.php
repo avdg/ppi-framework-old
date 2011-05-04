@@ -137,10 +137,14 @@ class PPI_Exception extends Exception {
 	static function show_404($p_sLocation = "", $p_bUseImage = false) {
 		$oConfig = PPI_Helper::getConfig();
 		$heading = "Page cannot be found";
-		$message = (!empty ($p_sLocation) ) ? $p_sLocation : "The page you requested was not found.";
+		$message = !empty($p_sLocation) ? $p_sLocation : "The page you requested was not found.";
 		PPI_Helper::getRegistry()->set('PPI_View::httpResponseCode', 404);
+		header('Status: 404 Not Found');
 		$oView   = new PPI_View();
-		$oView->load('framework/404', array('heading' => 'Page cannot be found', 'message' => $message));
+		$oView->load('framework/404', array(
+			'heading'       => 'Page cannot be found', 'message' => $message,
+			'errorPageType' => '404'
+		));
         exit;
 	}
 
@@ -156,18 +160,22 @@ class PPI_Exception extends Exception {
 
 		$p_aError['sql'] = PPI_Helper::getRegistry()->get('PPI_Model::Query_Backtrace', array());
 		if(!empty($p_aError)) {
-			$logInfo = $p_aError;
-			try{
+
+			try {
+				$logInfo = $p_aError;
 				unset($logInfo['code']);
 				$logInfo['sql'] = serialize($logInfo['sql']);
 				$oModel = new PPI_Model_Shared('ppi_exception', 'id');
 				$oModel->insert($logInfo);
-				$oEmail = new PPI_Email_PHPMailer();
-				$oConfig = PPI_Helper::getConfig();
-				$url = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+			} catch(PPI_Exception $e) {} catch(Exception $e) {}
+
+			try {
+				$oEmail    = new PPI_Email_PHPMailer();
+				$oConfig   = PPI_Helper::getConfig();
+				$url       = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 				$userAgent = $_SERVER['HTTP_USER_AGENT'];
-				$ip = $_SERVER['REMOTE_ADDR'];
-				$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'Not Available';
+				$ip        = $_SERVER['REMOTE_ADDR'];
+				$referer   = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'Not Available';
 				if(isset($oConfig->system->error->email)) {
 
 				$emailBody = <<<EOT
@@ -205,7 +213,6 @@ EOT;
 					$oEmail->Send();
 				}
 
-
 			} catch(PPI_Exception $e) {} catch(Exception $e) {}
 		}
 
@@ -217,6 +224,7 @@ EOT;
 			echo $header.$html.$footer;
 			exit;
 		}
+
 		$sSiteMode = $oApp->getSiteMode();
 		if($sSiteMode == 'development') {
 			$heading = "Exception";
@@ -224,8 +232,12 @@ EOT;
 			require SYSTEMPATH.'View/code_error.php';
 			echo $header.$html.$footer;
 		} else {
+
 			$oView = new PPI_View();
-			$oView->load('framework/error', array('message' => $p_aError['message']));
+			$oView->load('framework/error', array(
+				'message' => $p_aError['message'],
+				'errorPageType' => '404'
+			));
 		}
 		exit;
 	}

@@ -99,7 +99,7 @@ class PPI_Controller {
      * @return void
      */
     protected function addStylesheet($p_mStylesheet) {
-        $this->_view->addStylesheet($p_mStylesheet);
+        $this->_view->addStylesheet(func_get_args());
     }
 
     /**
@@ -109,7 +109,7 @@ class PPI_Controller {
      * @return void
      */
     protected function addJavascript($p_mJavascript) {
-        $this->_view->addJavascript($p_mJavascript);
+        $this->_view->addJavascript(func_get_args());
     }
 
 	/**

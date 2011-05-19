@@ -28,7 +28,15 @@ class PPI_View_Helper {
 	 * @param mixed $p_mStylesheet
 	 */
 	static function addStylesheet($p_mStylesheet) {
-		self::$_styleSheets = array_merge(self::$_styleSheets, (array) $p_mStylesheet);
+		$aTmpStyles = array();
+		if(is_array($p_mStylesheet) && is_array($p_mStylesheet[0])) {
+			foreach($p_mStylesheet[0] as $sheet) {
+				$aTmpStyles[] = $sheet;
+			}
+			self::$_styleSheets = array_merge(self::$_styleSheets, (array) $aTmpStyles);
+		} else {
+			self::$_styleSheets = array_merge(self::$_styleSheets, (array) $p_mStylesheet);
+		}
 	}
 
 	/**

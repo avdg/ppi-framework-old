@@ -28,14 +28,18 @@ class PPI_View_Helper {
 	 * @param mixed $p_mStylesheet
 	 */
 	static function addStylesheet($p_mStylesheet) {
-		$aTmpStyles = array();
-		if(is_array($p_mStylesheet) && is_array($p_mStylesheet[0])) {
-			foreach($p_mStylesheet[0] as $sheet) {
-				$aTmpStyles[] = $sheet;
+		if(is_string($p_mStylesheet)) {
+			self::$_styleSheets[] = $p_mStylesheet;
+			return;
+		}
+		if(is_array($p_mStylesheet)) {
+			foreach($p_mStylesheet as $stylesheet) {
+				if(is_string($stylesheet)) {
+					self::$_styleSheets[] = $stylesheet;
+				} elseif(is_array($stylesheet)) {
+					self::addStylesheet($stylesheet);
+				}
 			}
-			self::$_styleSheets = array_merge(self::$_styleSheets, (array) $aTmpStyles);
-		} else {
-			self::$_styleSheets = array_merge(self::$_styleSheets, (array) $p_mStylesheet);
 		}
 	}
 
@@ -44,7 +48,19 @@ class PPI_View_Helper {
 	 * @param mixed $p_mJavascript
 	 */
 	static function addJavascript($p_mJavascript) {
-		self::$_javascriptFiles = array_merge(self::$_javascriptFiles, (array) $p_mJavascript);
+		if(is_string($p_mJavascript)) {
+			self::$_javascriptFiles[] = $p_mJavascript;
+			return;
+		}
+		if(is_array($p_mJavascript)) {
+			foreach($p_mJavascript as $javascriptFile) {
+				if(is_string($javascriptFile)) {
+					self::$_javascriptFiles[] = $javascriptFile;
+				} elseif(is_array($javascriptFile)) {
+					self::addJavascript($javascriptFile);
+				}
+			}
+		}
 	}
 
 	/**

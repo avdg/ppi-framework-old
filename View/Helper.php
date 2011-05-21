@@ -34,12 +34,9 @@ class PPI_View_Helper {
 		}
 		if(is_array($p_mStylesheet)) {
 			foreach($p_mStylesheet as $stylesheet) {
-				if(is_string($stylesheet)) {
-					self::$_styleSheets[] = $stylesheet;
-				} elseif(is_array($stylesheet)) {
-					self::addStylesheet($stylesheet);
-				}
+				self::addStylesheet($stylesheet);
 			}
+			return;
 		}
 	}
 
@@ -54,12 +51,9 @@ class PPI_View_Helper {
 		}
 		if(is_array($p_mJavascript)) {
 			foreach($p_mJavascript as $javascriptFile) {
-				if(is_string($javascriptFile)) {
-					self::$_javascriptFiles[] = $javascriptFile;
-				} elseif(is_array($javascriptFile)) {
-					self::addJavascript($javascriptFile);
-				}
+				self::addJavascript($javascriptFile);
 			}
+			return;
 		}
 	}
 

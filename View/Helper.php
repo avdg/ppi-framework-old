@@ -36,6 +36,7 @@ class PPI_View_Helper {
 			foreach($p_mStylesheet as $stylesheet) {
 				self::addStylesheet($stylesheet);
 			}
+			return;
 		}
 	}
 
@@ -52,6 +53,7 @@ class PPI_View_Helper {
 			foreach($p_mJavascript as $javascriptFile) {
 				self::addJavascript($javascriptFile);
 			}
+			return;
 		}
 	}
 

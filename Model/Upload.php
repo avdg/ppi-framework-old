@@ -33,7 +33,7 @@
  *
  * @version   0.29
  * @author    Colin Verot <colin@verot.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
+ * @license   http://opensource.org/licenses/GNU-license.php GNU Public License
  * @copyright Colin Verot
  * @package   cmf
  * @subpackage external

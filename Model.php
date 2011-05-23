@@ -268,7 +268,7 @@ abstract class PPI_Model {
 
 	/**
 	 * Wrapper for PDO::exec. This will execute a query such as a DELETE or UPDATE.
-     * 
+     *
 	 * @param string $p_sQuery The Query
 	 * @return integer The affected rows
 	 */
@@ -520,7 +520,7 @@ abstract class PPI_Model {
 	 * From the instance information, retreives information from the table.
 	 * Building up query of orders, limits and clauses it returns a data structure of the records found.
 	 * If you do not have instance information, or would like to access another table then $p_aExtras should be populated.
-     * 
+     *
 	 * @param string $p_mFilter WHERE
 	 * @param string $p_sOrder ORDER BY
 	 * @param string $p_iLimit LIMIT
@@ -540,6 +540,10 @@ abstract class PPI_Model {
 			} else {
 				$sFilter = '';
 			}
+			
+
+			// Group
+			$sGroup = $p_sGroup != '' ? ' GROUP BY ' . $p_sGroup : '';			
 
 			// Order
 			$sOrder = is_array($p_sOrder) && !empty($p_sOrder) ? 'ORDER BY ' : '';
@@ -550,9 +554,6 @@ abstract class PPI_Model {
 				$sOrder .= $val.',';
 			}
 			$sOrder = substr($sOrder, 0, -1);
-
-			// Group
-			$sGroup = $p_sGroup != '' ? ' GROUP BY ' . $p_sGroup : '';
 
 			// Limit
 			$sLimit = ($p_iLimit != '') ? 'LIMIT ' . $p_iLimit : '';
@@ -568,7 +569,7 @@ abstract class PPI_Model {
 
 	/**
 	 * Fetch a singular row from the getList()
-     * 
+     *
 	 * @see PPI_Model->getList()
 	 */
 	function fetch($p_mFilter = '', $p_sOrder = '', $p_iLimit = '', $p_sGroup = '') {
@@ -690,7 +691,7 @@ abstract class PPI_Model {
 
 	/**
 	 * Handler function for MIN() and MAX()
-     * 
+     *
 	 * @param string $p_sType Type ('MIN' or 'MAX')
 	 * @param string $p_sField The field to perform the minmax on
 	 * @param string $p_sClause Optional clause to apply to the query
@@ -836,7 +837,7 @@ abstract class PPI_Model {
 
 	/**
 	 * Get the primary key assigned to this Model
-     * 
+     *
 	 * @return string
 	 */
 	function getPrimaryKey() {

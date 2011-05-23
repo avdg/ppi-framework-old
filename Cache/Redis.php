@@ -2,7 +2,7 @@
 
 /**
  * @author	  Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @license   http://opensource.org/licenses/mit-license.php MIT
  * @copyright Digiflex Development
  * @package   Cache
  * @link      http://www.ppiframework.com/docs/cache.html

@@ -2,7 +2,7 @@
 if(!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
-	 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+	 * @license http://opensource.org/licenses/mit-license.php MIT
 	 * @copyright (c) Digiflex Development Team 2008
 	 * @version 1.0
 	 * @author Paul Dragoonis <paul@digiflex.org>

@@ -200,7 +200,7 @@ class PPI_Helper {
 	}
 
 	static function getCurrUrl() {
-		return trim($_SERVER['REQUEST_URI'], '/') . '/';
+		return rtrim($_SERVER['REQUEST_URI'], '/') . '/';
 	}
 
 }

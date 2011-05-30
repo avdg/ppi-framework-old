@@ -27,6 +27,7 @@ class PPI_Controller {
 	function __construct () {
 		$this->_input = PPI_Helper::getInput();
 		$this->_view  = new PPI_View();
+		$this->_request = new PPI_Request();
 		$this->oInput = $this->_input; // Legacy Code
 	}
 
@@ -71,12 +72,11 @@ class PPI_Controller {
      * @return void
 	 */
 	protected function set($p_mKeys, $p_mValue = null) {
-		if(is_array($p_mKeys)) {
-			foreach($p_mKeys as $key => $val) {
-				$this->_view->set($key, $val);
-			}
-		} else {
-			$this->_view->set($p_mKeys, $p_mValue);
+		if(is_scalar($p_mKeys)) {
+			$p_mKeys = array($p_mKeys => $p_mValue);
+		}
+		foreach($p_mKeys as $key => $val) {
+			$this->_view->set($key, $val);
 		}
 	}
 
@@ -158,7 +158,7 @@ class PPI_Controller {
      * @return string
      */
 	protected function getCurrUrl() {
-		return PPI_Helper::getCurrUrl();
+		throw new PPI_Exception('Deprecated function - use getUri() instead');
 	}
 
 	/**
@@ -167,7 +167,19 @@ class PPI_Controller {
 	 * @return string
 	 */
 	protected function getFullUrl() {
-		return PPI_Helper::getFullUrl();
+		return $this->getUrl();
+	}
+
+	protected function getUrl() {
+		return $this->_request->getUrl();
+	}
+
+	protected function getProtocol() {
+		return $this->_request->getProtocol();
+	}
+
+	protected function getUri() {
+		return $this->_request->getUri();
 	}
 
 	/**
@@ -244,7 +256,7 @@ class PPI_Controller {
 	 * @return mixed
 	 */
 	protected function get($p_sVar, $p_mDefault = null) {
-		return $this->_input->get($p_sVar, $p_mDefault);
+		return $this->_request->get($p_sVar, $p_mDefault);
 	}
 
 	/**
@@ -255,7 +267,7 @@ class PPI_Controller {
 	 * @return mixed
 	 */
 	protected function post($p_sVar = null, $p_mDefault = null) {
-		return $this->_input->post($p_sVar, $p_mDefault);
+		return $this->_request->post($p_sVar, $p_mDefault);
 	}
 
 	/**
@@ -265,7 +277,7 @@ class PPI_Controller {
 	 * @return boolean
 	 */
 	protected function hasPost($p_sKey) {
-		return $this->_input->hasPost($p_sKey);
+		return $this->_request->hasPost($p_sKey);
 	}
 
 	/**
@@ -274,7 +286,7 @@ class PPI_Controller {
 	 * @return boolean
 	 */
 	protected function isPost() {
-		return $this->_input->isPost();
+		return $this->_request->is('post');
 	}
 
 	/**
@@ -285,7 +297,7 @@ class PPI_Controller {
 	 * @return unknown
 	 */
 	protected function stripPost($p_sPrefix) {
-		return $this->_input->stripPost($p_sPrefix);
+		return $this->_request->stripPost($p_sPrefix);
 	}
 
 	/**
@@ -295,7 +307,7 @@ class PPI_Controller {
 	 * @return void
 	 */
 	protected function removePost($p_sKey) {
-		$this->_input->removePost($p_sKey);
+		$this->_request->removePost($p_sKey);
 	}
 
 	/**
@@ -304,7 +316,36 @@ class PPI_Controller {
 	 * @return void
 	 */
 	protected function emptyPost() {
-		$this->_input->emptyPost();
+		$this->_request->emptyPost();
+	}
+
+	protected function is($var) {
+		switch($var) {
+			case 'ajax':
+			case 'post':
+			case 'get':
+			case 'head':
+			case 'put':
+			case 'mobile':
+			case 'ssl':
+			case 'https':
+				return $this->_request->is($var);
+				break;
+		}
+		return false;
+	}
+
+	protected function getRemote($var) {
+		switch($var) {
+			case 'ip':
+			case 'browser':
+			case 'browserAndVersion':
+			case 'browserVersion':
+			case 'userAgent':
+				return $this->_request->getRemote($var);
+				break;
+		}
+		return null;
 	}
 
     /**

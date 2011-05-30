@@ -81,18 +81,16 @@ abstract class PPI_Dispatch_Abstract {
 	/**
 	 * Get the URI segments after the base url
      *
-	 * @todo Add a 3rd param to explode() to make it faster
 	 * @return array
 	 */
 	function getURISegments() {
-		$url = '';
 		if($this->_router !== null) {
-			$url = $this->_router->getRoute();
+			$url = $this->_router->getMatchedRoute();
+		} else {
+			$url = str_replace($this->_config->system->base_url, '', $this->_fullUrl);
 		}
-		if($url == '') {
-			$url = trim(str_replace($this->_config->system->base_url, '', $this->_fullUrl), '/');
-		}
-		return explode('/', $url);
+		PPI_Helper::getRegistry()->set('PPI::Request_URI', $url);
+		return explode('/', trim($url, '/'));
 	}
 
 	/**
@@ -124,15 +122,11 @@ abstract class PPI_Dispatch_Abstract {
 
 			// Proceed with instantiation.
 			$oController = new $sContFilename();
-
 			// Did we specify a method ?
-			if( ($sMethod = $this->_input->get($sLowerControllerName)) != '') {
-				// Does our method exist on the class
-				if(!in_array($sMethod, get_class_methods(get_class($oController)))) {
-					return false;
-				}
-			} else {
-				$sMethod = 'index';
+			$sMethod = isset($aUrls[1]) ? $aUrls[1] : 'index';
+			// Does our method exist on the class
+			if(!in_array($sMethod, get_class_methods(get_class($oController)))) {
+				return false;
 			}
 			$this->setControllerName($sLowerControllerName);
 			$this->setController($oController);

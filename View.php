@@ -171,7 +171,11 @@ class PPI_View {
 			$sMasterTemplate = $oTpl->getDefaultMasterTemplate();
 		}
 
-		$oTpl->render($sMasterTemplate);
+		try {
+			echo $oTpl->render($sMasterTemplate);
+		} catch(PPI_Exception $e) {
+			throw new PPI_Exception($e->getMessage());
+		}
 	}
 
 	/**

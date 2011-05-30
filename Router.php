@@ -4,7 +4,6 @@
  * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
- * @copyright Digiflex Development
  * @package   Core
  * @link      www.ppiframework.com
  *
@@ -12,32 +11,26 @@
 class PPI_Router implements PPI_Router_Interface {
 
     /**
-     * The array of routes
+     * The matched route
      *
-     * @var null|array
+     * @var string
      */
-    static $_routes = null;
+    protected $_matchedRoute = null;
 
 	/**
 	 * The file to get the routes from
 	 *
 	 * @var string $_routingFile
 	 */
-	static $_routingFile = null;
-
-	/**
-	 * The filename of the cache file on disk of the routes
-     * 
-	 * @todo if we are using raw PHP then we don't need to cache
-	 * @var string $_routingCachingFile
-	 */
-	static $_routingCachingFile = null;
+	protected $_routingFile = null;
 
     /**
      * The constructor
      */
-	function __construct() {
-
+	function __construct(array $options = array()) {
+		if(isset($options['routingFile'])) {
+			$this->_routingFile = $options['routingFile'];
+		}
 	}
 
     /**
@@ -46,56 +39,57 @@ class PPI_Router implements PPI_Router_Interface {
      * @return void
      */
 	function init() {
-		ppi_dump('heheheh', true);
-		$this->_routes = $this->getRoutes();
-	}
 
-	/**
-	 * Get the routes, either from the cache or newly from disk
-	 *
-	 * @return array
-	 */
-	function getRoute() {
+		include_once($this->getRoutingFile());
+		$uri = str_replace(PPI_Helper::getConfig()->system->base_url, '/', PPI_Helper::getFullUrl());
+		$route = $uri;
 
-		$this->routes = file_get_contents(APPFOLDER . 'Config/routes.php');
-		ppi_dump($this->routes, true);
 		// Loop through the route array looking for wild-cards
-		foreach($this->routes as $key => $val) {
+		foreach($routes as $key => $val) {
 			// Convert wild-cards to RegEx
-			$key = str_replace(':any', '.+', str_replace(':num', '[0-9]+', $key));
+			$key = str_replace(array(':any', ':num'), array('.+', '[0-9]+'), $key);
 			// Does the RegEx match?
 			if (preg_match('#^'.$key.'$#', $uri)) {
 				// Do we have a back-reference?
-				if (strpos($val, '$') !== FALSE AND strpos($key, '(') !== FALSE) {
+				if (strpos($val, '$') !== false && strpos($key, '(') !== false) {
 					$val = preg_replace('#^'.$key.'$#', $val, $uri);
 				}
-
-				$this->_set_request(explode('/', $val));
-				return;
+				$route = $val;
+				break;
 			}
 		}
-
-		PPI_Helper::getRegistry()->set();
-
-		return self::$_routes;
+		$this->setMatchedRoute($route);
 	}
 
 	/**
-	 * Parse through the routes and return the routes
-     *
-	 * @return array The Routes
+	 * GEt the route currently matched
+	 *
+	 * @return string
 	 */
-	function parseRoutes() {
-
+	function getMatchedRoute() {
+		return $this->_matchedRoute;
 	}
 
 	/**
-	 * Cache the routes to disk
-     * 
-     * @return int
+	 * Set the route currently matched
+	 *
+	 * @param string $route
+	 * @return void
 	 */
-	function saveRoutes() {
-		return file_put_contents(self::routingCacheFile, serialize(self::$_routes));
+	function setMatchedRoute($route) {
+		$this->_matchedRoute = $route;
+	}
+
+	/**
+	 * Get the routing file
+	 *
+	 * @return string
+	 */
+	function getRoutingFile() {
+		if($this->_routingFile === null) {
+			$this->_routingFile = APPFOLDER . 'Config/routes.php';
+		}
+		return $this->_routingFile;
 	}
 
 }

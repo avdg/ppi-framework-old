@@ -166,39 +166,31 @@ class PPI_Request {
 					                         && strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] === 'xmlhttprequest');
 				}
 				return $this->_isVars['ajax'];
-				break;
 
 			case 'post':
 				return strtolower($this->getRequestMethod()) === 'post';
-				break;
 
 			case 'get':
 				return strtolower($this->getRequestMethod()) === 'get';
-				break;
 
 			case 'put':
 				return strtolower($this->getRequestMethod()) === 'put';
-				break;
 
 			case 'delete':
 				return strtolower($this->getRequestMethod()) === 'delete';
-				break;
 
 			case 'head':
 				return strtolower($this->getRequestMethod()) === 'head';
-				break;
 
 			case 'mobile':
 				if($this->_isVars['mobile'] === null) {
 					$this->_isVars['mobile'] = $this->isRequestMobile();
 				}
 				return $this->_isVars['mobile'];
-				break;
 
 			case 'https':
 			case 'ssl':
 				return $this->getProtocol() === 'https';
-				break;
 
 		}
 
@@ -216,15 +208,12 @@ class PPI_Request {
 
 			case 'ip':
 				return isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0';
-				break;
 
 			case 'referer':
 				return isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-				break;
 
 			case 'userAgent':
 				return isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-				break;
 
 			case 'browser':
 				$ret = '';

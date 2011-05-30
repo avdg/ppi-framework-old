@@ -22,54 +22,47 @@ class PPI_Request {
 
 	function __construct() {
 		$this->_uri = PPI_Helper::getRegistry()->get('PPI::Request_URI');
-		$this->_uriParams = explode('/', $this->_uri);
+//		$this->_uriParams = explode('/', $this->_uri);
 	}
-
+	
 	/**
 	 * Obtain a url segments value pair by specifying the key.
 	 * eg: /key/val/key2/val2 - by specifying key, you get val, by specifying key2, you get val2.
-	 * @param string $p_sIndex The specified key
-	 * @param string $p_sDefaultValue The default value to return in the situation that the key or subsequent value was not found.
-	 * @return mixed (Can be user defined)
+	 *
+	 * @param string $var
+	 * @param mixed $default
+	 * @return mixed
 	 */
-	function get($p_sIndex, $p_sDefaultValue = "") {
-		$tmp = array();
-		$count = count($this->_uriParams);
-		for($i = 0 , $j = 1; $i < $count; $i+=1, $j++) {
-			if(!empty($this->_uriParams[$i]) && isset($this->_uriParams[$j])) {
-				if(is_integer($this->_uriParams[$j]) || $this->_uriParams[$j] == '0') {
-					$tmp[$this->_uriParams[$i]] = (int) $this->_uriParams[$j];
-				} else {
-					$tmp[$this->_uriParams[$i]] = $this->_uriParams[$j];
-				}
-			} else {
-				$tmp[$this->_uriParams[$i]] = '';
-			}
+	function get($var, $default = null) {
+		if(empty($this->_uriParams)) {
+			$this->processUriParams();
 		}
-		if(!empty($tmp)) {
-			foreach($tmp as $item => $val) {
-				if($item == $p_sIndex) {
-					if(is_integer ($val) OR $val == '0') {
-						return (int) $val;
-					} elseif(!empty($val)) {
-						return urldecode ($val);
-					}
-				}
-			}
+		if(isset($_GET[$var])) {
+			return urldecode(is_numeric($var) ? (int) $var : $var);
 		}
-
-		if(empty($p_sDefaultValue)) $p_sDefaultValue = "";
-		if(isset($_GET[$p_sIndex])) {
-			if(is_integer ($_GET[$p_sIndex]) || $_GET[$p_sIndex] == '0') {
-				return (int) $_GET[$p_sIndex];
-			}
-			return (!empty($_GET[$p_sIndex])) ? urldecode($_GET[$p_sIndex]) : urldecode($p_sDefaultValue);
-		}
-		return urldecode($p_sDefaultValue);
+		return isset($this->_uriParams[$var]) ? $this->_uriParams[$var] : $default;
 	}
 
 	/**
-	 * Retreive information passed via the $_POST array.
+	 * Process the URI Parameters into a clean hashmap for isset() calling later.
+	 *
+	 * @return void
+	 */
+	function processUriParams() {
+		$params    = array();
+		$uriParams = explode('/', trim($this->_uri, '/'));
+		$count     = count($uriParams);
+		if($count > 0) {
+			for($i = 0; $i < $count; $i++) {
+				$val = isset($uriParams[($i + 1)]) ? $uriParams[($i + 1)] : null;
+				$params[$uriParams[$i]] = urldecode(is_numeric($val) ? (int) $val : $val);
+			}
+			$this->_uriParams = $params;
+		}
+	}
+
+	/**
+	 * Retrieve information passed via the $_POST array.
 	 * Can specify a key and return that, else return the whole $_POST array
 	 *
 	 * @param string [$p_sIndex] Specific $_POST key

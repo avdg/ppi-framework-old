@@ -22,9 +22,8 @@ class PPI_Request {
 
 	function __construct() {
 		$this->_uri = PPI_Helper::getRegistry()->get('PPI::Request_URI');
-//		$this->_uriParams = explode('/', $this->_uri);
 	}
-	
+
 	/**
 	 * Obtain a url segments value pair by specifying the key.
 	 * eg: /key/val/key2/val2 - by specifying key, you get val, by specifying key2, you get val2.
@@ -84,10 +83,7 @@ class PPI_Request {
 	 * @return array|boolean
 	 */
 	function stripPost($p_sPrefix = '') {
-		if($p_sPrefix == '') {
-			return array();
-		}
-		if(isset($_POST)) {
+		if($p_sPrefix !== '' || $this->is('post')) {
 			$aValues = array();
 			foreach($this->post() as $key => $val) {
 				if(strpos($key, $p_sPrefix) !== false) {

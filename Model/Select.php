@@ -219,7 +219,7 @@ class PPI_Model_Select {
     /**
      * The model that this class was initialised from
      *
-     * @var
+     * @var object
      */
 	protected $_model;
 
@@ -432,7 +432,6 @@ class PPI_Model_Select {
      *
      * @throws PPI_Exception
      * @return void
-     *
 	 */
 	protected function logError() {
 		// check if we need to email

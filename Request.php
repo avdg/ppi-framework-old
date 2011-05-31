@@ -162,6 +162,7 @@ class PPI_Request {
 
 	/**
 	 * Check whether a value has been submitted via post
+	 *
 	 * @param string The $_POST key
 	 * @return boolean
 	 */
@@ -263,14 +264,7 @@ class PPI_Request {
 			case 'browser':
 			case 'browserVersion':
 			case 'browserAndVersion':
-				if($this->_userAgentInfo === null) {
-					$userAgentParts = explode(' ', $this->getRemote('userAgent'));
-					foreach($this->_userAgentMap as $mapKey => $userAgentKey) {
-						$this->_userAgentInfo[$mapKey] = $userAgentInfo[$userAgentKey];
-					}
-					ppi_dump($this->_userAgentInfo); exit;
-				}
-					die('here');
+				// @tbc
 				break;
 		}
 
@@ -330,6 +324,11 @@ class PPI_Request {
 		return false;
 	}
 
+	/**
+	 * Get the current request method
+	 *
+	 * @return string
+	 */
 	protected function getRequestMethod() {
 		if($this->_requestMethod === null) {
 			$this->_requestMethod = $_SERVER['REQUEST_METHOD'];

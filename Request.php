@@ -1,6 +1,19 @@
 <?php
+/**
+ *
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/mit-license.php MIT
+ * @package   Core
+ * @link      www.ppiframework.com
+ *
+ */
 class PPI_Request {
 
+	/**
+	 * Remote vars cache for the getRemove() function
+	 *
+	 * @var array
+	 */
 	protected $_remoteVars = array(
 		'ip'                => '',
 		'userAgent'         => '',
@@ -9,15 +22,67 @@ class PPI_Request {
 		'browserAndVersion' => ''
 	);
 
+	/**
+	 * Vars cache for the is() function
+	 *
+	 * @var array
+	 */
 	protected $_isVars = array(
 		'ajax'   => null,
 		'mobile' => null
 	);
 
+	/**
+	 * Mapping fields for get_browser()
+	 *
+	 * @var array
+	 */
+	protected $_userAgentMap = array(
+		'browser'           => 'browser',
+		'browserVersion'    => 'version',
+		'browserAndVersion' => 'parent'
+	);
+
+	/**
+	 * The browser data from
+	 *
+	 * @var array|null
+	 */
+	protected $_userAgentInfo = null;
+
+	/**
+	 * The request method
+	 *
+	 * @var null|string
+	 */
 	protected $_requestMethod = null;
+
+	/**
+	 * The protocol being used
+	 *
+	 * @var null|string
+	 */
 	protected $_protocol = null;
+
+	/**
+	 * The full url including the protocol
+	 *
+	 * @var null|string
+	 */
 	protected $_url = null;
+
+	/**
+	 * The URI after the base url
+	 *
+	 * @var null|string
+	 */
 	protected $_uri = null;
+
+	/**
+	 * The quick keyval lookup array for URI parameters
+	 *
+	 * @var array
+	 */
 	protected $_uriParams = array();
 
 	function __construct() {
@@ -82,7 +147,7 @@ class PPI_Request {
 	 * @param string $sPrefix The prefix to get values with
 	 * @return array|boolean
 	 */
-	
+
 	function stripPost($p_sPrefix = '') {
 		$aValues = array();
 		if($p_sPrefix !== '' && $this->is('post')) {
@@ -95,28 +160,8 @@ class PPI_Request {
 		return $aValues;
 	}
 
-/*
-	function stripPost($p_sPrefix = '') {
-		if($p_sPrefix == '') {
-			return array();
-		}
-		if(isset($_POST)) {
-			$aValues = array();
-			foreach($this->post() as $key => $val) {
-				if(strpos($key, $p_sPrefix) !== false) {
-					$key = str_replace($p_sPrefix, '', $key);
-					$aValues[$key] = $val;
-				}
-			}
-			if(!empty($aValues)) {
-				return $aValues;
-			}
-		}
-		return array();
-	}
-*/
 	/**
-	 * Check wether a value has been submitted via post
+	 * Check whether a value has been submitted via post
 	 * @param string The $_POST key
 	 * @return boolean
 	 */
@@ -143,14 +188,9 @@ class PPI_Request {
 	 *
 	 * @param string $p_sKey The key
 	 * @param mixed $p_mValue The value to set the key with
-	 * @param boolean $p_bOverride Default is false. If you want to override a value that already exists then pass true.
-	 * @throws PPI_Exception If the key already existed and you did not permit an override
 	 * @return void
 	 */
-	function addPost($p_sKey, $p_mValue, $p_bOverride = false) {
-		if($p_bOverride === false && isset($_POST[$p_sKey])) {
-			throw new PPI_Exception("Unable to set POST key: $p_sKey. Key already exists and override was not permitted");
-		}
+	function addPost($p_sKey, $p_mValue) {
 		$_POST[$p_sKey] = $p_mValue;
 	}
 
@@ -171,29 +211,19 @@ class PPI_Request {
 	 */
 	function is($var) {
 
+		$var = strtolower($var);
 		switch($var) {
 
-			case 'ajax':
-				if($this->_isVars['ajax'] === null) {
-					$this->_isVars['ajax'] = isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-					                         && strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] === 'xmlhttprequest');
-				}
-				return $this->_isVars['ajax'];
-
 			case 'post':
-				return strtolower($this->getRequestMethod()) === 'post';
-
 			case 'get':
-				return strtolower($this->getRequestMethod()) === 'get';
-
 			case 'put':
-				return strtolower($this->getRequestMethod()) === 'put';
-
 			case 'delete':
-				return strtolower($this->getRequestMethod()) === 'delete';
-
 			case 'head':
-				return strtolower($this->getRequestMethod()) === 'head';
+				return strtolower($this->getRequestMethod()) === $var;
+
+			case 'https':
+			case 'ssl':
+				return $this->getProtocol() === 'https';
 
 			case 'mobile':
 				if($this->_isVars['mobile'] === null) {
@@ -201,10 +231,12 @@ class PPI_Request {
 				}
 				return $this->_isVars['mobile'];
 
-			case 'https':
-			case 'ssl':
-				return $this->getProtocol() === 'https';
-
+			case 'ajax':
+				if($this->_isVars['ajax'] === null) {
+					$this->_isVars['ajax'] = isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+					                         && strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] === 'xmlhttprequest');
+				}
+				return $this->_isVars['ajax'];
 		}
 
 	}
@@ -229,17 +261,17 @@ class PPI_Request {
 				return isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
 
 			case 'browser':
-				$ret = '';
-				break;
-
 			case 'browserVersion':
-				$ret = '';
-				break;
-
 			case 'browserAndVersion':
-				$ret = '';
+				if($this->_userAgentInfo === null) {
+					$userAgentParts = explode(' ', $this->getRemote('userAgent'));
+					foreach($this->_userAgentMap as $mapKey => $userAgentKey) {
+						$this->_userAgentInfo[$mapKey] = $userAgentInfo[$userAgentKey];
+					}
+					ppi_dump($this->_userAgentInfo); exit;
+				}
+					die('here');
 				break;
-
 		}
 
 	}

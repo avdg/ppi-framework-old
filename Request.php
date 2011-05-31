@@ -77,13 +77,30 @@ class PPI_Request {
 	}
 
 	/**
-	 * Retreive all $_POST elements with have a specific prefix
+	 * Retrieve all $_POST elements with have a specific prefix
 	 *
 	 * @param string $sPrefix The prefix to get values with
 	 * @return array|boolean
 	 */
+	
 	function stripPost($p_sPrefix = '') {
-		if($p_sPrefix !== '' || $this->is('post')) {
+		$aValues = array();
+		if($p_sPrefix !== '' && $this->is('post')) {
+			$aPost = $this->post();
+			$aPrefixKeys = preg_grep("/{$p_sPrefix}/", array_keys($aPost));
+			foreach($aPrefixKeys as $prefixKey) {
+				$aValues[$prefixKey] = $aPost[$prefixKey];
+			}
+		}
+		return $aValues;
+	}
+
+/*
+	function stripPost($p_sPrefix = '') {
+		if($p_sPrefix == '') {
+			return array();
+		}
+		if(isset($_POST)) {
 			$aValues = array();
 			foreach($this->post() as $key => $val) {
 				if(strpos($key, $p_sPrefix) !== false) {
@@ -97,7 +114,7 @@ class PPI_Request {
 		}
 		return array();
 	}
-
+*/
 	/**
 	 * Check wether a value has been submitted via post
 	 * @param string The $_POST key

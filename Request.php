@@ -212,8 +212,6 @@ class PPI_Request {
 	 */
 	function is($var) {
 		$var = strtolower($var);
-
-		$var = strtolower($var);
 		switch($var) {
 			case 'ajax':
 				if($this->_isVars['ajax'] === null) {
@@ -312,7 +310,7 @@ class PPI_Request {
 	protected function isRequestMobile() {
 		$mobileUserAgents = array(
 			'iPhone', 'MIDP', 'AvantGo', 'BlackBerry', 'J2ME', 'Opera Mini', 'DoCoMo', 'NetFront',
-			'Nokia', 'PalmOS', 'PalmSource', 'portalmmm', 'Plucker', 'ReqwirelessWeb', 'iPod',
+			'Nokia', 'PalmOS', 'PalmSource', 'portalmmm', 'Plucker', 'ReqwirelessWeb', 'iPod', 'iPad',
 			'SonyEricsson', 'Symbian', 'UP\.Browser', 'Windows CE', 'Xiino', 'Android'
 		);
 		$currentUserAgent = $this->getRemote('userAgent');

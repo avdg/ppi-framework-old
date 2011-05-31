@@ -210,9 +210,16 @@ class PPI_Request {
 	 * @return bool
 	 */
 	function is($var) {
+		$var = strtolower($var);
 
 		$var = strtolower($var);
 		switch($var) {
+			case 'ajax':
+				if($this->_isVars['ajax'] === null) {
+					$this->_isVars['ajax'] = isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+					                         && strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] === 'xmlhttprequest');
+				}
+				return $this->_isVars['ajax'];
 
 			case 'post':
 			case 'get':
@@ -221,22 +228,15 @@ class PPI_Request {
 			case 'head':
 				return strtolower($this->getRequestMethod()) === $var;
 
-			case 'https':
-			case 'ssl':
-				return $this->getProtocol() === 'https';
-
 			case 'mobile':
 				if($this->_isVars['mobile'] === null) {
 					$this->_isVars['mobile'] = $this->isRequestMobile();
 				}
 				return $this->_isVars['mobile'];
 
-			case 'ajax':
-				if($this->_isVars['ajax'] === null) {
-					$this->_isVars['ajax'] = isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-					                         && strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] === 'xmlhttprequest');
-				}
-				return $this->_isVars['ajax'];
+			case 'https':
+			case 'ssl':
+				return $this->getProtocol() === 'https';
 		}
 
 	}

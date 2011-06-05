@@ -86,7 +86,6 @@ class PPI_Request {
 	protected $_uriParams = array();
 
 	function __construct() {
-		$this->_uri = PPI_Helper::getRegistry()->get('PPI::Request_URI');
 	}
 
 	/**
@@ -98,11 +97,11 @@ class PPI_Request {
 	 * @return mixed
 	 */
 	function get($var, $default = null) {
-		if(empty($this->_uriParams)) {
-			$this->processUriParams();
-		}
 		if(isset($_GET[$var])) {
 			return urldecode(is_numeric($var) ? (int) $var : $var);
+		}
+		if(empty($this->_uriParams)) {
+			$this->processUriParams();
 		}
 		return isset($this->_uriParams[$var]) ? $this->_uriParams[$var] : $default;
 	}
@@ -276,7 +275,7 @@ class PPI_Request {
 	 */
 	function getUri() {
 		if($this->_uri === null) {
-			$this->_uri = rtrim($_SERVER['REQUEST_URI'], '/') . '/';
+			$this->_uri = PPI_Helper::getRegistry()->get('PPI::Request_URI');
 		}
 		return $this->_uri;
 

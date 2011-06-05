@@ -25,9 +25,8 @@ class PPI_Controller {
      * The constructor
      */
 	function __construct () {
-		$this->_input = PPI_Helper::getInput();
 		$this->_view  = new PPI_View();
-		$this->_request = new PPI_Request();
+		$this->_request = PPI_Helper::getRequest();
 		$this->oInput = $this->_input; // Legacy Code
 	}
 

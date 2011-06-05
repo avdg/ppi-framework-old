@@ -133,7 +133,7 @@ abstract class PPI_Model {
 				throw new PPI_Exception('Database configuration error. Unable to find '.$field.' in '.$p_sDBKey);
 			}
 			// @todo: Why are we checking for 'password' here ?
-			if($field !== 'password' && $dbInfo[$field] == '') {
+			if($field !== 'password' && $dbInfo[$field] === '') {
 				throw new PPI_Exception('No information found for database configuration option: '.$field);
 			}
 		}
@@ -540,10 +540,10 @@ abstract class PPI_Model {
 			} else {
 				$sFilter = '';
 			}
-			
+
 
 			// Group
-			$sGroup = $p_sGroup != '' ? ' GROUP BY ' . $p_sGroup : '';			
+			$sGroup = $p_sGroup != '' ? ' GROUP BY ' . $p_sGroup : '';
 
 			// Order
 			$sOrder = is_array($p_sOrder) && !empty($p_sOrder) ? 'ORDER BY ' : '';

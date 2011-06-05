@@ -82,15 +82,6 @@ class PPI_Helper {
 	}
 
 	/**
-	 * Get the dispatcher object
-	 *
-	 * @return object
-	 */
-	static function getInput() {
-		return self::getObjectFromRegistry('PPI_Input');
-	}
-
-	/**
 	 * Get the session object
 	 *
 	 * @param mixed $p_mOptions The information to get a different cache object
@@ -154,10 +145,22 @@ class PPI_Helper {
 	/**
 	 * Get the registry object
 	 *
+	 * @static
 	 * @return object
 	 */
 	static function getRegistry() {
 		return PPI_Registry::getInstance();
+	}
+
+	/**
+	 * Get the PPI_Request object cached from the registry
+	 *
+	 * @static
+	 * @return mixed
+	 */
+	static function getRequest() {
+		return self::getObjectFromRegistry('PPI_Request');
+
 	}
 
 	/**

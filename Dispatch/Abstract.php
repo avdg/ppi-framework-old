@@ -120,17 +120,21 @@ abstract class PPI_Dispatch_Abstract {
 				return false;
 			}
 
+			$sMethod = isset($aUrls[1]) ? $aUrls[1] : 'index';
+
+			// We set these early, so that the executed controller has access to the dispatched
+			// Controller name and method to access this information within its __construct
+			$this->setControllerName($sLowerControllerName);
+			$this->setMethod($sMethod);
+
 			// Proceed with instantiation.
 			$oController = new $sContFilename();
 			// Did we specify a method ?
-			$sMethod = isset($aUrls[1]) ? $aUrls[1] : 'index';
 			// Does our method exist on the class
 			if(!in_array($sMethod, get_class_methods(get_class($oController)))) {
 				return false;
 			}
-			$this->setControllerName($sLowerControllerName);
 			$this->setController($oController);
-			$this->setMethod($sMethod);
 			return true;
 		}
 		return false;

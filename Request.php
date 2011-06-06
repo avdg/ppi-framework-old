@@ -113,7 +113,7 @@ class PPI_Request {
 	 */
 	function processUriParams() {
 		$params    = array();
-		$uriParams = explode('/', trim($this->_uri, '/'));
+		$uriParams = explode('/', trim($this->getUri(), '/'));
 		$count     = count($uriParams);
 		if($count > 0) {
 			for($i = 0; $i < $count; $i++) {

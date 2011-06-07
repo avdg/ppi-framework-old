@@ -10,6 +10,15 @@
 class PPI_Request {
 
 	/**
+	 * Environment variables
+	 *
+	 * @var array|arrayAccess
+	 */
+	protected $_get     = null;
+	protected $_post    = null;
+	protected $_server  = null;
+
+	/**
 	 * Remote vars cache for the getRemove() function
 	 *
 	 * @var array
@@ -85,7 +94,48 @@ class PPI_Request {
 	 */
 	protected $_uriParams = array();
 
-	function __construct() {
+	/**
+	 * Constructor
+	 *
+	 * By default, it takes environment variables
+	 * cookie, env, get, post, server and session
+	 * from data collectors (PPI_Request_*)
+	 *
+	 * However, any of these can be overriden by
+	 * an array or by an object that extends their
+	 * representing PPI_Request_* class
+	 *
+	 * @param array $env Change environment variables
+	 */
+	function __construct(array $env = array())
+	{
+		if (isset($env['get']) &&
+			((is_array($env['get'])) ||
+			($env['get'] instanceof PPI_Request_Get))
+		) {
+			$this->_get = $env['get'];
+		} else {
+			$this->_get = new PPI_Request_Get();
+		}
+
+		if (isset($env['post']) &&
+			((is_array($env['post'])) ||
+			($env['post'] instanceof PPI_Request_Post))
+		) {
+			$this->_post = $env['post'];
+		} else {
+			$this->_post = new PPI_Request_Post();
+		}
+
+		if (isset($env['server']) &&
+			((is_array($env['server'])) ||
+			($env['server'] instanceof PPI_Request_Server))
+		) {
+			$this->_server = $env['server'];
+		} else {
+			$this->_server = new PPI_Request_Server();
+		}
+
 	}
 
 	/**

@@ -12,7 +12,7 @@ class PPI_Request_Post extends PPI_Request_Abstract
 	 */
 	public function __construct(array $post = null)
 	{
-		if ($post === null)) {
+		if ($post === null) {
 			$this->_array = $_POST;
 		} else {
 			$this->_array       = $post;

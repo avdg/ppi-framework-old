@@ -11,6 +11,13 @@
 class PPI_Request {
 
 	/**
+	 * The COOKIE data
+	 *
+	 * @var null|object
+	 */
+	protected $_cookie  = null;
+
+	/**
 	 * The URI variables. eg: www.domain.com/some/uri/variables/here
 	 *
 	 * @var null|object
@@ -23,6 +30,13 @@ class PPI_Request {
 	 * @var null|object
 	 */
 	protected $_post = null;
+
+	/**
+	 * The SESSION data
+	 *
+	 * @var null|object
+	 */
+	protected $_session = null;
 
 	/**
 	 * The SERVER data
@@ -126,6 +140,12 @@ class PPI_Request {
 			$this->_server = new PPI_Request_Server();
 		}
 
+		if (isset($env['cookie'] && (is_array($env['cookie'] || $env['cookie'] instanceof PPI_Request_Cookie)) {
+			$this->_cookie = $env['cookie'];
+		} else {
+			$this->_cookie = new PPI_Request_Cookie();
+		}
+
 		if (isset($env['get']) && (is_array($env['get']) || $env['get'] instanceof PPI_Request_Url)) {
 			$this->_get = $env['get'];
 		} else {
@@ -142,6 +162,11 @@ class PPI_Request {
 			$this->_post = $env['post'];
 		} else {
 			$this->_post = new PPI_Request_Post();
+
+		if (isset($env['session']) && (is_array($env['session']) || $env['session'] instanceof PPI_Request_Session)) {
+			$this->_session = $env['session'];
+		} else {
+			$this->_session = new PPI_Request_Session();
 		}
 	}
 

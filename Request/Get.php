@@ -12,7 +12,7 @@ class PPI_Request_Get extends PPI_Request_Abstract
 	 */
 	public function __construct(array $get = null)
 	{
-		if ($get === null)) {
+		if ($get === null) {
 			$this->_array = $_GET;
 		} else {
 			$this->_array       = $get;

@@ -12,7 +12,7 @@ class PPI_Request_Server extends PPI_Request_Abstract
 	 */
 	public function __construct(array $server = null)
 	{
-		if ($server === null)) {
+		if ($server === null) {
 			$this->_array = $_SERVER;
 		} else {
 			$this->_array       = $server;

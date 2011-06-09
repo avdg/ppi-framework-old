@@ -60,6 +60,10 @@ class PPI_Controller {
 	 * @return void
 	 */
 	protected function load($p_tplFile, $p_tplParams = array()) {
+		 if(!isset($p_tplParams['isAjax']) && $this->is('ajax') === true) {
+		 	$p_tplParams['isAjax'] = true; 
+		 }
+		
 		$this->_view->load($p_tplFile, $p_tplParams);
 	}
 

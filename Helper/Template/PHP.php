@@ -39,11 +39,7 @@ class PPI_Helper_Template_PHP implements PPI_Interface_Template {
 			$$key = $var;
 		}
 		
-		if ( isset($this->_viewVars['isAjax']) ) {
-			include_once($this->_viewVars["actionFile"]);
-		} else {
-			include_once($sPath);
-		}
+		include_once($sPath);
 	}
 
 	/**

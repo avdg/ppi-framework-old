@@ -85,8 +85,7 @@ class PPI_Request {
 	 */
 	protected $_uriParams = array();
 
-	function __construct() {
-	}
+	function __construct() {}
 
 	/**
 	 * Obtain a url segments value pair by specifying the key.
@@ -132,7 +131,7 @@ class PPI_Request {
 	 * @param mixed [$p_sDefaultValue] null if not specified, mixed otherwise
 	 * @return string|array Depending if you passed in a value for $p_sIndex
 	 */
-	function post($p_sIndex = null, $p_sDefaultValue = null, $p_aOptions = null) {
+	function post($p_sIndex = null, $p_sDefaultValue = null) {
 		if($p_sIndex === null) {
 			return PPI_Helper::getInstance()->arrayTrim($_POST);
 		} else {
@@ -146,7 +145,6 @@ class PPI_Request {
 	 * @param string $sPrefix The prefix to get values with
 	 * @return array|boolean
 	 */
-
 	function stripPost($p_sPrefix = '') {
 		$aValues = array();
 		if($p_sPrefix !== '' && $this->is('post')) {
@@ -215,7 +213,7 @@ class PPI_Request {
 			case 'ajax':
 				if($this->_isVars['ajax'] === null) {
 					$this->_isVars['ajax'] = isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-					                         && strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] === 'xmlhttprequest');
+					                         && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
 				}
 				return $this->_isVars['ajax'];
 

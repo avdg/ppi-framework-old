@@ -66,7 +66,7 @@ class PPI_View {
 		} else {
 			$sRenderer = $this->_defaultRenderer;
 		}
-
+		
 		switch($sRenderer) {
 			case 'smarty':
 				$oTpl = new PPI_Helper_Template_Smarty();

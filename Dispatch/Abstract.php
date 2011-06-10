@@ -55,7 +55,6 @@ abstract class PPI_Dispatch_Abstract {
      */
 	function __construct() {
 		$this->_config = PPI_Helper::getConfig();
-		$this->_request = PPI_Helper::getRequest();
 		$this->_fullUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 'https' : 'http') .
 			'://' . str_replace('www.', '', $_SERVER['HTTP_HOST']) . $_SERVER['REQUEST_URI'];
 	}

@@ -1,7 +1,6 @@
 <?php
 
-abstract class PPI_Request_Abstract implements ArrayAccess, Iterator, Countable
-{
+abstract class PPI_Request_Abstract implements ArrayAccess, Iterator, Countable {
 	protected $_array = array();
 
 	protected $_isCollected = true;
@@ -15,8 +14,7 @@ abstract class PPI_Request_Abstract implements ArrayAccess, Iterator, Countable
 	 *
 	 * @return bool
 	 */
-	public function isCollected()
-	{
+	public function isCollected() {
 		return $this->_isCollected;
 	}
 
@@ -27,8 +25,7 @@ abstract class PPI_Request_Abstract implements ArrayAccess, Iterator, Countable
 	 *
 	 * @return bool
 	 */
-	public function offsetExists($offset)
-	{
+	public function offsetExists($offset) {
 		return isset($this->_array[$offset]);
 	}
 
@@ -39,8 +36,7 @@ abstract class PPI_Request_Abstract implements ArrayAccess, Iterator, Countable
 	 *
 	 * @return mixed
 	 */
-	public function offsetGet($offset)
-	{
+	public function offsetGet($offset) {
 		if ($this->offsetExists($offset)) {
 			return $this->_array[$offset];
 		}
@@ -55,8 +51,7 @@ abstract class PPI_Request_Abstract implements ArrayAccess, Iterator, Countable
 	 *
 	 * @return void
 	 */
-	public function offsetSet($offset, $value)
-	{
+	public function offsetSet($offset, $value) {
 		if ($value === null) {
 			return $this->offsetUnset($offset);
 		}
@@ -71,8 +66,7 @@ abstract class PPI_Request_Abstract implements ArrayAccess, Iterator, Countable
 	 *
 	 * @return void
 	 */
-	public function offsetUnset($offset)
-	{
+	public function offsetUnset($offset) {
 		unset($this->_array[$offset]);
 	}
 
@@ -81,8 +75,7 @@ abstract class PPI_Request_Abstract implements ArrayAccess, Iterator, Countable
 	 *
 	 * @return mixed
 	 */
-	public function current()
-	{
+	public function current() {
 		return current($this->_array);
 	}
 
@@ -91,8 +84,7 @@ abstract class PPI_Request_Abstract implements ArrayAccess, Iterator, Countable
 	 *
 	 * @return scalar
 	 */
-	public function key()
-	{
+	public function key() {
 		return key($this->_array);
 	}
 
@@ -101,8 +93,7 @@ abstract class PPI_Request_Abstract implements ArrayAccess, Iterator, Countable
 	 *
 	 * @return void
 	 */
-	public function next()
-	{
+	public function next() {
 		return next($this->_array);
 	}
 
@@ -111,8 +102,7 @@ abstract class PPI_Request_Abstract implements ArrayAccess, Iterator, Countable
 	 *
 	 * @return void
 	 */
-	public function rewind()
-	{
+	public function rewind() {
 		return reset($this->_array);
 	}
 
@@ -121,8 +111,7 @@ abstract class PPI_Request_Abstract implements ArrayAccess, Iterator, Countable
 	 *
 	 * @return bool
 	 */
-	public function valid()
-	{
+	public function valid() {
 		return key($this->_array) !== null;
 	}
 
@@ -131,8 +120,7 @@ abstract class PPI_Request_Abstract implements ArrayAccess, Iterator, Countable
 	 *
 	 * @return int
 	 */
-	public function count()
-	{
+	public function count() {
 		return count($this->_array);
 	}
 }

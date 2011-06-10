@@ -29,7 +29,6 @@ class PPI_Dispatch_Standard extends PPI_Dispatch_Abstract implements PPI_Dispatc
 	 * @return boolean
 	 */
 	function init() {
-
 		if($this->_router !== null) {
 			$this->_router->init();
 		}

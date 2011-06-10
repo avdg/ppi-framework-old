@@ -32,7 +32,7 @@ class PPI_Config {
 	 * Will check the file extension of your config filename and load up a specific parser
 	 * @param string $p_sConfigFile The config filename
 	 * @param array $p_aOptions The options
-     * 
+     *
      * @return void
 	 */
 	function __construct($p_sConfigFile, $p_aOptions = array()) {
@@ -43,7 +43,7 @@ class PPI_Config {
 		$block = isset($p_aOptions['block']) ? $p_aOptions['block'] : 'development';
 		switch($ext) {
 			case 'ini':
-				$this->_oConfig = new PPI_Config_Ini(parse_ini_file(CONFIGPATH . $p_sConfigFile, true), $block);
+				$this->_oConfig = new PPI_Config_Ini(parse_ini_file(CONFIGPATH . $p_sConfigFile, true, INI_SCANNER_RAW), $block);
 				break;
 
 			case 'xml':

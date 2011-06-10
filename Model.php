@@ -115,7 +115,6 @@ abstract class PPI_Model {
 		$this->sTableName  = $p_sTableName;
 
 		$oConfig = $this->getConfig();
-
 		// Multiple DB Check and Verify their key exists
 		if($p_sDBKey !== 'default') {
 			if(!isset($oConfig->db->$p_sDBKey)) {
@@ -130,9 +129,9 @@ abstract class PPI_Model {
 		// Verification that all the required DB fields are setup properly
 		foreach(array('host', 'username', 'password', 'database', 'enabled') as $field) {
 			if(!isset($dbInfo[$field])) {
-				throw new PPI_Exception('Database configuration error. Unable to find '.$field.' in '.$p_sDBKey);
+				throw new PPI_Exception('Database configuration error. Unable to find ' . $field . ' in ' . $p_sDBKey);
 			}
-			// @todo: Why are we checking for 'password' here ?
+
 			if($field !== 'password' && $dbInfo[$field] === '') {
 				throw new PPI_Exception('No information found for database configuration option: '.$field);
 			}

@@ -1,9 +1,7 @@
 <?php
 /**
- * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
- * @copyright Digiflex Development
  * @link      www.ppiframework.com
  * @package   View
  */
@@ -15,6 +13,20 @@ class PPI_View {
      * @var array
      */
 	protected $_viewParams = array();
+
+	/**
+	 * The current set view theme
+	 *
+	 * @var null|string
+	 */
+	protected $_viewTheme = null;
+
+	/**
+	 * The master template file
+	 *
+	 * @var null|string
+	 */
+	protected $_masterTemplateFile = null;
 
 	/**
 	 * Are we loading a plugin view (TBC)
@@ -31,20 +43,26 @@ class PPI_View {
 	private $_defaultRenderer = 'php';
 
 	/**
-	 * Master Template Override from config or setTemplateFile()
-     *
-	 * @var string $_templateOverride
-	 */
-	private $_templateOverride = null;
-
-	/**
 	 * Template Renderer Override from config or useRenderer()
      *
 	 * @var string $_rendererOverride
 	 */
 	private $_rendererOverride = null;
 
-	function __construct() {}
+	/**
+	 * The constructor
+	 *
+	 * @todo - When this is instantiated, pass it an options array,
+	 * @todo - Get the skeleton app to pass $config->layout->toArray()
+	 * @param array $options The options
+	 */
+	function __construct(array $options = array()) {
+		if(isset($options['view_theme'])) {
+			$this->_viewTheme = $options['view_theme'];
+		}
+
+		$this->_config = PPI_Helper::getConfig();
+	}
 
 	/**
 	 * Load function called from controllers
@@ -57,12 +75,8 @@ class PPI_View {
 	 */
 	function load($p_tplFile, $p_tplParams = array()) {
 
-		// checking for config overrides or useRenderer() overrides
-		$oConfig = PPI_Helper::getConfig();
-		if($this->_rendererOverride !== null) {
-			$sRenderer = $this->_rendererOverride;
-		} elseif(isset($oConfig->layout->renderer) && $oConfig->layout->renderer != '') {
-			$sRenderer = $oConfig->layout->renderer;
+		if(isset($this->_config->layout->renderer) && $this->_config->layout->renderer != '') {
+			$sRenderer = $this->_config->layout->renderer;
 		} else {
 			$sRenderer = $this->_defaultRenderer;
 		}
@@ -82,7 +96,7 @@ class PPI_View {
 				break;
 		}
 
-		$this->setupRenderer($oTpl, $p_tplFile, array_merge($p_tplParams, $this->_viewParams), $oConfig);
+		$this->setupRenderer($oTpl, $p_tplFile, array_merge($p_tplParams, $this->_viewParams));
 	}
 
 	/**
@@ -103,8 +117,31 @@ class PPI_View {
 	 * @param array $p_tplParams Optional user defined params
      * @return void
 	 */
-	function loadSmarty($p_tplFile, $p_tplParams = array()) {
-		$this->setupRenderer(new PPI_Helper_Template_Smarty(), $p_tplFile, $p_tplParams, PPI_Helper::getConfig());
+	function loadSmarty($p_tplFile, array $p_tplParams = array()) {
+		$this->setupRenderer(new PPI_Helper_Template_Smarty(), $p_tplFile, $p_tplParams);
+
+	}
+
+	/**
+	 * Override the current set theme
+	 *
+	 * @param string $p_sThemeName
+	 * @return void
+	 */
+	function theme($p_sThemeName) {
+		$this->_viewTheme = $p_sThemeName;
+	}
+
+	/**
+	 * Get the currently set view theme
+	 *
+	 * @return string
+	 */
+	protected function getViewTheme() {
+		if($this->_viewTheme === null) {
+			$this->_viewTheme = $this->_config->layout->view_theme;
+		}
+		return $this->_viewTheme;
 	}
 
     /**
@@ -120,14 +157,12 @@ class PPI_View {
 	/**
 	 * Initialisation for the renderer, assignment of default values, boot up of the master template
 	 *
-	 * @param object $oTpl Templating renderer. Instance of PPI_Interface_Template
+	 * @param PPI_Interface_Template $oTpl Templating renderer. Instance of PPI_Interface_Template
 	 * @param string $p_tplFile The template file to render
 	 * @param array $p_tplParams Optional user defined parameres
      * @return void
 	 */
-	function setupRenderer(PPI_Interface_Template $oTpl, $p_tplFile, $p_tplParams = array(), $p_oConfig) {
-
-		$oSession = PPI_Helper::getSession();
+	function setupRenderer(PPI_Interface_Template $oTpl, $p_tplFile, $p_tplParams = array()) {
 
 		// Default View Values
 		if(!empty($p_tplParams)) {
@@ -141,41 +176,30 @@ class PPI_View {
 		$sPath = (defined('PLUGINVIEWPATH') ? PLUGINVIEWPATH : APPFOLDER . 'View/');
 
 		// View Directory Preparation By Theme
-		$sViewDir = $sPath . $p_oConfig->layout->view_theme . '/';
+		$sViewDir = $sPath . $this->getViewTheme() . '/';
 
 		// Get the default view vars that come when you load a view page.
 		$defaultViewVars = $this->getDefaultRenderValues(array(
 			'viewDir'    => $sViewDir,
 			'actionFile' => $p_tplFile
-		), $p_oConfig);
-
+		));
 		foreach($defaultViewVars as $varName => $viewVar) {
 			$oTpl->assign($varName, $viewVar);
 		}
 
 		// Flash Messages
-		if(!isset($p_oConfig->layout->useMessageFlash) ||
-			($p_oConfig->layout->useMessageFlash && $p_oConfig->layout->useMessageFlash == true)) {
+		if(!isset($this->_config->layout->useMessageFlash) ||
+			($this->_config->layout->useMessageFlash && $this->_config->layout->useMessageFlash == true)) {
 			$oTpl->assign('ppiFlashMessage', PPI_Input::getFlashMessage());
 			PPI_Input::clearFlashMessage();
 		}
 
+		// Master template
+		$sMasterTemplate = $this->_masterTemplateFile !== null ? $this->_masterTemplateFile : $oTpl->getDefaultMasterTemplate();
+		$sMasterTemplate = PPI_Helper::checkExtension($sMasterTemplate, $oTpl->getTemplateExtension());
 
-
-		// Master template override from config or setTemplateFile()
-		if($this->_templateOverride !== null) {
-			$sMasterTemplate = $this->_templateOverride;
-		} elseif(isset($p_oConfig->layout->masterFile) && $p_oConfig->layout->masterFile != '') {
-			$sMasterTemplate = $p_oConfig->layout->masterFile;
-		} else {
-			$sMasterTemplate = $oTpl->getDefaultMasterTemplate();
-		}
-
-		try {
-			echo $oTpl->render($sMasterTemplate);
-		} catch(PPI_Exception $e) {
-			throw new PPI_Exception($e->getMessage());
-		}
+		// Lets render baby !!
+		$oTpl->render($sMasterTemplate);
 	}
 
 	/**
@@ -185,7 +209,7 @@ class PPI_View {
 	 * @param array $options
 	 * @return array
 	 */
-	function getDefaultRenderValues(array $options, $p_oConfig) {
+	function getDefaultRenderValues(array $options) {
 
 		$authData  = PPI_Helper::getSession()->getAuthData();
 		$oDispatch = PPI_Helper::getDispatcher();
@@ -195,11 +219,11 @@ class PPI_View {
 		);
 		return array(
 			'isLoggedIn'      => !empty($authData),
-			'config'          => $p_oConfig,
+			'config'          => $this->_config,
 			'request'         => $request,
 			'PPIRequest'      => PPI_Helper::getRequest(),
             'authData'        => $authData,
-			'baseUrl'         => $p_oConfig->system->base_url,
+			'baseUrl'         => $this->_config->system->base_url,
 			'fullUrl'         => PPI_Helper::getFullUrl(),
 			'currUrl'         => PPI_Helper::getCurrUrl(),
 			'viewDir'         => $options['viewDir'],
@@ -210,7 +234,7 @@ class PPI_View {
             'authInfo'        => $authData, // Do not use, just BC stuff
 			'aAuthInfo'       => $authData, // Do not use, just BC stuff.
 			'bIsLoggedIn'     => !empty($authData), // Do not use, just BC stuff
-			'oConfig'         => $p_oConfig, // Do not use, just BC stuff
+			'oConfig'         => $this->_config, // Do not use, just BC stuff
 		);
 	}
 
@@ -249,17 +273,13 @@ class PPI_View {
 
 	/**
 	 * Override the default template file, with optional include for the .php or .tpl extension
-     *
-	 * @param string $p_sNewTemplateFile New Template Filename
+	 *
 	 * @todo have this lookup the template engines default extension and remove the smarty param
-     * @return void
+	 * @param string $p_sNewTemplateFile New Template Filename
+	 * @return void
 	 */
-	function setTemplateFile($p_sNewTemplateFile, $p_bUseSmarty = false) {
-		$ext = ($p_bUseSmarty === true) ? '.tpl' : '.php';
-		if(strripos($p_sNewTemplateFile, $ext) === false) {
-			$p_sNewTemplateFile .= $ext;
-		}
-		$this->_templateOverride = $p_sNewTemplateFile;
+	function setTemplateFile($p_sNewTemplateFile) {
+		$this->_masterTemplateFile = $p_sNewTemplateFile;
 	}
 
 	/**

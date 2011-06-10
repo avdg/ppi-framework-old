@@ -1,7 +1,6 @@
 <?php
 
-abstract class PPI_Request_Abstract
-implements ArrayAccess, IteratorAggregate, Countable
+abstract class PPI_Request_Abstract implements ArrayAccess, Iterator, Countable
 {
 	protected $_array = array();
 
@@ -78,13 +77,53 @@ implements ArrayAccess, IteratorAggregate, Countable
 	}
 
 	/**
-	 * IteratorAggregate implementation for getIterator
+	 * Iterator implementation for current
 	 *
-	 * @return arrayIterator
+	 * @return mixed
 	 */
-	public function getIterator()
+	public function current()
 	{
-		return new arrayIterator($this->_array);
+		return current($this->_array);
+	}
+
+	/**
+	 * Iterator implementation for key
+	 *
+	 * @return scalar
+	 */
+	public function key()
+	{
+		return key($this->_array);
+	}
+
+	/**
+	 * Iterator implementation for next
+	 *
+	 * @return void
+	 */
+	public function next()
+	{
+		return next($this->_array);
+	}
+
+	/**
+	 * Iterator implementation for rewind
+	 *
+	 * @return void
+	 */
+	public function rewind()
+	{
+		return reset($this->_array);
+	}
+
+	/**
+	 * Iterator implementation for valid
+	 *
+	 * @return bool
+	 */
+	public function valid()
+	{
+		return key($this->_array) !== null;
 	}
 
 	/**

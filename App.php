@@ -18,56 +18,68 @@ class PPI_App {
      *
      * @var int
      */
-    protected $_errorLevel       = E_ALL;
+    protected $_errorLevel = E_ALL;
 
     /**
      * Whether to display errors or not. This gets fired into ini_set('display_errors')
      *
      * @var string
      */
-    protected $_showErrors       = 'On';
+    protected $_showErrors = 'On';
 
     /**
      * The block in the config file to get the config data from
      *
      * @var string
      */
-    protected $_configBlock      = 'development';
+    protected $_configBlock = 'development';
 
     /**
      * The site mode. Default is 'development'. This determines how PPI handles exceptions
      *
      * @var string
      */
-    protected $_siteMode         = 'development';
+    protected $_siteMode = 'development';
 
     /**
      * The config object
      *
      * @var null|PPI_Config
      */
-    protected $_config           = null;
+    protected $_config = null;
 
     /**
      * The PPI_Dispatch object
      *
      * @var null|PPI_Dispatch
      */
-    protected $_dispatcher       = null;
+    protected $_dispatcher = null;
 
     /**
      * The PPI_Router object
      *
      * @var null|PPI_Router
      */
-    protected $_router           = null;
+    protected $_router = null;
 
     /**
      * The PPI_Session object
      *
      * @var null|PPI_Session
      */
-    protected $_session          = null;
+    protected $_session = null;
+
+
+	/**
+	 *
+	 *
+	 * @var null
+	 */
+	protected $_request = null;
+
+	/**
+	 * @param array $p_aParams
+	 */
 
     function __construct($p_aParams = array()) {
         if(!empty($p_aParams)) {
@@ -127,6 +139,16 @@ class PPI_App {
         $this->_dispatcher = $p_oDispatch;
     }
 
+		/**
+	 * Set the request object for the app bootup
+	 *
+	 * @param object $p_oRequest
+	 * @return void
+	 */
+	function setRequest($p_oRequest) {
+		$this->_request = $p_oRequest;
+	}
+
     /**
      * Set the session object for the app bootup
      *
@@ -155,8 +177,15 @@ class PPI_App {
         $this->_config = $this->_config->getConfig();
 
         $registry = PPI_Registry::getInstance();
-        // Set the config into the registry for quick read/write
+
+	    // -- Set the config into the registry for quick read/write --
         $registry->set('PPI_Config', $this->_config);
+
+	    // -- Set the PPI_Request object --
+	    if($this->_request === null) {
+		    $this->_request = new PPI_Request();
+	    }
+	    $registry->set('PPI_Request', $this->_request);
 
         // ------------- Initialise the session -----------------
         if(!headers_sent()) {

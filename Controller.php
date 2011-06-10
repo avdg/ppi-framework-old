@@ -67,6 +67,16 @@ class PPI_Controller {
 	}
 
 	/**
+	 * Override the current set theme name
+	 *
+	 * @param string $p_sThemeName
+	 * @return void
+	 */
+	protected function theme($p_sThemeName) {
+		$this->_view->theme($p_sThemeName);
+	}
+
+	/**
 	 * Set a view variable or a list of view variables.
 	 *
 	 * @param mixed $p_mKeys

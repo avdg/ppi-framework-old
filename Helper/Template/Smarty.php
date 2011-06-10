@@ -4,7 +4,6 @@ require_once SYSTEMPATH . 'Vendor/Smarty/class.Smarty.php';
 /**
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
- * @copyright Digiflex Development
  * @package   View
  * @link      www.ppiframework.com
  */
@@ -33,7 +32,13 @@ class PPI_Helper_Template_Smarty implements PPI_Interface_Template {
      * Setup all the rendering variables
      */
 	function __construct() {
-		$oConfig                         = PPI_Helper::getConfig();
+
+		if(isset($options['config'])) {
+			$this->_config = $options['config'];
+		} else {
+			$this->_config = PPI_Helper::getConfig();
+		}
+
 		$this->_renderer                 = new Smarty();
 
 		$this->_viewPath                 = APPFOLDER . 'View/';
@@ -45,8 +50,8 @@ class PPI_Helper_Template_Smarty implements PPI_Interface_Template {
 		$this->_renderer->compile_dir 	 = $this->_cachePath.'templates_c';
 		$this->_renderer->cache_dir 	 = $this->_cachePath.'cache';
 		$this->_renderer->config_dir 	 = $this->_smartyPath.'configs';
-		$this->_renderer->force_compile  = isset($oConfig->system->smarty_compile) ? (bool) $oConfig->system->smarty_compile : false;
-		$this->_renderer->caching 		 = isset($oConfig->system->enable_caching) ? (bool) $oConfig->system->enable_caching : false;
+		$this->_renderer->force_compile  = isset($this->_config->system->smarty_compile) ? (bool) $this->_config->system->smarty_compile : false;
+		$this->_renderer->caching 		 = isset($this->_config->system->enable_caching) ? (bool) $this->_config->system->enable_caching : false;
 	}
 
 
@@ -60,8 +65,8 @@ class PPI_Helper_Template_Smarty implements PPI_Interface_Template {
 	function render($p_sTplFile) {
 		// Optional extension for smarty templates
 		$p_sTplFile = PPI_Helper::checkExtension($p_sTplFile, SMARTY_EXT);
-		$sTheme     = PPI_Helper::getConfig()->layout->view_theme;
-		$sPath      = 	$this->_viewPath. "$sTheme/$p_sTplFile";
+		$sTheme     = $this->_config->layout->view_theme;
+		$sPath      = $this->_viewPath. "$sTheme/$p_sTplFile";
         if(!file_exists($sPath)) {
             throw new PPI_Exception('Unable to load: ' . $sPath . ' file does not exist');
         }
@@ -80,13 +85,12 @@ class PPI_Helper_Template_Smarty implements PPI_Interface_Template {
 	}
 
 	/**
-	 * Get the view file extension. Config overridable defaulting to .tpl
+	 * Get the view file extension. Config override or defaulting to .tpl
 	 *
 	 * @return string
 	 */
 	function getTemplateExtension() {
-		$oConfig = PPI_Helper::getConfig();
-		return !empty($oConfig->layout->rendererExt) ? $oConfig->layout->rendererExt : '.tpl';
+		return !empty($this->_config->layout->rendererExt) ? $this->_config->layout->rendererExt : '.tpl';
 	}
 
 	/**

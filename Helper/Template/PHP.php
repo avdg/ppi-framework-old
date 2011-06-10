@@ -2,7 +2,6 @@
 /**
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
- * @copyright Digiflex Development
  * @package   View
  * @package   www.ppiframework.com
  */
@@ -17,8 +16,16 @@ class PPI_Helper_Template_PHP implements PPI_Interface_Template {
 
     /**
      * The constructor
+     *
+     * @param array $options
      */
-	function __construct() {}
+	function __construct(array $options = array()) {
+		if(isset($options['config'])) {
+			$this->_config = $options['config'];
+		} else {
+			$this->_config = PPI_Helper::getConfig();
+		}
+	}
 
 	/**
 	 * Actually load in the view and render it.
@@ -54,13 +61,12 @@ class PPI_Helper_Template_PHP implements PPI_Interface_Template {
 	}
 
 	/**
-	 * Get the default extension for our view files, config overridable defaulting to .php
+	 * Get the default extension for our view files, config override or defaulting to .php
 	 *
 	 * @return string
 	 */
 	function getTemplateExtension() {
-		$oConfig = PPI_Helper::getConfig();
-		return !empty($oConfig->layout->rendererExt) ? $oConfig->layout->rendererExt : '.php';
+		return !empty($this->_config->layout->rendererExt) ? $this->_config->layout->rendererExt : '.php';
 	}
 
 	/**
@@ -70,6 +76,15 @@ class PPI_Helper_Template_PHP implements PPI_Interface_Template {
 	 */
 	function getDefaultMasterTemplate() {
 		return 'template.php';
+	}
+
+	/**
+	 * Get the default file extension for templates on this renderer
+	 *
+	 * @return string
+	 */
+	function getDefaultExtension() {
+		return '.php';
 	}
 
 }

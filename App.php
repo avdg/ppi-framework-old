@@ -251,6 +251,7 @@ class PPI_App {
      * @return $this Fluent interface
      */
     function dispatch() {
+	    
 		$dispatch = PPI_Registry::getInstance()->get('PPI_Dispatch');
         $dispatch->dispatch();
         return $this;

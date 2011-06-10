@@ -97,40 +97,31 @@ class PPI_Request {
 	/**
 	 * Constructor
 	 *
-	 * By default, it takes environment variables
-	 * cookie, env, get, post, server and session
+	 * By default, it takes environment variables cookie, env, get, post, server and session
 	 * from data collectors (PPI_Request_*)
 	 *
-	 * However, any of these can be overriden by
-	 * an array or by an object that extends their
+	 * However, any of these can be overriden by an array or by an object that extends their
 	 * representing PPI_Request_* class
 	 *
 	 * @param array $env Change environment variables
 	 */
-	function __construct(array $env = array())
-	{
-		if (isset($env['get']) &&
-			((is_array($env['get'])) ||
-			($env['get'] instanceof PPI_Request_Get))
-		) {
+	function __construct(array $env = array()) {
+
+		if (isset($env['get']) && (is_array($env['get']) || $env['get'] instanceof PPI_Request_Get)) {
 			$this->_get = $env['get'];
 		} else {
-			$this->_get = new PPI_Request_Get();
+			$this->_get = new PPI_Request_Get(array(
+				'uri' => $this->getUri()
+			));
 		}
 
-		if (isset($env['post']) &&
-			((is_array($env['post'])) ||
-			($env['post'] instanceof PPI_Request_Post))
-		) {
+		if (isset($env['post']) && (is_array($env['post']) || $env['post'] instanceof PPI_Request_Post)) {
 			$this->_post = $env['post'];
 		} else {
 			$this->_post = new PPI_Request_Post();
 		}
 
-		if (isset($env['server']) &&
-			((is_array($env['server'])) ||
-			($env['server'] instanceof PPI_Request_Server))
-		) {
+		if (isset($env['server']) && (is_array($env['server']) || $env['server'] instanceof PPI_Request_Server)) {
 			$this->_server = $env['server'];
 		} else {
 			$this->_server = new PPI_Request_Server();
@@ -150,53 +141,27 @@ class PPI_Request {
 		if(isset($_GET[$var])) {
 			return urldecode(is_numeric($var) ? (int) $var : $var);
 		}
-		if(empty($this->_uriParams)) {
-			$this->processUriParams();
-		}
-		return isset($this->_uriParams[$var]) ? $this->_uriParams[$var] : $default;
-	}
-
-	/**
-	 * Process the URI Parameters into a clean hashmap for isset() calling later.
-	 *
-	 * @return void
-	 */
-	function processUriParams() {
-		$params    = array();
-		$uriParams = explode('/', trim($this->getUri(), '/'));
-		$count     = count($uriParams);
-		if($count > 0) {
-			for($i = 0; $i < $count; $i++) {
-				$val = isset($uriParams[($i + 1)]) ? $uriParams[($i + 1)] : null;
-				$params[$uriParams[$i]] = urldecode(is_numeric($val) ? (int) $val : $val);
-			}
-			$this->_uriParams = $params;
-		}
+		return isset($this->_get[$var]) ? $this->_get[$var] : $default;
 	}
 
 	/**
 	 * Retrieve information passed via the $_POST array.
 	 * Can specify a key and return that, else return the whole $_POST array
 	 *
-	 * @param string [$p_sIndex] Specific $_POST key
-	 * @param mixed [$p_sDefaultValue] null if not specified, mixed otherwise
+	 * @param string $key Specific $_POST key
+	 * @param mixed $default null if not specified, mixed otherwise
 	 * @return string|array Depending if you passed in a value for $p_sIndex
 	 */
-	function post($p_sIndex = null, $p_sDefaultValue = null, $p_aOptions = null) {
-		if($p_sIndex === null) {
-			return PPI_Helper::getInstance()->arrayTrim($_POST);
-		} else {
-			return PPI_Helper::getInstance()->arrayTrim((isset($_POST[$p_sIndex])) ? $_POST[$p_sIndex] : $p_sDefaultValue);
-		}
+	function post($key = null, $default = null) {
+		return isset($this->_post[$key]) ? $this->_post[$key] : $default;
 	}
 
 	/**
-	 * Retrieve all $_POST elements with have a specific prefix
+	 * Retrieve all $_POST elements that have a specific prefix
 	 *
 	 * @param string $sPrefix The prefix to get values with
-	 * @return array|boolean
+	 * @return array
 	 */
-
 	function stripPost($p_sPrefix = '') {
 		$aValues = array();
 		if($p_sPrefix !== '' && $this->is('post')) {
@@ -212,7 +177,7 @@ class PPI_Request {
 	/**
 	 * Check whether a value has been submitted via post
 	 *
-	 * @param string The $_POST key
+	 * @param string $p_sKey The $_POST key
 	 * @return boolean
 	 */
 	function hasPost($p_sKey) {
@@ -286,7 +251,7 @@ class PPI_Request {
 			case 'ssl':
 				return $this->getProtocol() === 'https';
 		}
-
+		return false; // So that all paths return a val
 	}
 
 	/**
@@ -314,7 +279,7 @@ class PPI_Request {
 				// @tbc
 				break;
 		}
-
+		return ''; // So all code paths return a value
 	}
 
 	/**
@@ -331,6 +296,11 @@ class PPI_Request {
 
 	}
 
+	/**
+	 * Get the current protocol
+	 *
+	 * @return string
+	 */
 	function getProtocol() {
 		if($this->_protocol === null) {
 			$this->_protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 'https' : 'http';

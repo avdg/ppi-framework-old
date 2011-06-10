@@ -1,22 +1,14 @@
 <?php
 
-class PPI_Request_Post extends PPI_Request_Abstract
-{
+class PPI_Request_Post extends PPI_Request_Abstract {
+
 	/**
-	 * Constructor
+	 * Obtain the information from $this->_array.
+	 * Override from $options['data']
 	 *
-	 * Stores the given $_POST data or tries to fetch
-	 * $_POST if the given array is empty or not given
-	 *
-	 * @param array $post
+	 * @param array $options
 	 */
-	public function __construct(array $post = null)
-	{
-		if ($post === null) {
-			$this->_array = $_POST;
-		} else {
-			$this->_array       = $post;
-			$this->_isCollected = false;
-		}
+	public function __construct(array $options = array()) {
+		$this->_array = isset($options['data']) ? $options['data'] : $_POST;
 	}
 }

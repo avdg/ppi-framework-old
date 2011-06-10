@@ -181,15 +181,8 @@ class PPI_App {
 	    // -- Set the config into the registry for quick read/write --
         $registry->set('PPI_Config', $this->_config);
 
-	    // -- Set the PPI_Request object --
-	    if($this->_request === null) {
-		    $this->_request = new PPI_Request();
-	    }
-	    $registry->set('PPI_Request', $this->_request);
-
         // ------------- Initialise the session -----------------
         if(!headers_sent()) {
-
 	        // Fire up the default session handler
 	        if($this->_session === null) {
 	            $this->_session = new PPI_Session();
@@ -197,6 +190,18 @@ class PPI_App {
             $registry->set('PPI_Session', $this->_session);
         }
 
+        // Fire up the default dispatcher
+        if($this->_dispatcher === null) {
+            $this->_dispatcher = new PPI_Dispatch_Standard(array('router' => $this->_router));
+        }
+        $dispatch = new PPI_Dispatch($this->_dispatcher);
+        PPI_Registry::getInstance()->set('PPI_Dispatch', $dispatch);
+
+	    // -- Set the PPI_Request object --
+	    if($this->_request === null) {
+		    $this->_request = new PPI_Request();
+	    }
+	    $registry->set('PPI_Request', $this->_request);
         // -------------- Library Autoloading Process --------------
         if(!empty($this->_config->system->autoloadLibs)) {
             foreach(explode(',', $this->_config->system->autoloadLibs) as $sLib) {
@@ -235,7 +240,6 @@ class PPI_App {
             }
         }
 
-
         $registry->set('PPI_App', $this);
 
         return $this; // Fluent Interface
@@ -247,14 +251,7 @@ class PPI_App {
      * @return $this Fluent interface
      */
     function dispatch() {
-
-        // Fire up the default dispatcher
-        if($this->_dispatcher === null) {
-            $this->_dispatcher = new PPI_Dispatch_Standard(array('router' => $this->_router));
-        }
-
-        $dispatch = new PPI_Dispatch($this->_dispatcher);
-        PPI_Registry::getInstance()->set('PPI_Dispatch', $dispatch);
+		$dispatch = PPI_Registry::getInstance()->get('PPI_Dispatch');
         $dispatch->dispatch();
         return $this;
     }

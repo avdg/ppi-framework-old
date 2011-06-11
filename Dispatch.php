@@ -16,6 +16,8 @@ class PPI_Dispatch {
      */
 	protected $_helper = null;
 
+	protected $_render404 = true;
+
     /**
      * The router doing the routing
      *
@@ -30,7 +32,7 @@ class PPI_Dispatch {
 	function __construct(PPI_Dispatch_Interface $p_oDispatch) {
 		$this->_helper = $p_oDispatch;
 		if($this->_helper->init() === false) {
-			PPI_Exception::show_404('Invalid dispatch process');
+			$this->_render404 = true;
 		}
 	}
 
@@ -40,6 +42,10 @@ class PPI_Dispatch {
      * @return void
 	 */
 	function dispatch() {
+		if($this->_render404) {
+			PPI_Exception::show_404('Invalid dispatch process');
+			return;
+		}
 		$this->_helper->dispatch();
 	}
 

@@ -80,7 +80,7 @@ class PPI_View {
 		} else {
 			$sRenderer = $this->_defaultRenderer;
 		}
-		
+
 		switch($sRenderer) {
 			case 'smarty':
 				$oTpl = new PPI_Helper_Template_Smarty();
@@ -212,11 +212,21 @@ class PPI_View {
 	function getDefaultRenderValues(array $options) {
 
 		$authData  = PPI_Helper::getSession()->getAuthData();
-		$oDispatch = PPI_Helper::getDispatcher();
-		$request   = array(
-			'controller' => $oDispatch->getControllerName(),
-			'method'     => $oDispatch->getMethodName()
+		$request = array(
+			'controller' => '',
+			'method'     => ''
 		);
+
+		// Sometimes a render is forced before the PPI_Dispatch object has finished instantiating
+		// For example if a 404 is thrown inside the routing/dispatch process then this scenario occurs.
+		if(PPI_Helper::getRegistry()->exists('PPI_Dispatch')) {
+			$oDispatch = PPI_Helper::getDispatcher();
+			$request   = array(
+				'controller' => $oDispatch->getControllerName(),
+				'method'     => $oDispatch->getMethodName()
+			);
+		}
+
 		return array(
 			'isLoggedIn'      => !empty($authData),
 			'config'          => $this->_config,

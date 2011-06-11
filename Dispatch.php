@@ -16,7 +16,7 @@ class PPI_Dispatch {
      */
 	protected $_helper = null;
 
-	protected $_render404 = true;
+	protected $_render404 = false;
 
     /**
      * The router doing the routing

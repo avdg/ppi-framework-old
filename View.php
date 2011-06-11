@@ -217,21 +217,26 @@ class PPI_View {
 			'method'     => ''
 		);
 
+		$registry = PPI_Helper::getRegistry();
+
 		// Sometimes a render is forced before the PPI_Dispatch object has finished instantiating
 		// For example if a 404 is thrown inside the routing/dispatch process then this scenario occurs.
-		if(PPI_Helper::getRegistry()->exists('PPI_Dispatch')) {
+		if($registry->exists('PPI_Dispatch')) {
 			$oDispatch = PPI_Helper::getDispatcher();
 			$request   = array(
 				'controller' => $oDispatch->getControllerName(),
 				'method'     => $oDispatch->getMethodName()
 			);
 		}
-
+		/*
+		if($registry->exists('PPI_Request')) {
+			$oRequest = $registry->get('PPI_Request');
+		}
+		*/
 		return array(
 			'isLoggedIn'      => !empty($authData),
 			'config'          => $this->_config,
 			'request'         => $request,
-			'PPIRequest'      => PPI_Helper::getRequest(),
             'authData'        => $authData,
 			'baseUrl'         => $this->_config->system->base_url,
 			'fullUrl'         => PPI_Helper::getFullUrl(),

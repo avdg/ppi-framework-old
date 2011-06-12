@@ -172,7 +172,7 @@ class PPI_App {
 
         // Fire up the default config handler
         if($this->_config === null) {
-            $this->_config = new PPI_Config('general.ini', array('block' => $this->_siteMode));
+            $this->_config = new PPI_Config('general.ini', array('block' => $this->_configBlock));
         }
         $this->_config = $this->_config->getConfig();
 
@@ -251,7 +251,7 @@ class PPI_App {
      * @return $this Fluent interface
      */
     function dispatch() {
-	    
+
 		$dispatch = PPI_Registry::getInstance()->get('PPI_Dispatch');
         $dispatch->dispatch();
         return $this;

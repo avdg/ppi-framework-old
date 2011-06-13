@@ -2,17 +2,9 @@
 /**
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
- * @copyright Digiflex Development
  * @package   Controller
  */
 class PPI_Controller {
-
-    /**
-     * The input object
-     *
-     * @var PPI_Input
-     */
-	protected $_input = null;
 
     /**
      * The PPI_View object
@@ -25,14 +17,15 @@ class PPI_Controller {
      * The constructor
      */
 	function __construct () {
-		$this->_view  = new PPI_View();
-		$this->_request = PPI_Helper::getRequest();
-		$this->oInput = $this->_input; // Legacy Code
+		$this->_view     = PPI_Helper::getView();
+		$this->_request  = PPI_Helper::getRequest();
+		$this->_response = PPI_Helper::getResponse();
 	}
 
 	/**
 	 * Perform redirect to internal framework url. Optionally redirect to external host
      *
+	 * @todo Make this auto-detect the first X chars starting with http:// and remove the prependbase char
 	 * @param string $p_sURL Optional param for where to redirect to
 	 * @param boolean $p_bPrependBase Default is true. If true will prepend the framework's base Url.
  	 *									If false will redirect to absolute external url.
@@ -63,7 +56,8 @@ class PPI_Controller {
 		if(!isset($p_tplParams['isAjax']) && $this->is('ajax')) {
 			$p_tplParams['isAjax'] = true;
 		}
-		$this->_view->load($p_tplFile, $p_tplParams);
+
+		$this->render($p_tplFile, $p_tplParams);
 	}
 
 	/**
@@ -111,38 +105,72 @@ class PPI_Controller {
      * @return void
      */
     protected function addStylesheet($p_mStylesheet) {
-        $this->_view->addStylesheet(func_get_args());
+        $this->_response->addCSS(func_get_args());
     }
+
+	protected function addCSS() {
+		$this->_response->addCSS(func_get_args());
+	}
+
+	/**
+	 * Clear all set stylesheets
+	 *
+	 * @return void
+	 */
+	protected function clearCSS() {
+		$this->_response->clearCSS();
+	}
 
     /**
      * Append to the list of javascript files to be included
      *
-     * @param mixed $p_mJavascript
      * @return void
      */
-    protected function addJavascript($p_mJavascript) {
-        $this->_view->addJavascript(func_get_args());
+    protected function addJavascript() {
+        $this->_response->addJS(func_get_args());
     }
+
+	/**
+	 * Add a javascript file
+	 *
+	 * @return void
+	 */
+	protected function addJS() {
+		$this->_response->addJS(func_get_args());
+	}
 
 	/**
 	 * Override the default template file, with optional include for the .php or .tpl extension
      *
-	 * @param string $p_sNewTemplateFile New Template Filename
 	 * @todo have this lookup the template engines default extension and remove the smarty param
+	 * @param string $p_sNewTemplateFile New Template Filename
      * @return void
 	 */
-	protected function setTemplateFile($p_sNewTemplateFile, $p_bUseSmarty = false) {
-		$this->_view->setTemplateFile($p_sNewTemplateFile, $p_bUseSmarty);
+	protected function setTemplateFile($p_sNewTemplateFile) {
+		$this->_view->setTemplateFile($p_sNewTemplateFile);
 	}
 
 
 	/**
 	 * Setter for setting the flash message to appear on next page load.
      *
+	 * @param string $message
+	 * @param boolean $success
 	 * @return void
 	 */
-	protected function setFlashMessage($p_sMessage, $p_bSuccess = true) {
-		PPI_Input::setFlashMessage($p_sMessage, $p_bSuccess);
+	protected function setFlashMessage($message, $success = true) {
+		$this->_response->setFlash($message, $success);
+	}
+
+	/**
+	 * Setter for setting the flash message to appear on next page load.
+     *
+	 * @param string $message
+	 * @param boolean $success
+	 * @return void
+	 */
+	protected function setFlash($message, $success = true) {
+		$this->_response->setFlash($message, $success);
 	}
 
 	/**
@@ -151,7 +179,7 @@ class PPI_Controller {
 	 * @return string
 	 */
 	protected function getFlashMessage() {
-		return PPI_Input::getFlashMessage();
+		$this->_response->getFlash();
 	}
 
 	/**
@@ -160,7 +188,7 @@ class PPI_Controller {
 	 * @return void
 	 */
 	protected function clearFlashMessage() {
-		PPI_Input::clearFlashMessage();
+		$this->_response->clearFlash();
 	}
 
     /**
@@ -182,14 +210,29 @@ class PPI_Controller {
 		return $this->getUrl();
 	}
 
+	/**
+	 * Get the current URL
+	 *
+	 * @return string
+	 */
 	protected function getUrl() {
 		return $this->_request->getUrl();
 	}
 
+	/**
+	 * Get the current protocol in use
+	 *
+	 * @return string
+	 */
 	protected function getProtocol() {
 		return $this->_request->getProtocol();
 	}
 
+	/**
+	 * Get the current URI
+	 *
+	 * @return string
+	 */
 	protected function getUri() {
 		return $this->_request->getUri();
 	}
@@ -206,6 +249,7 @@ class PPI_Controller {
 	/**
 	 * PPI_Controller::getConfig()
 	 * Returns the PPI_Config object
+	 *
 	 * @return object
 	 */
 	protected function getConfig() {
@@ -215,6 +259,7 @@ class PPI_Controller {
 	/**
 	 * Returns the session object
      *
+	 * @param mixed $p_mOptions
 	 * @return object PPI_Model_Session
 	 */
 	protected function getSession($p_mOptions = null) {
@@ -231,8 +276,18 @@ class PPI_Controller {
 	}
 
 	/**
+	 * Get the dispatcher object
+	 *
+	 * @return object
+	 */
+	protected function getDispatcher() {
+		return PPI_Helper::getDispatcher();
+	}
+
+	/**
 	 * Get the cache object from PPI_Helper
 	 *
+	 * @param mixed $p_mOptions
 	 * @return object
 	 */
 	protected function getCache($p_mOptions = null) {
@@ -331,6 +386,12 @@ class PPI_Controller {
 		$this->_request->emptyPost();
 	}
 
+	/**
+	 * Return a boolean values on this 'is' check
+	 *
+	 * @param string $var
+	 * @return bool
+	 */
 	protected function is($var) {
 		switch($var) {
 			case 'ajax':
@@ -347,6 +408,12 @@ class PPI_Controller {
 		return false;
 	}
 
+	/**
+	 * Get a remote variable from the request object
+	 *
+	 * @param string $var
+	 * @return null
+	 */
 	protected function getRemote($var) {
 		switch($var) {
 			case 'ip':
@@ -360,14 +427,37 @@ class PPI_Controller {
 		return null;
 	}
 
-    /**
-     * Get a plugin by name.
-     *
-     * @param string $p_sPluginName
-     * @return
-     */
-	protected function getPlugin($p_sPluginName) {
-		return PPI_Helper::getPlugin()->getPlugin($p_sPluginName);
-	}
+	/**
+	 * The main render function that pull in data from all framework components to render this page.
+	 *
+	 * @param string $template
+	 * @param array $options
+	 * @return void
+	 */
+	protected function render($template, array $options = array()) {
 
+		$core = array();
+
+		$core['charset'] = $this->_response->getCharset();
+		$core['url']     = $this->_request->getUrl();
+		$core['uri']     = $this->_request->getUri();
+		$core['flash']   = $this->_response->getFlashAndClear();
+		$core['is']      = array(
+			'ajax'   => $this->_request->is('ajax'),
+			'https'  => $this->_request->is('https'),
+			'post'   => $this->_request->is('post'),
+			'get'    => $this->_request->is('get'),
+			'put'    => $this->_request->is('put'),
+			'delete' => $this->_request->is('delete'),
+			'head'   => $this->_request->is('head')
+		);
+
+		$core['files']['css'] = $this->_response->getCSSFiles();
+		$core['files']['js']  = $this->_response->getJSFiles();
+
+		$options['core'] = $core;
+
+		$this->_view->render($template, $options);
+
+	}
 }

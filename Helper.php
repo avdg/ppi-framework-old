@@ -82,6 +82,16 @@ class PPI_Helper {
 	}
 
 	/**
+	 * Get the view object
+	 *
+	 * @static
+	 * @return mixed
+	 */
+	static function getView() {
+		return self::getObjectFromRegistry('PPI_View');
+	}
+
+	/**
 	 * Get the session object
 	 *
 	 * @param mixed $p_mOptions The information to get a different cache object
@@ -160,6 +170,17 @@ class PPI_Helper {
 	 */
 	static function getRequest() {
 		return self::getObjectFromRegistry('PPI_Request');
+
+	}
+
+	/**
+	 * Get the PPI_Response object cached from the registry
+	 *
+	 * @static
+	 * @return mixed
+	 */
+	static function getResponse() {
+		return self::getObjectFromRegistry('PPI_Response');
 
 	}
 

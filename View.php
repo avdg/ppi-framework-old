@@ -29,13 +29,6 @@ class PPI_View {
 	protected $_masterTemplateFile = null;
 
 	/**
-	 * Are we loading a plugin view (TBC)
-     *
-	 * @var boolean $_plugin
-	 */
-	private $_plugin = false;
-
-	/**
 	 * Default renderer, PHP helper
      *
 	 * @var string $_defaultRenderer
@@ -43,11 +36,18 @@ class PPI_View {
 	private $_defaultRenderer = 'php';
 
 	/**
-	 * Template Renderer Override from config or useRenderer()
-     *
-	 * @var string $_rendererOverride
+	 * CSS Files to be rendered
+	 *
+	 * @var array
 	 */
-	private $_rendererOverride = null;
+	protected $_cssFiles = array();
+
+	/**
+	 * Javascript files to be rendered
+	 *
+	 * @var array
+	 */
+	protected $_jsFiles = array();
 
 	/**
 	 * The constructor
@@ -60,7 +60,6 @@ class PPI_View {
 		if(isset($options['view_theme'])) {
 			$this->_viewTheme = $options['view_theme'];
 		}
-
 		$this->_config = PPI_Helper::getConfig();
 	}
 
@@ -74,29 +73,8 @@ class PPI_View {
      * @return void
 	 */
 	function load($p_tplFile, $p_tplParams = array()) {
+		$this->render($p_tplFile, $p_tplParams);
 
-		if(isset($this->_config->layout->renderer) && $this->_config->layout->renderer != '') {
-			$sRenderer = $this->_config->layout->renderer;
-		} else {
-			$sRenderer = $this->_defaultRenderer;
-		}
-
-		switch($sRenderer) {
-			case 'smarty':
-				$oTpl = new PPI_Helper_Template_Smarty();
-				break;
-
-			case 'twig':
-				$oTpl = new PPI_Helper_Template_Twig();
-				break;
-
-			case 'php':
-			default:
-				$oTpl = new PPI_Helper_Template_PHP();
-				break;
-		}
-
-		$this->setupRenderer($oTpl, $p_tplFile, array_merge($p_tplParams, $this->_viewParams));
 	}
 
 	/**
@@ -144,16 +122,6 @@ class PPI_View {
 		return $this->_viewTheme;
 	}
 
-    /**
-     * Specify the renderer to use at runtime
-     *
-     * @param string $p_sRendererName The renderer name
-     * @return void
-     */
-	function useRenderer($p_sRendererName) {
-		$this->_rendererOverride = $p_sRendererName;
-	}
-
 	/**
 	 * Initialisation for the renderer, assignment of default values, boot up of the master template
 	 *
@@ -172,11 +140,9 @@ class PPI_View {
 		}
 
 		$p_tplFile = PPI_Helper::checkExtension($p_tplFile, $oTpl->getTemplateExtension());
-		// Plugin View Detection
-		$sPath = (defined('PLUGINVIEWPATH') ? PLUGINVIEWPATH : APPFOLDER . 'View/');
 
 		// View Directory Preparation By Theme
-		$sViewDir = $sPath . $this->getViewTheme() . '/';
+		$sViewDir = $this->getViewDir();
 
 		// Get the default view vars that come when you load a view page.
 		$defaultViewVars = $this->getDefaultRenderValues(array(
@@ -187,12 +153,13 @@ class PPI_View {
 			$oTpl->assign($varName, $viewVar);
 		}
 
+		/*
 		// Flash Messages
 		if(!isset($this->_config->layout->useMessageFlash) ||
 			($this->_config->layout->useMessageFlash && $this->_config->layout->useMessageFlash == true)) {
-			$oTpl->assign('ppiFlashMessage', PPI_Input::getFlashMessage());
-			PPI_Input::clearFlashMessage();
+
 		}
+		*/
 
 		// Master template
 		$sMasterTemplate = $this->_masterTemplateFile !== null ? $this->_masterTemplateFile : $oTpl->getDefaultMasterTemplate();
@@ -200,6 +167,15 @@ class PPI_View {
 
 		// Lets render baby !!
 		$oTpl->render($sMasterTemplate);
+	}
+
+	/**
+	 * Get the path to the view file dir
+	 *
+	 * @return string
+	 */
+	public function getViewDir() {
+		return APPFOLDER . 'View/' . $this->getViewTheme() . '/';
 	}
 
 	/**
@@ -244,8 +220,6 @@ class PPI_View {
 			'viewDir'         => $options['viewDir'],
 			'actionFile'      => $options['actionFile'],
 			'responseCode'    => PPI_Helper::getRegistry()->get('PPI_View::httpResponseCode', 200),
-			'stylesheetFiles' => PPI_View_Helper::getStylesheets(),
-			'javascriptFiles' => PPI_View_Helper::getJavascripts(),
             'authInfo'        => $authData, // Do not use, just BC stuff
 			'aAuthInfo'       => $authData, // Do not use, just BC stuff.
 			'bIsLoggedIn'     => !empty($authData), // Do not use, just BC stuff
@@ -266,26 +240,6 @@ class PPI_View {
 		return $this->_viewParams[$key];
 	}
 
-    /**
-     * Append to the list of stylesheets to be included
-     *
-     * @param mixed $p_mStylesheet This can be an existing array of stylesheets or a string.
-     * @return void
-     */
-    function addStylesheet($p_mStylesheet) {
-        PPI_View_Helper::addStylesheet($p_mStylesheet);
-    }
-
-    /**
-     * Append to the list of javascript files to be included
-     *
-     * @param mixed $p_mJavascript
-     * @return void
-     */
-    function addJavascript($p_mJavascript) {
-        PPI_View_Helper::addJavascript($p_mJavascript);
-    }
-
 	/**
 	 * Override the default template file, with optional include for the .php or .tpl extension
 	 *
@@ -298,49 +252,34 @@ class PPI_View {
 	}
 
 	/**
-	 * Create an override for the renderer
-     *
-	 * @todo add Twig to this list.
-	 * @param string $p_sRendererName The renderer name
-     * @throws PPI_Exception
-     * @return void
-	 */
-	function setRenderer($p_sRendererName) {
-		switch($p_sRendererName) {
-			case 'php':
-				throw new PPI_Exception('Not yet implemented.');
-				break;
-
-			case 'smarty':
-				throw new PPI_Exception('Not yet implemented.');
-				break;
-
-			case 'twig':
-			default:
-				throw new PPI_Exception('Not yet implemented.');
-				break;
-
-		}
-
-	}
-
-	/**
 	 * The internal render function, this is called by $this->load('template');
      *
 	 * @todo finish this, have it accept 'template' at first.
-	 * @param string $p_sTemplate The template name to render
-	 * @param array $p_aParams Optional parameters
-	 * @param array $p_aOptions Optional options
+	 * @param string $template The template name to render
+	 * @param array $params Optional parameters
      * @return void
 	 */
-	protected function render($p_sTemplate, $p_aParams = array(), $p_aOptions = array()) {
-
-		if(!isset($p_aOptions['use_frame']) || $p_aOptions['use_frame'] == true) {
-			// Load up the template
-
+	function render($template, array $params = array()) {
+		if(isset($this->_config->layout->renderer) && $this->_config->layout->renderer != '') {
+			$sRenderer = $this->_config->layout->renderer;
 		} else {
-			// Render just this template.
-
+			$sRenderer = $this->_defaultRenderer;
 		}
+
+		switch($sRenderer) {
+			case 'smarty':
+				$oTpl = new PPI_Helper_Template_Smarty();
+				break;
+
+			case 'twig':
+				$oTpl = new PPI_Helper_Template_Twig();
+				break;
+
+			case 'php':
+			default:
+				$oTpl = new PPI_Helper_Template_PHP();
+				break;
+		}
+		$this->setupRenderer($oTpl, $template, array_merge($params, $this->_viewParams));
 	}
 }

@@ -38,7 +38,8 @@ class PPI_Request {
 	 */
 	protected $_isVars = array(
 		'ajax'   => null,
-		'mobile' => null
+		'mobile' => null,
+		'ssl'    => null
 	);
 
 	/**
@@ -249,7 +250,11 @@ class PPI_Request {
 
 			case 'https':
 			case 'ssl':
-				return $this->getProtocol() === 'https';
+				if($this->_isVars['ssl'] === null) {
+					$this->_isVars['ssl'] = $this->getProtocol() === 'https';
+				}
+				return $this->_isVars['ssl'];
+
 		}
 		return false; // So that all paths return a val
 	}
@@ -268,6 +273,7 @@ class PPI_Request {
 				return isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0';
 
 			case 'referer':
+			case 'referrer':
 				return isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 
 			case 'userAgent':
@@ -351,6 +357,15 @@ class PPI_Request {
 			$this->_requestMethod = $_SERVER['REQUEST_METHOD'];
 		}
 		return $this->_requestMethod;
+	}
+
+	/**
+	 * Get the is vars
+	 *
+	 * @return array
+	 */
+	public function getIsVars() {
+		return $this->_isVars;
 	}
 
 }

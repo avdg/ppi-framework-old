@@ -135,13 +135,12 @@ class PPI_Exception extends Exception {
     * @return	void
     */
 	static function show_404($p_sLocation = "", $p_bUseImage = false) {
-		$oConfig = PPI_Helper::getConfig();
 		$heading = "Page cannot be found";
 		$message = !empty($p_sLocation) ? $p_sLocation : "The page you requested was not found.";
 		PPI_Helper::getRegistry()->set('PPI_View::httpResponseCode', 404);
 		header('Status: 404 Not Found');
-		$oView   = new PPI_View();
-		$oView->load('framework/404', array(
+		$oView   = new PPI_Controller();
+		$oView->render('framework/404', array(
 			'heading'       => 'Page cannot be found', 'message' => $message,
 			'errorPageType' => '404'
 		));

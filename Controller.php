@@ -434,7 +434,7 @@ class PPI_Controller {
 	 * @param array $options
 	 * @return void
 	 */
-	protected function render($template, array $options = array()) {
+	public function render($template, array $options = array()) {
 
 		$core = array();
 

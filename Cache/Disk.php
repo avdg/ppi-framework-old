@@ -39,7 +39,7 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	 * @return mixed
 	 */
 	protected function getData($p_sPath) {
-		$sContent = file_get_contents($p_sPath);
+		$sContent = file_exists($p_sPath) ? file_get_contents($p_sPath) : '';
 		return $sContent != '' ? unserialize($sContent) : '';
 	}
 
@@ -115,7 +115,7 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 		}
 		$aMetaData = $this->getMetaData($p_sKey);
 		// See if the item has a ttl and if it has expired then we delete it.
-		if($aMetaData['ttl'] > 0 && (int) $aMetaData['expire_time'] < time()) {
+		if(is_array($aMetaData) && ($aMetaData['ttl'] > 0 && (int) $aMetaData['expire_time'] < time())) {
 			// Remove the cache item and its metadata file.
 			$this->remove($p_sKey);
 			return false;

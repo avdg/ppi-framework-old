@@ -111,10 +111,10 @@ class PPI_App {
             unset($p_aOptions['siteMode']);
         }
         // Any further options passed, eg: it maps; 'errorLevel' to $this->_errorLevel
-        foreach($p_aOptions as $option) {
-            $option = '_' . $option;
-            if(isset($this->$option)) {
-                $this->$option = $option;
+        foreach($p_aOptions as $optionName => $option) {
+            $optionName = '_' . $optionName;
+            if(isset($this->$optionName)) {
+                $this->$optionName = $option;
             }
         }
     }

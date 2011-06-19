@@ -189,11 +189,9 @@ class PPI_App {
 				'configCachePath' => $this->_envOptions['configCachePath']
 			));
         }
-	    $start = microtime(true);
+
         $this->_config = $this->_config->getConfig();
-	    $end = microtime(true);
-	    ppi_dump(number_format($end - $start, 5));
-		exit;
+
         $registry = PPI_Registry::getInstance();
 
 	    // -- Set the config into the registry for quick read/write --

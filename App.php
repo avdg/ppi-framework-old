@@ -7,39 +7,25 @@
  *
  * @package   Core
  * @author    Paul Dragoonis <dragoonis@php.net>
- * @copyright 2001-2010 Digiflex Development Team
  * @license   http://opensource.org/licenses/mit-license.php MIT
- * @link      www.ppiframework.com
+ * @link      http://www.ppiframework.com
 */
 class PPI_App {
 
-    /**
-     * The error level to throw via error_reporting()
-     *
-     * @var int
-     */
-    protected $_errorLevel = E_ALL;
-
-    /**
-     * Whether to display errors or not. This gets fired into ini_set('display_errors')
-     *
-     * @var string
-     */
-    protected $_showErrors = 'On';
-
-    /**
-     * The block in the config file to get the config data from
-     *
-     * @var string
-     */
-    protected $_configBlock = 'development';
-
-    /**
-     * The site mode. Default is 'development'. This determines how PPI handles exceptions
-     *
-     * @var string
-     */
-    protected $_siteMode = 'development';
+	/**
+	 * The Environment Options for the PPI Application
+	 *
+	 * @var array
+	 */
+	protected $_envOptions = array(
+		'siteMode'         => 'development', // This determines how PPI handles things like exceptions
+		'configBlock'      => 'development', // The block in the config file to get the config data from
+		'configFile'       => 'general.ini', // The default filename for the config file
+		'configCachePath'  => '', // The path to the config cache
+		'cacheConfig'      => false, // Config object caching
+		'errorLevel'       => E_ALL, // The error level to throw via error_reporting()
+		'showErrors'       => 'On' // Whether to display errors or not. This gets fired into ini_set('display_errors')
+	);
 
     /**
      * The config object
@@ -69,11 +55,10 @@ class PPI_App {
      */
     protected $_session = null;
 
-
 	/**
+	 * The PPI_Request object
 	 *
-	 *
-	 * @var null
+	 * @var null|PPI_Request
 	 */
 	protected $_request = null;
 
@@ -98,26 +83,51 @@ class PPI_App {
      * @return void
      */
     function setEnv(array $p_aOptions) {
-        if(isset($p_aOptions['config'])) {
-            $this->_config = $p_aOptions['config'];
-            unset($p_aOptions['config']);
-        }
-        // The sites "mode" this is production or development.
-        // This is so PPI knows how to handle things like errors and exceptions without implicitly telling it what to do.
+
+	    // If we pass in a bad sitemode, lets just default to 'development' gracefully.
         if(isset($p_aOptions['siteMode'])) {
-            if(in_array($p_aOptions['siteMode'], array('development', 'production'))) {
-            	$this->_siteMode = $p_aOptions['siteMode'];
+            if(!in_array($p_aOptions['siteMode'], array('development', 'production'))) {
+            	unset($p_aOptions['siteMode']);
             }
-            unset($p_aOptions['siteMode']);
         }
+
         // Any further options passed, eg: it maps; 'errorLevel' to $this->_errorLevel
         foreach($p_aOptions as $optionName => $option) {
-            $optionName = '_' . $optionName;
-            if(isset($this->$optionName)) {
-                $this->$optionName = $option;
-            }
+	        $this->_envOptions[$optionName] = $option;
         }
     }
+
+	/**
+	 * Magic setter function, this is an alias of setEnv()
+	 *
+	 * @param string $option The Option
+	 * @param string $value The Value
+	 * @return void
+	 */
+	function __set($option, $value) {
+		$this->setEnv(array($option => $value));
+	}
+
+	/**
+	 * Obtain the value of an environment option
+	 *
+	 * @param string $key The Environment Option
+	 * @param mixed $default The default value to return if the key is not found
+	 * @return mixed If your key is not found, then NULL is returned
+	 */
+	function getEnv($key, $default = null) {
+		return isset($this->_envOptions[$key]) ? $this->_envOptions[$key] : $default;
+	}
+
+	/**
+	 * Magic getter function, this is an alias of getEnv()
+	 *
+	 * @param string $option The Option
+	 * @return mixed
+	 */
+	function __get($option) {
+		return $this->getEnv($option);
+	}
 
     /**
      * Set the router object for the app bootup
@@ -167,15 +177,23 @@ class PPI_App {
      */
     function boot() {
 
-        error_reporting($this->_errorLevel);
-        ini_set('display_errors', $this->_showErrors);
+        error_reporting($this->getEnv('errorLevel'));
+        ini_set('display_errors', $this->getEnv('showErrors', 'On'));
 
         // Fire up the default config handler
         if($this->_config === null) {
-            $this->_config = new PPI_Config('general.ini', array('block' => $this->_configBlock));
+			$this->_config = new PPI_Config(array(
+				'configBlock'     => $this->_envOptions['configBlock'],
+				'configFile'      => $this->_envOptions['configFile'],
+				'cacheConfig'     => $this->_envOptions['cacheConfig'],
+				'configCachePath' => $this->_envOptions['configCachePath']
+			));
         }
+	    $start = microtime(true);
         $this->_config = $this->_config->getConfig();
-
+	    $end = microtime(true);
+	    ppi_dump(number_format($end - $start, 5));
+		exit;
         $registry = PPI_Registry::getInstance();
 
 	    // -- Set the config into the registry for quick read/write --
@@ -251,7 +269,6 @@ class PPI_App {
      * @return $this Fluent interface
      */
     function dispatch() {
-
 		$dispatch = PPI_Registry::getInstance()->get('PPI_Dispatch');
         $dispatch->dispatch();
         return $this;
@@ -263,7 +280,7 @@ class PPI_App {
      * @return string
      */
     function getSiteMode() {
-        return $this->_siteMode;
+        return $this->getEnv('siteMode');
     }
 
 }

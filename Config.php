@@ -18,33 +18,80 @@ class PPI_Config {
      */
 	protected $_oConfig    = null;
 
-    /**
-     * The config file name
-     *
-     * @var string
-     */
-	protected $_configFile = null;
-
+	/**
+	 * The configuration options
+	 *
+	 * @var array
+	 */
+	protected $_options = array();
 
 	/**
 	 * Initialise the config object
 	 *
 	 * Will check the file extension of your config filename and load up a specific parser
-	 * @param string $p_sConfigFile The config filename
-	 * @param array $p_aOptions The options
+	 * @param array $options The options
      *
-     * @return void
 	 */
-	function __construct($p_sConfigFile, $p_aOptions = array()) {
-		if(!file_exists(CONFIGPATH . $p_sConfigFile)) {
-			die('Unable to find <b>'. CONFIGPATH . $p_sConfigFile .'</b> file, please check your application configuration');
+	function __construct(array $options = array()) {
+		$this->_options = $options;
+	}
+
+	/**
+	 * Get the current set config object
+	 *
+	 * @return object
+	 */
+	function getConfig() {
+		if($this->_oConfig === null) {
+			if(isset($this->_options['cacheConfig']) && $this->_options['cacheConfig']) {
+				$this->_oConfig = $this->cacheConfig();
+			} else {
+				$this->_oConfig = $this->parseConfig();
+			}
 		}
-		$ext   = PPI_Helper::getFileExtension($p_sConfigFile);
-		$block = isset($p_aOptions['block']) ? $p_aOptions['block'] : 'development';
-		switch($ext) {
+		return $this->_oConfig;
+	}
+
+	/**
+	 * Get a cached version of the framework, if no cached version exists it parses the config and caches it for you.
+	 *
+	 * @throws PPI_Exception
+	 * @return void
+	 */
+	function cacheConfig() {
+		if(!isset($this->_options['configCachePath'])) {
+			throw new PPI_Exception('Missing path to the config cache path');
+		}
+
+		$path = sprintf('%s%s.%s.cache',
+			$this->_options['configCachePath'],
+			$this->_options['configFile'],
+			$this->_options['configBlock']);
+
+		if(file_exists($path)) {
+			return unserialize(file_get_contents($path));
+		}
+		$config = $this->parseConfig();
+		file_put_contents($path, serialize($config));
+		return $config;
+	}
+
+	/**
+	 * Parse the config file
+	 *
+	 * @return object
+	 */
+	function parseConfig() {
+
+		// Make sure our config file exists
+		if(!file_exists(CONFIGPATH . $this->_options['configFile'])) {
+			die('Unable to find <b>'. CONFIGPATH . $this->_options['configFile'] .'</b> file, please check your application configuration');
+		}
+
+		// Switch the file extension
+		switch(PPI_Helper::getFileExtension($this->_options['configFile'])) {
 			case 'ini':
-				$this->_oConfig = new PPI_Config_Ini(parse_ini_file(CONFIGPATH . $p_sConfigFile, true, INI_SCANNER_RAW), $block);
-				break;
+				return new PPI_Config_Ini(parse_ini_file(CONFIGPATH . $this->_options['configFile'], true, INI_SCANNER_RAW), $this->_options['configBlock']);
 
 			case 'xml':
 				die('Trying to load a xml config file but no parser yet created.');
@@ -55,15 +102,6 @@ class PPI_Config {
 				break;
 
 		}
-	}
-
-	/**
-	 * Get the current set config object
-	 *
-	 * @return object
-	 */
-	function getConfig() {
-		return $this->_oConfig;
 	}
 
 }

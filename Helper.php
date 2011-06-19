@@ -186,7 +186,9 @@ class PPI_Helper {
 
 	/**
 	 * Obtain the extension from a filename
+	 *
      * @todo Move to PPI_File
+	 * @todo Convert to pathinfo
 	 * @param string $fileName The file's filename
 	 * @return string
 	 */

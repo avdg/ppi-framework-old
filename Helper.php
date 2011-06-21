@@ -229,4 +229,21 @@ class PPI_Helper {
 		return rtrim($_SERVER['REQUEST_URI'], '/') . '/';
 	}
 
+	static function getFileType($fileName) {
+		if (substr($fileName, 0, 7) == 'http://') {
+			return 'http';
+		} elseif (substr($fileName, 0, 8) == 'https://') {
+			return 'https';
+		} elseif (substr($fileName, 0, 6) == 'ftp://') {
+			return 'ftp';
+		} elseif (substr($fileName, 0, 7) == 'ftps://') {
+			return 'ftps';
+		} elseif (is_file($fileName)) {
+			return 'file';
+		} elseif (is_dir($fileName)) {
+			return 'directory';
+		} else {
+			return 'unknown';
+		}
+	}
 }

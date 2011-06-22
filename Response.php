@@ -1,4 +1,14 @@
 <?php
+
+/**
+ *
+ * @version   1.0
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/mit-license.php MIT
+ * @package   Core
+ * @link      www.ppiframework.com
+ *
+ */
 class PPI_Response {
 
 	/**
@@ -7,14 +17,12 @@ class PPI_Response {
 	 * @var string
 	 */
 	protected $_charset = 'utf-8';
-
 	/**
 	 * The JS files for rendering
 	 *
 	 * @var array
 	 */
 	protected $_jsFiles = array();
-
 	/**
 	 * The CSS files for rendering
 	 *
@@ -22,7 +30,9 @@ class PPI_Response {
 	 */
 	protected $_cssFiles = array();
 
-	function __construct() {}
+	public function __construct() {
+
+	}
 
 	/**
 	 * Append to the list of javascript files to be included
@@ -30,7 +40,7 @@ class PPI_Response {
 	 * @param mixed $js
 	 * @return void
 	 */
-	function addJS($js) {
+	public function addJS($js) {
 		$this->addJavascript($js);
 	}
 
@@ -39,26 +49,26 @@ class PPI_Response {
 	 *
 	 * @return array
 	 */
-	function getJSFiles() {
+	public function getJSFiles() {
 		return $this->_jsFiles;
 	}
 
-    /**
-     * Append to the list of stylesheets to be included
-     *
-     * @param mixed $p_mStylesheet This can be an existing array of stylesheets or a string.
-     * @return void
-     */
-	function addStylesheet($p_mStylesheet) {
-		if(is_string($p_mStylesheet)) {
-			$this->_cssFiles[] = $p_mStylesheet;
-			return;
-		}
-		if(is_array($p_mStylesheet)) {
-			foreach($p_mStylesheet as $stylesheet) {
-				$this->addStylesheet($stylesheet);
-			}
-			return;
+	/**
+	 * Append to the list of stylesheets to be included
+	 *
+	 * @param mixed $p_mStylesheet This can be an existing array of stylesheets or a string.
+	 * @return void
+	 */
+	public function addStylesheet($p_mStylesheet) {
+
+		switch (gettype($p_mStylesheet)) {
+			case 'string':
+				$this->_cssFiles[] = $p_mStylesheet;
+				return;
+			case 'array':
+				foreach ($p_mStylesheet as $stylesheet) {
+					$this->addStylesheet($stylesheet);
+				}
 		}
 	}
 
@@ -68,7 +78,7 @@ class PPI_Response {
 	 * @param mixed $css This can be an existing array of stylesheets or a string.
 	 * @return void
 	 */
-	function addCSS($css) {
+	public function addCSS($css) {
 		$this->addStylesheet($css);
 	}
 
@@ -77,7 +87,7 @@ class PPI_Response {
 	 *
 	 * @return void
 	 */
-	function clearCSS() {
+	public function clearCSS() {
 		$this->_cssFiles = array();
 	}
 
@@ -86,7 +96,7 @@ class PPI_Response {
 	 *
 	 * @return array
 	 */
-	function getCSSFiles() {
+	public function getCSSFiles() {
 		return $this->_cssFiles;
 	}
 
@@ -95,26 +105,26 @@ class PPI_Response {
 	 *
 	 * @return void
 	 */
-	function clearJS() {
+	public function clearJS() {
 		$this->_jsFiles = array();
 	}
 
-    /**
-     * Append to the list of javascript files to be included
-     *
-     * @param mixed $p_mJavascript
-     * @return void
-     */
-	function addJavascript($p_mJavascript) {
-		if(is_string($p_mJavascript)) {
-			$this->_jsFiles[] = $p_mJavascript;
-			return;
-		}
-		if(is_array($p_mJavascript)) {
-			foreach($p_mJavascript as $javascriptFile) {
-				$this->addJavascript($javascriptFile);
-			}
-			return;
+	/**
+	 * Append to the list of javascript files to be included
+	 *
+	 * @param mixed $p_mJavascript
+	 * @return void
+	 */
+	public function addJavascript($p_mJavascript) {
+
+		switch (gettype($p_mJavascript)) {
+			case 'string':
+				$this->_jsFiles[] = $p_mJavascript;
+				return;
+			case 'array':
+				foreach ($p_mJavascript as $javascriptFile) {
+					$this->addJavascript($javascriptFile);
+				}
 		}
 	}
 
@@ -125,11 +135,12 @@ class PPI_Response {
 	 * @param bool $success
 	 * @return void
 	 */
-	function setFlash($message, $success = true) {
-        PPI_Helper::getSession()->set('ppi_flash_message', array(
-            'mode'    => $success ? 'success' : 'failure',
-            'message' => $message
-        ));
+	public function setFlash($message, $success = true) {
+
+		PPI_Helper::getSession()->set('ppi_flash_message', array(
+			'mode' => $success ? 'success' : 'failure',
+			'message' => $message
+		));
 	}
 
 	/**
@@ -137,7 +148,7 @@ class PPI_Response {
 	 *
 	 * @return mixed
 	 */
-	function getFlash() {
+	public function getFlash() {
 		return PPI_Helper::getSession()->get('ppi_flash_message');
 	}
 
@@ -146,7 +157,8 @@ class PPI_Response {
 	 *
 	 * @return void
 	 */
-	function getFlashAndClear() {
+	public function getFlashAndClear() {
+
 		$flash = $this->getFlash();
 		$this->clearFlash();
 	}
@@ -156,7 +168,7 @@ class PPI_Response {
 	 *
 	 * @return array
 	 */
-	function clearFlash() {
+	public function clearFlash() {
 		return PPI_Helper::getSession()->remove('ppi_flash_message');
 	}
 
@@ -165,8 +177,7 @@ class PPI_Response {
 	 *
 	 * @return string
 	 */
-	function getCharset() {
+	public function getCharset() {
 		return $this->_charset;
 	}
-
 }

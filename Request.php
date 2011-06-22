@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * @author    Paul Dragoonis <dragoonis@php.net>
@@ -14,80 +15,71 @@ class PPI_Request {
 	 *
 	 * @var array|arrayAccess
 	 */
-	protected $_get     = null;
-	protected $_post    = null;
-	protected $_server  = null;
-
+	protected $_get = null;
+	protected $_post = null;
+	protected $_server = null;
 	/**
 	 * Remote vars cache for the getRemove() function
 	 *
 	 * @var array
 	 */
 	protected $_remoteVars = array(
-		'ip'                => '',
-		'userAgent'         => '',
-		'browser'           => '',
-		'browserVersion'    => '',
-		'browserAndVersion' => ''
+		'ip'				=> '',
+		'userAgent'			=> '',
+		'browser'			=> '',
+		'browserVersion'	=> '',
+		'browserAndVersion'	=> ''
 	);
-
 	/**
 	 * Vars cache for the is() function
 	 *
 	 * @var array
 	 */
 	protected $_isVars = array(
-		'ajax'   => null,
-		'mobile' => null,
-		'ssl'    => null
+		'ajax'		=> null,
+		'mobile'	=> null,
+		'ssl'		=> null
 	);
-
 	/**
 	 * Mapping fields for get_browser()
 	 *
 	 * @var array
 	 */
 	protected $_userAgentMap = array(
-		'browser'           => 'browser',
-		'browserVersion'    => 'version',
-		'browserAndVersion' => 'parent'
+		'browser'				=> 'browser',
+		'browserVersion'		=> 'version',
+		'browserAndVersion'		=> 'parent'
 	);
-
 	/**
 	 * The browser data from
 	 *
 	 * @var array|null
 	 */
 	protected $_userAgentInfo = null;
-
 	/**
 	 * The request method
 	 *
 	 * @var null|string
 	 */
 	protected $_requestMethod = null;
-
 	/**
 	 * The protocol being used
 	 *
 	 * @var null|string
 	 */
 	protected $_protocol = null;
-
 	/**
 	 * The full url including the protocol
 	 *
 	 * @var null|string
 	 */
 	protected $_url = null;
-
 	/**
 	 * The URI after the base url
 	 *
 	 * @var null|string
 	 */
 	protected $_uri = null;
-
 	/**
 	 * The quick keyval lookup array for URI parameters
 	 *
@@ -112,8 +104,8 @@ class PPI_Request {
 			$this->_get = $env['get'];
 		} else {
 			$this->_get = new PPI_Request_Get(array(
-				'uri' => $this->getUri()
-			));
+						'uri' => $this->getUri()
+					));
 		}
 
 		if (isset($env['post']) && (is_array($env['post']) || $env['post'] instanceof PPI_Request_Post)) {
@@ -127,7 +119,6 @@ class PPI_Request {
 		} else {
 			$this->_server = new PPI_Request_Server();
 		}
-
 	}
 
 	/**
@@ -139,8 +130,9 @@ class PPI_Request {
 	 * @return mixed
 	 */
 	function get($var, $default = null) {
-		if(isset($_GET[$var])) {
-			return urldecode(is_numeric($var) ? (int) $var : $var);
+
+		if (isset($_GET[$var])) {
+			return urldecode(is_numeric($var) ? (int)$var : $var);
 		}
 		return isset($this->_get[$var]) ? $this->_get[$var] : $default;
 	}
@@ -164,11 +156,12 @@ class PPI_Request {
 	 * @return array
 	 */
 	function stripPost($p_sPrefix = '') {
+
 		$aValues = array();
-		if($p_sPrefix !== '' && $this->is('post')) {
+		if ($p_sPrefix !== '' && $this->is('post')) {
 			$aPost = $this->post();
 			$aPrefixKeys = preg_grep("/{$p_sPrefix}/", array_keys($aPost));
-			foreach($aPrefixKeys as $prefixKey) {
+			foreach ($aPrefixKeys as $prefixKey) {
 				$aValues[$prefixKey] = $aPost[$prefixKey];
 			}
 		}
@@ -192,7 +185,8 @@ class PPI_Request {
 	 * @return boolean True if the value existed, false if not.
 	 */
 	function removePost($p_sKey) {
-		if(isset($_POST[$p_sKey])) {
+
+		if (isset($_POST[$p_sKey])) {
 			unset($_POST[$p_sKey]);
 			return true;
 		}
@@ -226,12 +220,13 @@ class PPI_Request {
 	 * @return bool
 	 */
 	function is($var) {
+
 		$var = strtolower($var);
-		switch($var) {
+		switch ($var) {
 			case 'ajax':
-				if($this->_isVars['ajax'] === null) {
+				if ($this->_isVars['ajax'] === null) {
 					$this->_isVars['ajax'] = isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-					                         && strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] === 'xmlhttprequest');
+							&& strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] === 'xmlhttprequest');
 				}
 				return $this->_isVars['ajax'];
 
@@ -243,18 +238,17 @@ class PPI_Request {
 				return strtolower($this->getRequestMethod()) === $var;
 
 			case 'mobile':
-				if($this->_isVars['mobile'] === null) {
+				if ($this->_isVars['mobile'] === null) {
 					$this->_isVars['mobile'] = $this->isRequestMobile();
 				}
 				return $this->_isVars['mobile'];
 
 			case 'https':
 			case 'ssl':
-				if($this->_isVars['ssl'] === null) {
+				if ($this->_isVars['ssl'] === null) {
 					$this->_isVars['ssl'] = $this->getProtocol() === 'https';
 				}
 				return $this->_isVars['ssl'];
-
 		}
 		return false; // So that all paths return a val
 	}
@@ -267,7 +261,7 @@ class PPI_Request {
 	 */
 	function getRemote($var) {
 
-		switch($var) {
+		switch ($var) {
 
 			case 'ip':
 				return isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0';
@@ -295,11 +289,11 @@ class PPI_Request {
 	 * @return string
 	 */
 	function getUri() {
-		if($this->_uri === null) {
+
+		if (null !== $this->_uri) {
 			$this->_uri = PPI_Helper::getRegistry()->get('PPI::Request_URI');
 		}
 		return $this->_uri;
-
 	}
 
 	/**
@@ -308,7 +302,8 @@ class PPI_Request {
 	 * @return string
 	 */
 	function getProtocol() {
-		if($this->_protocol === null) {
+
+		if (null === $this->_protocol) {
 			$this->_protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 'https' : 'http';
 		}
 		return $this->_protocol;
@@ -320,7 +315,8 @@ class PPI_Request {
 	 * @return string
 	 */
 	function getUrl() {
-		if($this->_url === null) {
+
+		if ($this->_url === null) {
 			$this->_url = $this->getProtocol() . '://' . str_replace('www.', '', $_SERVER['HTTP_HOST']) . $_SERVER['REQUEST_URI'];
 		}
 		return $this->_url;
@@ -333,14 +329,15 @@ class PPI_Request {
 	 * @return boolean
 	 */
 	protected function isRequestMobile() {
+
 		$mobileUserAgents = array(
 			'iPhone', 'MIDP', 'AvantGo', 'BlackBerry', 'J2ME', 'Opera Mini', 'DoCoMo', 'NetFront',
 			'Nokia', 'PalmOS', 'PalmSource', 'portalmmm', 'Plucker', 'ReqwirelessWeb', 'iPod', 'iPad',
 			'SonyEricsson', 'Symbian', 'UP\.Browser', 'Windows CE', 'Xiino', 'Android'
 		);
 		$currentUserAgent = $this->getRemote('userAgent');
-		foreach($mobileUserAgents as $userAgent) {
-			if(strpos($currentUserAgent, $userAgent) !== false) {
+		foreach ($mobileUserAgents as $userAgent) {
+			if (strpos($currentUserAgent, $userAgent) !== false) {
 				return true;
 			}
 		}
@@ -353,7 +350,8 @@ class PPI_Request {
 	 * @return string
 	 */
 	protected function getRequestMethod() {
-		if($this->_requestMethod === null) {
+
+		if (null === $this->_requestMethod) {
 			$this->_requestMethod = $_SERVER['REQUEST_METHOD'];
 		}
 		return $this->_requestMethod;
@@ -367,5 +365,4 @@ class PPI_Request {
 	public function getIsVars() {
 		return $this->_isVars;
 	}
-
 }

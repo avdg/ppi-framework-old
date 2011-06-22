@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
@@ -13,7 +14,7 @@ class PPI_Security {
 	 * Create a new CSRF key and set it in the session
 	 * @return string The Token
 	 */
-	static function createCSRF() {
+	public static function createCSRF() {
 		$token = md5(uniqid(mt_rand(), true));
 		self::setCSRF($token);
 		return $token;
@@ -24,7 +25,7 @@ class PPI_Security {
 	 * @param string $token
 	 * @return boolean
 	 */
-	static function checkCSRF($token) {
+	public static function checkCSRF($token) {
 		return self::getCSRF() === $token;
 	}
 
@@ -32,7 +33,7 @@ class PPI_Security {
 	 * Set the CSRF in the session
 	 * @param string $token
 	 */
-	static function setCSRF($token) {
+	public static function setCSRF($token) {
 		PPI_Helper::getSession()->set('PPI_Security::csrfToken', $token);
 	}
 
@@ -40,8 +41,7 @@ class PPI_Security {
 	 * Get the CSRF token from the session
 	 * @return string
 	 */
-	static function getCSRF() {
+	public static function getCSRF() {
 		return PPI_Helper::getSession()->get('PPI_Security::csrfToken');
 	}
-
 }

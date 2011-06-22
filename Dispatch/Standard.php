@@ -51,6 +51,5 @@ class PPI_Dispatch_Standard extends PPI_Dispatch_Abstract implements PPI_Dispatc
 		$oController = $this->getController();
 		$sMethod     = $this->getMethod();
 		$oController->$sMethod();
-		exit;
 	}
 }

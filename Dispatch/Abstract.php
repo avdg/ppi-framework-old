@@ -123,7 +123,7 @@ abstract class PPI_Dispatch_Abstract {
 			$oController = new $sContFilename();
 			// Did we specify a method ?
 			// Does our method exist on the class
-			if(!in_array($sMethod, get_class_methods(get_class($oController)))) {
+			if(!is_callable(array($oController, $sMethod))) {
 				return false;
 			}
 			$this->setController($oController);

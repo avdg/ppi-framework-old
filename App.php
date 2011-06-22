@@ -24,43 +24,14 @@ class PPI_App {
 		'configCachePath'  => '', // The path to the config cache
 		'cacheConfig'      => false, // Config object caching
 		'errorLevel'       => E_ALL, // The error level to throw via error_reporting()
-		'showErrors'       => 'On' // Whether to display errors or not. This gets fired into ini_set('display_errors')
+		'showErrors'       => 'On', // Whether to display errors or not. This gets fired into ini_set('display_errors')
+		'router'           => null,
+		'session'          => null,
+		'config'           => null,
+		'dispatcher'       => null,
+		'request'          => null
 	);
 
-    /**
-     * The config object
-     *
-     * @var null|PPI_Config
-     */
-    protected $_config = null;
-
-    /**
-     * The PPI_Dispatch object
-     *
-     * @var null|PPI_Dispatch
-     */
-    protected $_dispatcher = null;
-
-    /**
-     * The PPI_Router object
-     *
-     * @var null|PPI_Router
-     */
-    protected $_router = null;
-
-    /**
-     * The PPI_Session object
-     *
-     * @var null|PPI_Session
-     */
-    protected $_session = null;
-
-	/**
-	 * The PPI_Request object
-	 *
-	 * @var null|PPI_Request
-	 */
-	protected $_request = null;
 
 	/**
 	 * @param array $p_aParams
@@ -136,7 +107,7 @@ class PPI_App {
      * @return void
      */
     function setRouter(PPI_Router_Interface $p_oRouter) {
-        $this->_router = $p_oRouter;
+        $this->_envOptions['router'] = $p_oRouter;
     }
 
     /**
@@ -146,7 +117,7 @@ class PPI_App {
      * @return void
      */
     function setDispatcher(PPI_Dispatch_Interface $p_oDispatch) {
-        $this->_dispatcher = $p_oDispatch;
+        $this->_envOptions['dispatcher'] = $p_oDispatch;
     }
 
 		/**
@@ -156,7 +127,7 @@ class PPI_App {
 	 * @return void
 	 */
 	function setRequest($p_oRequest) {
-		$this->_request = $p_oRequest;
+		$this->_envOptions['request'] = $p_oRequest;
 	}
 
     /**
@@ -166,7 +137,7 @@ class PPI_App {
      * @return void
      */
     function setSession(PPI_Session_Interface $p_oSession) {
-        $this->_session = $p_oSession;
+        $this->_envOptions['session'] = $p_oSession;
     }
 
     /**
@@ -177,11 +148,11 @@ class PPI_App {
      */
     function boot() {
 
-        error_reporting($this->getEnv('errorLevel'));
+        error_reporting($this->_envOptions['errorLevel']);
         ini_set('display_errors', $this->getEnv('showErrors', 'On'));
 
         // Fire up the default config handler
-        if($this->_config === null) {
+        if($this->_envOptions['config'] === null) {
 			$this->_config = new PPI_Config(array(
 				'configBlock'     => $this->_envOptions['configBlock'],
 				'configFile'      => $this->_envOptions['configFile'],
@@ -200,24 +171,26 @@ class PPI_App {
         // ------------- Initialise the session -----------------
         if(!headers_sent()) {
 	        // Fire up the default session handler
-	        if($this->_session === null) {
-	            $this->_session = new PPI_Session();
+	        if($this->_envOptions['session'] === null) {
+	            $this->_envOptions['session'] = new PPI_Session();
 	        }
             $registry->set('PPI_Session', $this->_session);
         }
 
         // Fire up the default dispatcher
-        if($this->_dispatcher === null) {
-            $this->_dispatcher = new PPI_Dispatch_Standard(array('router' => $this->_router));
+        if($this->_envOptions['dispatcher'] === null) {
+            $this->_envOptions['dispatcher'] = new PPI_Dispatch_Standard(array(
+				'router' => $this->_envOptions['router']
+			));
         }
-        $dispatch = new PPI_Dispatch($this->_dispatcher);
+        $dispatch = new PPI_Dispatch($this->_envOptions['dispatcher']);
         PPI_Registry::getInstance()->set('PPI_Dispatch', $dispatch);
 
 	    // -- Set the PPI_Request object --
-	    if($this->_request === null) {
-		    $this->_request = new PPI_Request();
+	    if($this->_envOptions['request'] === null) {
+		    $this->_envOptions['request'] = new PPI_Request();
 	    }
-	    $registry->set('PPI_Request', $this->_request);
+	    $registry->set('PPI_Request', $this->_envOptions['request']);
         // -------------- Library Autoloading Process --------------
         if(!empty($this->_config->system->autoloadLibs)) {
             foreach(explode(',', $this->_config->system->autoloadLibs) as $sLib) {
@@ -278,7 +251,7 @@ class PPI_App {
      * @return string
      */
     function getSiteMode() {
-        return $this->getEnv('siteMode');
+        return $this->_envOptions['siteMode'];
     }
 
 }

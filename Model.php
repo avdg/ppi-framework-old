@@ -144,8 +144,10 @@ abstract class PPI_Model {
 
 			// Charset setting
 			$bIsCharsetOverride = isset($dbInfo['charset']) && $dbInfo['charset'] != '';
-			$charset = strtolower($bIsCharsetOverride ? $oConfig->db->charset : 'utf8');
-			$connectParams[PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES ' . $charset;
+			$this->charset = strtolower($bIsCharsetOverride ? $oConfig->db->charset : 'utf8');
+			if(version_compare(PHP_VERSION, '5.3.6', '<')) {
+				$connectParams[PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES ' . $this->charset;
+			}
 
 			// Connect
 			$this->rHandler = new PDO($this->makeDSN(), $this->sUserName, $this->sPassword, $connectParams);
@@ -156,14 +158,6 @@ abstract class PPI_Model {
 		} catch (PDOException $e) {
 			throw new PPI_Exception('Database Connection Error: ' . $e->getMessage());
 		}
-
-		// If the charset is overriden lets check this charset exists in the mysqld. Exception upon non-existant charset
-		if ($bIsCharsetOverride && !$this->isValidCharset($charset)) {
-			throw new PPI_Exception('Invalid charset specified');
-		}
-
-		// Set the correct charset in the db
-		$this->exec('SET NAMES ' . $charset, false);
 
 		// Lets check that our table exists that our model is setup against
 		if (!$this->isTableExist($this->sTableName)) {
@@ -183,7 +177,7 @@ abstract class PPI_Model {
 	 * @return string The DSN
 	 */
 	public function makeDSN() {
-		return 'mysql:host=' . $this->sHostName . ';dbname=' . $this->sDataBase;
+		return 'mysql:host=' . $this->sHostName . ';dbname=' . $this->sDataBase . ';charset=' . $this->charset;
 	}
 
 	/**
@@ -378,11 +372,9 @@ abstract class PPI_Model {
 		if (isset($p_aRecord[$this->sTableIndex])) {
 			$this->update($p_aRecord, $this->sTableIndex . ' = ' . $p_aRecord[$this->sTableIndex]);
 			return $p_aRecord[$this->sTableIndex];
-
-			// No primary key found its an insert
-		} else {
-			return $this->insert($p_aRecord);
 		}
+		// No primary key found its an insert
+		return $this->insert($p_aRecord);
 	}
 
 	/**

@@ -104,8 +104,8 @@ class PPI_Request {
 			$this->_get = $env['get'];
 		} else {
 			$this->_get = new PPI_Request_Get(array(
-						'uri' => $this->getUri()
-					));
+				'uri' => $this->getUri()
+			));
 		}
 
 		if (isset($env['post']) && (is_array($env['post']) || $env['post'] instanceof PPI_Request_Post)) {
@@ -290,7 +290,7 @@ class PPI_Request {
 	 */
 	function getUri() {
 
-		if (null !== $this->_uri) {
+		if (null === $this->_uri) {
 			$this->_uri = PPI_Helper::getRegistry()->get('PPI::Request_URI');
 		}
 		return $this->_uri;

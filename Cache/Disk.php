@@ -1,10 +1,9 @@
 <?php
 /**
+ * The PPI Cache Component For Using The Hard Disk
  *
- * @version   1.0
- * @author	Paul Dragoonis <dragoonis@php.net>
+ * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
- * @copyright Digiflex Development
  * @package   Cache
  */
 
@@ -91,6 +90,7 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 
 	/**
 	 * Set a value in the cache
+	 *
 	 * @param string $p_sKey The Key
 	 * @param mixed $p_mData The Data
 	 * @param integer $p_iTTL The Time To Live
@@ -135,6 +135,7 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 
 	/**
 	 * Get a value from cache
+	 *
 	 * @param string $p_sKey The Key
 	 * @return mixed
 	 */

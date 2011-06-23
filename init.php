@@ -47,3 +47,7 @@ require 'common.php';
 // load up custom error handlers
 require 'errors.php';
 setErrorHandlers('ppi_error_handler', 'ppi_exception_handler');
+
+if(version_compare(PHP_VERSION, '5.3.0', '<')) {
+	set_magic_quotes_runtime(0); // Kill magic quotes
+}

@@ -146,6 +146,10 @@ class PPI_Request {
 	 * @return string|array Depending if you passed in a value for $p_sIndex
 	 */
 	function post($key = null, $default = null) {
+
+		if($key === null) {
+			return $this->_post->all();
+		}
 		return isset($this->_post[$key]) ? $this->_post[$key] : $default;
 	}
 

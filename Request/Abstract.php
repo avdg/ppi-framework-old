@@ -123,4 +123,13 @@ abstract class PPI_Request_Abstract implements ArrayAccess, Iterator, Countable 
 	public function count() {
 		return count($this->_array);
 	}
+
+	/**
+	 * Return all the array elements
+	 *
+	 * @return array
+	 */
+	public function all() {
+		return $this->_array;
+	}
 }

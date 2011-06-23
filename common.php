@@ -119,6 +119,20 @@ function is_db_installed() {
 }
 
 /**
+ * Check if a variable is set and not empty and return a default if false
+ * @param <type> $var
+ * @param <type> $alt
+ * @return <type> 
+ */
+function ifset(&$var, $alt=null) {
+
+	if (empty($var)) {
+		return $alt;
+	}
+	return $var;
+}
+
+/**
  * This function works like phpinfo(); and returns a html representation of the Framework settings.
  */
 function ppi_info() {

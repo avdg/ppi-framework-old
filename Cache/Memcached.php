@@ -51,7 +51,7 @@ class PPI_Cache_Memcached implements PPI_Cache_Interface {
 	 * @return mixed
 	 */
 	function get($p_sKey) {
-		if($this->_serverAdded === false) {
+		if(false === $this->_serverAdded) {
 			$this->addServer('localhost');
 		}
 		return $this->_handler->get($p_sKey);
@@ -66,7 +66,7 @@ class PPI_Cache_Memcached implements PPI_Cache_Interface {
 	 * @return boolean
 	 */
 	function set($p_sKey, $p_mData, $p_mTTL = 0) {
-		if($this->_serverAdded === false) {
+		if(false === $this->_serverAdded) {
 			$this->addServer('localhost');
 		}
 		return $this->_handler->set($p_sKey, $p_mData, (is_numeric($p_mTTL) ? $p_mTTL : strtotime($p_mTTL)));

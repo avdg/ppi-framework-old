@@ -53,11 +53,10 @@ class PPI_Cache_Redis implements PPI_Cache_Interface {
 	 * @return boolean True on succes, False on failure.
 	 */
 	function set($p_sKey, $p_mData, $p_mTTL = null) {
-		if($p_mTTL !== null && is_string($p_mData)) {
+		if(null !== $p_mTTL && is_string($p_mData)) {
 			$p_mTTL = strtotime($p_mTTL);
 		}
-		$p_mTTL = $p_mTTL !== null ? $p_mTTL : $this->_defaults['expiry'];
-		return $this->_handler->set($p_sKey, $p_mData, $p_mTTL);
+		return $this->_handler->set($p_sKey, $p_mData, ifset($p_mTTL,  $this->_defaults['expiry']));
 	}
 
 	/**

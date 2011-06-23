@@ -65,7 +65,6 @@ abstract class PPI_Model {
 	 * @var int
 	 */
 	protected $sFetchMode = PDO::FETCH_ASSOC;
-	private $aQueries = array();
 	/**
 	 * Attributes storing the users meta data if you use __get(),__set() stuff
 	 *
@@ -199,6 +198,7 @@ abstract class PPI_Model {
 	 * @return void
 	 */
 	private function appendQueryList($p_sQuery) {
+
 		$oRegistry = PPI_Helper::getRegistry();
 		$oRegistry->set('PPI_Model::Queries_Backtrace', array_merge($oRegistry->get('PPI_Model::Queries_Backtrace', array()), (array)$p_sQuery));
 	}
@@ -213,6 +213,7 @@ abstract class PPI_Model {
 	 * @return array
 	 */
 	public function query($p_sQuery, $p_bLogQuery = true) {
+
 		try {
 			if ($p_bLogQuery) {
 				$this->appendQueryList($p_sQuery);
@@ -233,6 +234,7 @@ abstract class PPI_Model {
 	 * @return integer The affected rows
 	 */
 	public function delete($p_iRecordID = 0) {
+
 		if ($p_iRecordID === 0) {
 			$p_iRecordID = isset($this->metaAttributes[$this->sTableIndex]) ? $this->metaAttributes[$this->sTableIndex] : 0;
 			if ($p_iRecordID === 0) {
@@ -260,7 +262,8 @@ abstract class PPI_Model {
 	 * @return integer The affected rows
 	 */
 	public function exec($p_sQuery, $p_bLogQuery = true) {
-		if ($p_bLogQuery === true) {
+
+		if (true === $p_bLogQuery) {
 			$this->appendQueryList($p_sQuery);
 		}
 		try {
@@ -278,7 +281,8 @@ abstract class PPI_Model {
 	 * @return Return the current class, useful for method chaining
 	 */
 	public function __set($p_sName, $p_mValue) {
-		if (trim($p_sName) != '') {
+
+		if ('' !== trim($p_sName)) {
 			$this->metaAttributes[$p_sName] = $p_mValue;
 		}
 		return $this;
@@ -349,9 +353,7 @@ abstract class PPI_Model {
 		if ($p_bClearAttrs) {
 			$this->metaAttributes = array();
 		}
-		if (isset($attrs['rHandler'])) {
-			unset($attrs['rHandler']);
-		}
+		unset($attrs['rHandler']);
 		return $attrs;
 	}
 
@@ -427,9 +429,9 @@ abstract class PPI_Model {
 			$sValues = '';
 			$recordValues = array_values($aRecord);
 			foreach ($recordValues as $field) {
-				$sValues .= $this->quote($field) . ',';
+				$sValues.= $this->quote($field) . ',';
 			}
-			if ($sValues != '') {
+			if ('' !== $sValues) {
 				$sValues = substr($sValues, 0, -1);  // Remove the last comma
 			}
 			// Append selected value
@@ -440,7 +442,7 @@ abstract class PPI_Model {
 			// If we exceed our threshold
 			if ($iSelectedRecordsLength >= $iThreshold || $i == ($fullRecordsCount - 1)) {
 				// Append the next record to the query.
-				$sQuery .= "INSERT INTO {$this->sTableName} ($sKeys) VALUES (" . implode(' ), ( ', $selectedRecords) . ')';
+				$sQuery.= "INSERT INTO {$this->sTableName} ($sKeys) VALUES (" . implode(' ), ( ', $selectedRecords) . ')';
 				$modifiedRecords += $this->exec($sQuery); // Execute the query
 				$sQuery = ''; // Blank the query
 				$selectedRecords = array(); // Blank the selected records
@@ -468,7 +470,7 @@ abstract class PPI_Model {
 
 		$sData = implode(' = ?, ', $this->parse_reserved_keys(array_keys($p_aRecord))) . ' = ?'; // Setup the field = ? template
 		$sQuery = "UPDATE {$this->sTableName} SET $sData";
-		$sQuery .= ! empty($aWhere) ? ' WHERE ' . implode(' AND ', $aWhere) : '';
+		$sQuery.= ! empty($aWhere) ? ' WHERE ' . implode(' AND ', $aWhere) : '';
 		try {
 			$oResult = $this->rHandler->prepare($sQuery);
 			$oResult->execute(array_values($p_aRecord));
@@ -543,7 +545,7 @@ abstract class PPI_Model {
 				$sOrder = ($p_sOrder != '') ? 'ORDER BY ' : '';
 			}
 			foreach ((array)$p_sOrder as $key => $val) {
-				$sOrder .= $val . ',';
+				$sOrder.= $val . ',';
 			}
 			$sOrder = substr($sOrder, 0, -1);
 
@@ -652,7 +654,7 @@ abstract class PPI_Model {
 			foreach ($p_mValues as $key => $val) {
 				$p_mValues[$key] = "'$val'";
 			}
-			$sql .= implode(',', $p_mValues) . ')';
+			$sql.= implode(',', $p_mValues) . ')';
 			return $sql;
 		}
 		return false;
@@ -692,9 +694,9 @@ abstract class PPI_Model {
 
 		$query = "SELECT $p_sType($p_sField) value FROM $this->sTableName";
 		if ($p_sClause != '') {
-			$query .= " WHERE $p_sClause";
+			$query.= " WHERE $p_sClause";
 		}
-		$query .= ' LIMIT 1';
+		$query.= ' LIMIT 1';
 		$row = $this->query($query);
 		return (bool)$row ? $row[0]['value'] : 0;
 	}

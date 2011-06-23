@@ -16,9 +16,9 @@ class PPI_Cache_Apc implements PPI_Cache_Interface {
 	 * @param string $p_sKey The Key
 	 * @return mixed
 	 */
-	function get($p_sKey) { return apc_fetch($p_sKey); }
+	public function get($p_sKey) { return apc_fetch($p_sKey); }
 
-	function init() {}
+	public function init() {}
 
 	/**
 	 * Set a value in the cache
@@ -27,7 +27,7 @@ class PPI_Cache_Apc implements PPI_Cache_Interface {
 	 * @param mixed $p_iTTL The Time To Live. Integer or String (strtotime)
 	 * @return boolean True on succes, False on failure.
 	 */
-	function set($p_sKey, $p_mData, $p_mTTL = 0) {
+	public function set($p_sKey, $p_mData, $p_mTTL = 0) {
 		return apc_store($p_sKey, $p_mData, (is_numeric($p_mTTL) ? $p_mTTL : strtotime($p_mTTL)));
 	}
 
@@ -36,21 +36,21 @@ class PPI_Cache_Apc implements PPI_Cache_Interface {
 	 * @param string $p_mKey The Key
 	 * @return boolean
 	 */
-	function exists($p_mKey) { return apc_exists($p_mKey); }
+	public function exists($p_mKey) { return apc_exists($p_mKey); }
 
 	/**
 	 * Remove a key from the cache
 	 * @param string $p_sKey The Key
 	 * @return boolean
 	 */
-	function remove($p_sKey) { return apc_delete($p_sKey); }
+	public function remove($p_sKey) { return apc_delete($p_sKey); }
 
 	/**
 	 * Wipe the cache contents
 	 *
 	 * @return unknown
 	 */
-	function clear() { return apc_clear_cache('user'); }
+	public function clear() { return apc_clear_cache('user'); }
 
 	/**
 	 * Increment a numerical value
@@ -59,7 +59,7 @@ class PPI_Cache_Apc implements PPI_Cache_Interface {
 	 * @param numeric $p_iInc The incremental value
 	 * @return numeric
 	 */
-	function increment($p_sKey, $p_iInc = 1) { return apc_inc($p_sKey, $p_iInc); }
+	public function increment($p_sKey, $p_iInc = 1) { return apc_inc($p_sKey, $p_iInc); }
 
 	/**
 	 * Enter description here...
@@ -68,15 +68,15 @@ class PPI_Cache_Apc implements PPI_Cache_Interface {
 	 * @param numeric $p_iDec The decremental value
 	 * @return numeric
 	 */
-	function decrement($p_sKey, $p_iDec = 1) { return apc_dec($p_sKey, $p_iDec); }
+	public function decrement($p_sKey, $p_iDec = 1) { return apc_dec($p_sKey, $p_iDec); }
 
 	/**
 	 * Check if the APC extension has been loaded and is enabled in its configuration.
 	 *
 	 * @return boolean
 	 */
-	function enabled() {
-		return extension_loaded('apc') && (php_sapi_name() === 'cli' && ini_get('apc.enabled'));
+	public function enabled() {
+		return extension_loaded('apc') && ini_get('apc.enabled') && in_array(php_sapi_name(), array('fpm', 'cli', 'cgi'));
 	}
 
 }

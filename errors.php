@@ -9,7 +9,6 @@
  * @package   PPI
  */
 
-
 /**
  * The default PPI error handler, will play with some data then throw an exception, thus the set_exception_handler callback is ran
  *
@@ -20,15 +19,17 @@
  * @throws PPI_Exception
  */
 function ppi_error_handler($errno = '', $errstr = "", $errfile = "", $errline = "") {
+
 	$ppi_exception_thrown = true;
-	$error = array ();
-	$error ['code']   	= $errno;
-	$error ['message']  = $errstr;
-	$error ['file'] 	= $errfile;
-	$error ['line'] 	= $errline;
+	$error				= array();
+	$error['code']		= $errno;
+	$error['message']	= $errstr;
+	$error['file']		= $errfile;
+	$error['line']		= $errline;
+
 	/* throw exception to user */
 	$oException = new PPI_Exception();
-	if(property_exists($oException, '_traceString')) {
+	if (property_exists($oException, '_traceString')) {
 		$error['backtrace'] = $oException->_traceString;
 	}
 	// this function has the exit() call in it, so we must put it last
@@ -42,14 +43,20 @@ function ppi_error_handler($errno = '', $errstr = "", $errfile = "", $errline = 
  * @return void
  */
 function ppi_exception_handler($oException) {
-	if(!$oException instanceof Exception) {
+
+	if (!$oException instanceof Exception) {
 		return false;
 	}
+
 	$error = array();
-	foreach(array('code', 'message', 'file', 'line', 'traceString') as $field) {
-		$fieldName = "_$field";
-		if(!property_exists($oException, $fieldName)) { continue; }
-		if($field == 'traceString') {
+	foreach (array('code', 'message', 'file', 'line', 'traceString') as $field) {
+		$fieldName = '_';
+		$fieldName.= $field;
+
+		if (!property_exists($oException, $fieldName)) {
+			continue;
+		}
+		if ('traceString' === $field) {
 			$error['backtrace'] = $oException->$fieldName;
 		} else {
 			$error[$field] = $oException->$fieldName;
@@ -57,73 +64,71 @@ function ppi_exception_handler($oException) {
 	}
 
 	try {
-		
-		if(!PPI_Registry::getInstance()->exists('PPI_Config')) {
+
+		if (!PPI_Registry::getInstance()->exists('PPI_Config')) {
 			$oException->show_exceptioned_error($error);
 			return;
 		}
 
-		$oConfig = PPI_Helper::getConfig();		
+		$oConfig = PPI_Helper::getConfig();
 		$error['sql'] = PPI_Helper::getRegistry()->get('PPI_Model::PPI_Model_Queries', array());
 
 		// email the error with the backtrace information to the developer
-		if(!isset($oConfig->system->log_errors) || $oConfig->system->log_errors != false) {
-			
+		if (!isset($oConfig->system->log_errors) || false !== $oConfig->system->log_errors) {
+
 			// get the email contents
 			$emailContent = $oException instanceof PPI_Exception ? $oException->getErrorForEmail($error) : '';
-			
+
 			$oLog = new PPI_Model_Log();
 			$oLog->addExceptionLog(array(
-				'code' 		=> $oException->_code,
-				'message' 	=> $oException->_message,
-				'file' 		=> $oException->_file,
+				'code'		=> $oException->_code,
+				'message'	=> $oException->_message,
+				'file'		=> $oException->_file,
 				'line'		=> $oException->_line,
-				'backtrace' => $error['backtrace'],
-				'post'      => serialize($_POST),
-				'cookie'    => serialize($_COOKIE),
-				'get'       => serialize($_GET),
-				'session'   => serialize($_SESSION),
-				'content'	=> $emailContent								
+				'backtrace'	=> $error['backtrace'],
+				'post'		=> serialize($_POST),
+				'cookie'	=> serialize($_COOKIE),
+				'get'		=> serialize($_GET),
+				'session'	=> serialize($_SESSION),
+				'content'	=> $emailContent
 			));
-		
-			if($oConfig->system->email_errors) {
+
+			if ($oConfig->system->email_errors) {
 				//@mail($oConfig->system->developer_email, 'PHP Exception For '.getHostname(), $emailContent);
 				//include CORECLASSPATH.'mail.php';
 				//$mail = new Mail();
 				//$mail->send();
 			}
-			
-			// write the error to the php error log
-			writeErrorToLog($error['message'] . ' in file: '.$error['file'] . ' on line: '.$error['line']);			
-			$oException->show_exceptioned_error($error); 
-		}
 
-	}
-	catch(PPI_Exception $e) {
+			// write the error to the php error log
+			writeErrorToLog($error['message'] . ' in file: ' . $error['file'] . ' on line: ' . $error['line']);
+			$oException->show_exceptioned_error($error);
+		}
+	} catch (PPI_Exception $e) {
+		writeErrorToLog($e->getMessage());
+	} catch (Exception $e) {
+		writeErrorToLog($e->getMessage());
+	} catch (PDOException $e) {
 		writeErrorToLog($e->getMessage());
 	}
-	catch(Exception $e) {
-		writeErrorToLog($e->getMessage());
-	}
-	catch(PDOException $e) {
-		writeErrorToLog($e->getMessage());
-	}
-	$oException->show_exceptioned_error($error); 
-	
+	$oException->show_exceptioned_error($error);
+
 	// @todo This should go to an internal error page which doesn't use framework components and show the error code
 //	ppi_show_exceptioned_error($error);
-	
 }
 
 function writeErrorToLog($message) {
-	if(ini_get('log_errors') !== 'On') {
+
+	if ('On' !== ini_get('log_errors')) {
 		return false;
 	}
-	$oConfig   = PPI_Helper::getConfig();
-	if( ($sErrorLog = ini_get('error_log')) == 'syslog') {
-		syslog(LOG_ALERT, "\n$message\n");
-	} elseif($sErrorLog !== '' && is_writable($sErrorLog)) {
-		file_put_contents($sErrorLog, "\n$message\n", FILE_APPEND);
+
+	$oConfig = PPI_Helper::getConfig();
+	
+	if ('syslog' === ($sErrorLog = ini_get('error_log'))) {
+		syslog(LOG_ALERT, "\n" . $message . "\n");
+	} else if ('' !== $sErrorLog && is_writable($sErrorLog)) {
+		file_put_contents($sErrorLog, "\n" . $message . "\n", FILE_APPEND);
 	}
 }
 
@@ -139,11 +144,12 @@ function ppi_show_exceptioned_error() {
  * @return void
  */
 function setErrorHandlers($p_sErrorHandler = null, $p_sExceptionHandler = null) {
-        if($p_sErrorHandler !== null) {
-                set_error_handler($p_sErrorHandler, E_ALL);
-         }
-         if($p_sExceptionHandler !== null) {
-                set_exception_handler($p_sExceptionHandler);
-        }
-}
 
+	if (null !== $p_sErrorHandler) {
+		set_error_handler($p_sErrorHandler, E_ALL);
+	}
+
+	if (null !== $p_sExceptionHandler) {
+		set_exception_handler($p_sExceptionHandler);
+	}
+}

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
@@ -7,41 +8,36 @@
  */
 class PPI_View {
 
-    /**
-     * The variables to be rendered into the view file
-     *
-     * @var array
-     */
+	/**
+	 * The variables to be rendered into the view file
+	 *
+	 * @var array
+	 */
 	protected $_viewParams = array();
-
 	/**
 	 * The current set view theme
 	 *
 	 * @var null|string
 	 */
 	protected $_viewTheme = null;
-
 	/**
 	 * The master template file
 	 *
 	 * @var null|string
 	 */
 	protected $_masterTemplateFile = null;
-
 	/**
 	 * Default renderer, PHP helper
-     *
+	 *
 	 * @var string $_defaultRenderer
 	 */
 	private $_defaultRenderer = 'php';
-
 	/**
 	 * CSS Files to be rendered
 	 *
 	 * @var array
 	 */
 	protected $_cssFiles = array();
-
 	/**
 	 * Javascript files to be rendered
 	 *
@@ -56,8 +52,9 @@ class PPI_View {
 	 * @todo - Get the skeleton app to pass $config->layout->toArray()
 	 * @param array $options The options
 	 */
-	function __construct(array $options = array()) {
-		if(isset($options['view_theme'])) {
+	public function __construct(array $options = array()) {
+
+		if (isset($options['view_theme'])) {
 			$this->_viewTheme = $options['view_theme'];
 		}
 		$this->_config = PPI_Helper::getConfig();
@@ -65,16 +62,15 @@ class PPI_View {
 
 	/**
 	 * Load function called from controllers
-     *
+	 *
 	 * @todo Make this alias to $this->render()
 	 * @todo look into making this dynamic name rather than 'smarty', 'twig', 'php'
 	 * @param string $p_tplFile The template filename
 	 * @param array $p_tplParams Optional user defined params
-     * @return void
+	 * @return void
 	 */
-	function load($p_tplFile, $p_tplParams = array()) {
+	public function load($p_tplFile, array $p_tplParams = array()) {
 		$this->render($p_tplFile, $p_tplParams);
-
 	}
 
 	/**
@@ -82,10 +78,32 @@ class PPI_View {
 	 *
 	 * @param string $p_sKey
 	 * @param mixed $p_mVal
-     * @return void
+	 * @return void
 	 */
-	function set($p_sKey, $p_mVal) {
+	public function set($p_sKey, $p_mVal) {
 		$this->_viewParams[$p_sKey] = $p_mVal;
+	}
+
+	/**
+	 * Add a var to the view params by ref
+	 *
+	 * @param string $p_sKey
+	 * @param mixed &$p_mVal
+	 * @return void
+	 */
+	public function setByRef($p_sKey, &$p_mVal) {
+		$this->_viewParams[$p_sKey] = &$p_mVal;
+	}
+
+	/**
+	 * Add multiple vars to the view params
+	 *
+	 * @param string $p_sKey
+	 * @param array $p_mVal
+	 * @return void
+	 */
+	public function setByArray($p_sKey, array $p_mVal) {
+		$this->_viewParams = array_merge($this->_viewParams, $p_mVal);
 	}
 
 	/**
@@ -93,11 +111,10 @@ class PPI_View {
 	 *
 	 * @param string $p_tplFile The template filename
 	 * @param array $p_tplParams Optional user defined params
-     * @return void
+	 * @return void
 	 */
-	function loadSmarty($p_tplFile, array $p_tplParams = array()) {
+	public function loadSmarty($p_tplFile, array $p_tplParams = array()) {
 		$this->setupRenderer(new PPI_Helper_Template_Smarty(), $p_tplFile, $p_tplParams);
-
 	}
 
 	/**
@@ -106,7 +123,7 @@ class PPI_View {
 	 * @param string $p_sThemeName
 	 * @return void
 	 */
-	function theme($p_sThemeName) {
+	public function theme($p_sThemeName) {
 		$this->_viewTheme = $p_sThemeName;
 	}
 
@@ -116,7 +133,8 @@ class PPI_View {
 	 * @return string
 	 */
 	protected function getViewTheme() {
-		if($this->_viewTheme === null) {
+
+		if (null === $this->_viewTheme) {
 			$this->_viewTheme = $this->_config->layout->view_theme;
 		}
 		return $this->_viewTheme;
@@ -128,15 +146,13 @@ class PPI_View {
 	 * @param PPI_Interface_Template $oTpl Templating renderer. Instance of PPI_Interface_Template
 	 * @param string $p_tplFile The template file to render
 	 * @param array $p_tplParams Optional user defined parameres
-     * @return void
+	 * @return void
 	 */
-	function setupRenderer(PPI_Interface_Template $oTpl, $p_tplFile, $p_tplParams = array()) {
+	public function setupRenderer(PPI_Interface_Template $oTpl, $p_tplFile, array $p_tplParams = array()) {
 
 		// Default View Values
-		if(!empty($p_tplParams)) {
-			foreach($p_tplParams as $key => $val) {
-				$oTpl->assign($key, $val);
-			}
+		foreach ($p_tplParams as $key => $val) {
+			$oTpl->assign($key, $val);
 		}
 
 		$p_tplFile = PPI_Helper::checkExtension($p_tplFile, $oTpl->getTemplateExtension());
@@ -146,20 +162,21 @@ class PPI_View {
 
 		// Get the default view vars that come when you load a view page.
 		$defaultViewVars = $this->getDefaultRenderValues(array(
-			'viewDir'    => $sViewDir,
-			'actionFile' => $p_tplFile
-		));
-		foreach($defaultViewVars as $varName => $viewVar) {
+					'viewDir'		=> $sViewDir,
+					'actionFile'	=> $p_tplFile
+				));
+
+		foreach ($defaultViewVars as $varName => $viewVar) {
 			$oTpl->assign($varName, $viewVar);
 		}
 
 		/*
-		// Flash Messages
-		if(!isset($this->_config->layout->useMessageFlash) ||
-			($this->_config->layout->useMessageFlash && $this->_config->layout->useMessageFlash == true)) {
+		  // Flash Messages
+		  if(!isset($this->_config->layout->useMessageFlash) ||
+		  ($this->_config->layout->useMessageFlash && $this->_config->layout->useMessageFlash == true)) {
 
-		}
-		*/
+		  }
+		 */
 
 		// Master template
 		$sMasterTemplate = $this->_masterTemplateFile !== null ? $this->_masterTemplateFile : $oTpl->getDefaultMasterTemplate();
@@ -180,66 +197,66 @@ class PPI_View {
 
 	/**
 	 * Obtain the list of default view variables
-     *
+	 *
 	 * @todo review making var names not HNC prefixed.
 	 * @param array $options
 	 * @return array
 	 */
-	function getDefaultRenderValues(array $options) {
+	public function getDefaultRenderValues(array $options) {
 
-		$authData  = PPI_Helper::getSession()->getAuthData();
+		$authData = PPI_Helper::getSession()->getAuthData();
 		$request = array(
-			'controller' => '',
-			'method'     => ''
+			'controller'	=> '',
+			'method'		=> ''
 		);
 
 		$registry = PPI_Helper::getRegistry();
 
 		// Sometimes a render is forced before the PPI_Dispatch object has finished instantiating
 		// For example if a 404 is thrown inside the routing/dispatch process then this scenario occurs.
-		if($registry->exists('PPI_Dispatch')) {
+		if ($registry->exists('PPI_Dispatch')) {
 			$oDispatch = PPI_Helper::getDispatcher();
-			$request   = array(
+			$request = array(
 				'controller' => $oDispatch->getControllerName(),
-				'method'     => $oDispatch->getMethodName()
+				'method' => $oDispatch->getMethodName()
 			);
 		}
 		/*
-		if($registry->exists('PPI_Request')) {
-			$oRequest = $registry->get('PPI_Request');
-		}
-		*/
+		  if($registry->exists('PPI_Request')) {
+		  $oRequest = $registry->get('PPI_Request');
+		  }
+		 */
 		return array(
-			'isLoggedIn'      => !empty($authData),
-			'config'          => $this->_config,
-			'request'         => $request,
-            'authData'        => $authData,
-			'baseUrl'         => $this->_config->system->base_url,
-			'fullUrl'         => PPI_Helper::getFullUrl(),
-			'currUrl'         => PPI_Helper::getCurrUrl(),
-			'viewDir'         => $options['viewDir'],
-			'actionFile'      => $options['actionFile'],
-			'responseCode'    => PPI_Helper::getRegistry()->get('PPI_View::httpResponseCode', 200),
-            'authInfo'        => $authData, // Do not use, just BC stuff
-			'aAuthInfo'       => $authData, // Do not use, just BC stuff.
-			'bIsLoggedIn'     => !empty($authData), // Do not use, just BC stuff
-			'oConfig'         => $this->_config, // Do not use, just BC stuff
+			'isLoggedIn'	=> !empty($authData),
+			'config'		=> $this->_config,
+			'request'		=> $request,
+			'authData'		=> $authData,
+			'baseUrl'		=> $this->_config->system->base_url,
+			'fullUrl'		=> PPI_Helper::getFullUrl(),
+			'currUrl'		=> PPI_Helper::getCurrUrl(),
+			'viewDir'		=> $options['viewDir'],
+			'actionFile'	=> $options['actionFile'],
+			'responseCode'	=> PPI_Helper::getRegistry()->get('PPI_View::httpResponseCode', 200),
+			'authInfo'		=> $authData, // Do not use, just BC stuff
+			'aAuthInfo'		=> $authData, // Do not use, just BC stuff.
+			'bIsLoggedIn'	=> !empty($authData), // Do not use, just BC stuff
+			'oConfig'		=> $this->_config, // Do not use, just BC stuff
 		);
 	}
 
 	/**
 	 * To get a view variable that is set to get rendered. (TBC)
-     *
+	 *
 	 * @param string $key The Key
-     * @return mixed
+	 * @return mixed
 	 */
-	function get($key) {
-		if(!array_key_exists($key, $this->_viewParams)) {
-			throw new PPI_Exception('Unable to find View Key: '.$key);
-		}
-		return $this->_viewParams[$key];
-	}
+	public function get($key) {
 
+		if (isset($this->_viewParams[$key])) {
+			return $this->_viewParams[$key];
+		}
+		throw new PPI_Exception('Unable to find View Key: ' . $key);
+	}
 	/**
 	 * Override the default template file, with optional include for the .php or .tpl extension
 	 *
@@ -247,26 +264,27 @@ class PPI_View {
 	 * @param string $p_sNewTemplateFile New Template Filename
 	 * @return void
 	 */
-	function setTemplateFile($p_sNewTemplateFile) {
+	public function setTemplateFile($p_sNewTemplateFile) {
 		$this->_masterTemplateFile = $p_sNewTemplateFile;
 	}
 
 	/**
 	 * The internal render function, this is called by $this->load('template');
-     *
+	 *
 	 * @todo finish this, have it accept 'template' at first.
 	 * @param string $template The template name to render
 	 * @param array $params Optional parameters
-     * @return void
+	 * @return void
 	 */
-	function render($template, array $params = array()) {
-		if(isset($this->_config->layout->renderer) && $this->_config->layout->renderer != '') {
-			$sRenderer = $this->_config->layout->renderer;
-		} else {
+	public function render($template, array $params = array()) {
+
+		if (empty($this->_config->layout->renderer)) {
 			$sRenderer = $this->_defaultRenderer;
+		} else {
+			$sRenderer = $this->_config->layout->renderer;
 		}
 
-		switch($sRenderer) {
+		switch ($sRenderer) {
 			case 'smarty':
 				$oTpl = new PPI_Helper_Template_Smarty();
 				break;
@@ -275,7 +293,7 @@ class PPI_View {
 				$oTpl = new PPI_Helper_Template_Twig();
 				break;
 
-			case 'php':
+			#case 'php':
 			default:
 				$oTpl = new PPI_Helper_Template_PHP();
 				break;

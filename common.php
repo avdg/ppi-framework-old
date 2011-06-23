@@ -1,16 +1,16 @@
 <?php
 
-
-defined('PPI_CONTROLLER') or define ('PPI_CONTROLLER', 0);
-defined('PPI_CONTROLLER_PLUGIN') or define ('PPI_CONTROLLER_PLUGIN', 1);
+defined('PPI_CONTROLLER')			|| define('PPI_CONTROLLER', 0);
+defined('PPI_CONTROLLER_PLUGIN')	|| define('PPI_CONTROLLER_PLUGIN', 1);
 
 /**
  * This function returns the role name of the user
  * @returns string
  */
 function getRoleType() {
+
 	$aUserInfo = PPI_Session::getInstance()->getAuthData();
-	return ($aUserInfo !== false && count($aUserInfo) > 0) ? $aUserInfo['role_name'] : 'guest';
+	return false !== $aUserInfo && array() !== $aUserInfo ? $aUserInfo['role_name'] : 'guest';
 }
 
 /**
@@ -19,16 +19,18 @@ function getRoleType() {
  * @return integer
  */
 function getRoleID() {
-       $aUserInfo = PPI_Session::getInstance()->getAuthData();
-       return ($aUserInfo !== false && count($aUserInfo) > 0) ? $aUserInfo['role_id'] : 1;
+
+	$aUserInfo = PPI_Session::getInstance()->getAuthData();
+	return false !== $aUserInfo && array() !== $aUserInfo ? $aUserInfo['role_id'] : 1;
 }
 
 function getRoleIDFromName($p_sRoleName) {
+
 	$aRoles = PPI_Helper::getConfig()->system->roleMapping->toArray();
-	if(isset($aRoles[$p_sRoleName])) {
+	if (isset($aRoles[$p_sRoleName])) {
 		return $aRoles[$p_sRoleName];
 	}
-	throw new PPI_Exception('Unknown Role Type: '.$p_sRoleName);
+	throw new PPI_Exception('Unknown Role Type: ' . $p_sRoleName);
 }
 
 /**
@@ -36,27 +38,31 @@ function getRoleIDFromName($p_sRoleName) {
  *
  */
 function getRoles() {
-       return PPI_Helper::getConfig()->system->roleMapping->toArray();
+
+	return PPI_Helper::getConfig()->system->roleMapping->toArray();
 }
 
 function roleNameToID($p_sName) {
-	if(!isset(PPI_Helper::getConfig()->system->roleMapping)) {
+
+	if (!isset(PPI_Helper::getConfig()->system->roleMapping)) {
 		throw new PPI_Exception('Trying to perform roleIDToName when no roleMapping information was found.');
 	}
-       $aRoles = getRoles();
-       if(!isset($aRoles[$p_sName])) {
-           throw new PPI_Exception('Unable to find role: ' . $p_sName);
-       }
-       return $aRoles[$p_sName];
+
+	$aRoles = getRoles();
+	if (!isset($aRoles[$p_sName])) {
+		throw new PPI_Exception('Unable to find role: ' . $p_sName);
+	}
+	return $aRoles[$p_sName];
 }
 
 function roleIDToName($p_iID) {
-	if(!isset(PPI_Helper::getConfig()->system->roleMapping)) {
+
+	if (!isset(PPI_Helper::getConfig()->system->roleMapping)) {
 		throw new PPI_Exception('Trying to perform roleIDToName when no roleMapping information was found.');
 	}
 }
 
-function print_rn ($aData = ""){
+function print_rn($aData='') {
 	echo '<pre>';
 	print_r($aData);
 	echo '</pre>';
@@ -68,16 +74,16 @@ function print_rn ($aData = ""){
  */
 function getControllerList() {
 	$aControllers = array();
-	foreach(array(PLUGINCONTROLLERPATH, CONTROLLERPATH) as $sCurrPath) {
+	foreach (array(PLUGINCONTROLLERPATH, CONTROLLERPATH) as $sCurrPath) {
 		if ($handle = opendir($sCurrPath)) {
-		    while (false !== ($file = readdir($handle))) {
-		        if ($file != "." && $file != ".." && strpos($file, '.php') !== false) {
-		        	if(!in_array(strtolower($file), $aControllers)) {
-		           		$aControllers[] .= str_replace('.php', '', strtolower($file));
-		        	}
-		        }
-		    }
-		    closedir($handle);
+			while (false !== ($file = readdir($handle))) {
+				if ($file != "." && $file != ".." && strpos($file, '.php') !== false) {
+					if (!in_array(strtolower($file), $aControllers)) {
+						$aControllers[] .= str_replace('.php', '', strtolower($file));
+					}
+				}
+			}
+			closedir($handle);
 		}
 	}
 	return $aControllers;
@@ -88,8 +94,9 @@ function getControllerList() {
  * @return boolean
  */
 function db_check_version() {
+
 	$points = explode('.', mysql_get_server_info());
-	return ($points[0] < 5);
+	return $points[0] < 5;
 }
 
 /**
@@ -104,35 +111,50 @@ function php_check_version() {
  * Check if the database has been installed
  */
 function is_db_installed() {
-	$config  = PPI_Registry::getInstance()->get('config');
-	$oUser   = new PPI_Model_User();
-	$rows    = $oUser->query('SELECT ' . $config->system->defaultUserTable . ' FROM ' . $config->system->defaultUserTable . ' LIMIT 1');
-	return count($rows) > 0;
+
+	$config = PPI_Registry::getInstance()->get('config');
+	$oUser	= new PPI_Model_User();
+	$rows	= $oUser->query('SELECT ' . $config->system->defaultUserTable . ' FROM ' . $config->system->defaultUserTable . ' LIMIT 1');
+	return array() !== $rows;
+}
+
+/**
+ * Check if a variable is set and not empty and return a default if false
+ * @param <type> $var
+ * @param <type> $alt
+ * @return <type> 
+ */
+function ifset(&$var, $alt=null) {
+
+	if (empty($var)) {
+		return $alt;
+	}
+	return $var;
 }
 
 /**
  * This function works like phpinfo(); and returns a html representation of the Framework settings.
  */
-
 function ppi_info() {
+
 	global $oConfig;
-	$sVersion     = PPI_VERSION;
-	$sBasePath    = BASEPATH;
-	$sViewPath    = (defined ('PLUGINVIEWPATH') ? PLUGINVIEWPATH : VIEWPATH);
-	$sModelPath   = MODELPATH;
+	$sVersion	= PPI_VERSION;
+	$sBasePath	= BASEPATH;
+	$sViewPath	= defined('PLUGINVIEWPATH') ? PLUGINVIEWPATH : VIEWPATH;
+	$sModelPath	= MODELPATH;
 
-	$sBaseUrl         		= $oConfig->system->base_url;
-	$sMaintenanceMode 		= ($oConfig->system->maintenance == true) ? 'On' : 'Off';
-	$sAutoloadplugins 		= ($oConfig->system->autoload_plugins == true) ? 'On' : 'Off';
-	$sAllowedHosts    		= implode (' / ', $oConfig->system->allow_access->toArray());
-	$sSessionName     		= $oConfig->system->session_name;
-	$sPluginPath      		= PLUGINPATH;
-	$sPluginViewPath  		= PLUGINVIEWPATH;
-	$sPluginModelPath  		= PLUGINMODELPATH;
-	$sPluginControllerPath 	= PLUGINCONTROLLERPATH;
-	$sSiteType             	= getSiteType();
+	$sBaseUrl			= $oConfig->system->base_url;
+	$sMaintenanceMode	= ($oConfig->system->maintenance == true) ? 'On' : 'Off';
+	$sAutoloadplugins	= ($oConfig->system->autoload_plugins == true) ? 'On' : 'Off';
+	$sAllowedHosts		= implode(' / ', $oConfig->system->allow_access->toArray());
+	$sSessionName		= $oConfig->system->session_name;
+	$sPluginPath		= PLUGINPATH;
+	$sPluginViewPath	= PLUGINVIEWPATH;
+	$sPluginModelPath	= PLUGINMODELPATH;
+	$sPluginControllerPath = PLUGINCONTROLLERPATH;
+	$sSiteType			= getSiteType();
 
-	$sHtml =<<<EOF
+	$sHtml = <<<EOF
 
       <style>
         .ppi_info
@@ -237,6 +259,7 @@ function getHTTPHostname() {
 
 function getSiteType() {
 	global $siteTypes;
+
 	$sHostName = getHTTPHostname();
 	foreach ($siteTypes as $key => $val) {
 		if ($key == $sHostName) {
@@ -250,23 +273,25 @@ function getSiteType() {
  * Dumping a variable with backtracing information
  * @param mixed $var
  */
-function ppi_dump($var, $p_bThrowException = false) {
-	 	if($p_bThrowException === false) {
-		 	$trace = debug_backtrace();
-		 	$label = "File: ".str_replace($_SERVER['DOCUMENT_ROOT'], '...', $trace[0]['file'] . "<br>\n");
-		 	$label .=  "Line: {$trace[0]['line']}"."<br>\n";
-		 	if (isset($trace[1])) {
-		 		$label .=  "Function: {$trace[1]['function']}<br>\n";
-		 	} else {
-		 		$label .=  "Global (not in function)<br>\n";
-		 	}
-		 	$html = $label . '<pre>';
-		 	echo $html;
-			var_dump($var);
-			echo '</pre>';
-	 	} else {
-	 		echo "<pre>";
-	 		var_dump($var);
-	 		throw new PPI_Exception('Exceptioned Dump');
-	 	}
+function ppi_dump($var, $p_bThrowException=false) {
+
+	if (false === $p_bThrowException) {
+
+		$trace = debug_backtrace();
+		$label = 'File: ' . str_replace($_SERVER['DOCUMENT_ROOT'], '...', $trace[0]['file'] . "<br>\n");
+		$label.= 'Line: ' . $trace[0]['line'] . "<br>\n";
+
+		if (isset($trace[1])) {
+			$label.= 'Function: ' . $trace[1]['function'] . "<br>\n";
+		} else {
+			$label.= "Global (not in function)<br>\n";
+		}
+		echo $label . '<pre>';
+		var_dump($var);
+		echo '</pre>';
+	} else {
+		echo '<pre>';
+		var_dump($var);
+		throw new PPI_Exception('Exceptioned Dump');
+	}
 }

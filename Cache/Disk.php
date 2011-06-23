@@ -119,11 +119,17 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 		}
 
 		$aMetaData = array(
-		   'expire_time' => time() + (int) $p_iTTL,
-		   'ttl'		 => $p_iTTL
+			'expire_time' => time() + (int) $p_iTTL,
+			'ttl'         => $p_iTTL,
+			'serialized'  => false
 		);
+		if(!is_scalar($p_mData)) {
+			$aMetaData['serialized'] = true;
+			$p_mData = serialize($p_mData);
+		}
 
-		return file_put_contents($sPath, serialize($p_mData), LOCK_EX) > 0
+
+		return file_put_contents($sPath, $p_mData, LOCK_EX) > 0
 			&& file_put_contents($this->getKeyMetaCachePath($p_sKey), serialize($aMetaData), LOCK_EX) > 0;
 	}
 
@@ -136,7 +142,9 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 		if(false === $this->exists($p_sKey)) {
 			return $p_mDefault;
 		}
-		return unserialize(file_get_contents($this->getKeyCachePath($p_sKey)));
+		$metaData = file_get_contents($this->getKeyMetaCachePath($p_sKey));
+		$content = file_get_contents($this->getKeyCachePath($p_sKey));
+		return $metaData['serialized'] ? unserialize($content) : $content;
 	}
 
 	/**

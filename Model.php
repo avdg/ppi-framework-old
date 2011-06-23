@@ -134,25 +134,29 @@ abstract class PPI_Model {
 		$this->sPassword = $dbInfo['password'];
 		$this->sDataBase = $dbInfo['database'];
 
-		// Try our PDO connection. this checks for persistent connections and charsets too
+		// Try our PDO connection.
 		try {
-			$persistent = false;
-			if (isset($dbInfo['persistent']) && $dbInfo['persistent'] == true) {
-				$persistent = true;
-			}
-			$this->rHandler = new PDO($this->makeDSN(),
-							$this->sUserName,
-							$this->sPassword,
-							$persistent ? array(PDO::ATTR_PERSISTENT => true) : array()
-			);
+
+			$connectParams = array();
+
+			// Persistent
+			$connectParams[PDO::ATTR_PERSISTENT] = isset($dbInfo['persistent']) && $dbInfo['persistent'] == true;
+
+			// Charset setting
+			$bIsCharsetOverride = isset($dbInfo['charset']) && $dbInfo['charset'] != '';
+			$charset = strtolower($bIsCharsetOverride ? $oConfig->db->charset : 'utf8');
+			$connectParams[PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES ' . $charset;
+
+			// Connect
+			$this->rHandler = new PDO($this->makeDSN(), $this->sUserName, $this->sPassword, $connectParams);
+
+			// Set exception mode
 			$this->rHandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 		} catch (PDOException $e) {
 			throw new PPI_Exception('Database Connection Error: ' . $e->getMessage());
 		}
 
-		// Lets store our charset being overridable from the config, and defaulting to utf8.
-		$bIsCharsetOverride = isset($dbInfo['charset']) && $dbInfo['charset'] != '';
-		$charset = strtolower($bIsCharsetOverride ? $oConfig->db->charset : 'utf8');
 		// If the charset is overriden lets check this charset exists in the mysqld. Exception upon non-existant charset
 		if ($bIsCharsetOverride && !$this->isValidCharset($charset)) {
 			throw new PPI_Exception('Invalid charset specified');

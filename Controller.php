@@ -34,9 +34,6 @@ class PPI_Controller {
 	 */
 	protected function redirect($p_sURL = '', $p_bPrependBase = true) {
 		$sUrl = ($p_bPrependBase === true) ? $this->getConfig()->system->base_url . $p_sURL : $p_sURL;
-		if($this->getUrl() == $sUrl) {
-			return false;
-		}
 		if(!headers_sent()) {
 			header("Location: $sUrl");
 			exit;

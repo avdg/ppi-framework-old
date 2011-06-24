@@ -6,6 +6,8 @@ class PPI_Request_Get extends PPI_Request_Abstract {
 
 	protected $_processedUriParams = false;
 
+	protected $_dataOverride = false;
+
 	/**
 	 * Constructor
 	 *
@@ -16,6 +18,7 @@ class PPI_Request_Get extends PPI_Request_Abstract {
 	 */
 	public function __construct(array $data = array()) {
 		if(!empty($data)) {
+			$this->_dataOverride = true;
 			$this->_array = $data;
 		}
 	}
@@ -55,7 +58,7 @@ class PPI_Request_Get extends PPI_Request_Abstract {
 	 * @return mixed
 	 */
 	public function offsetGet($offset) {
-		if($this->_processedUriParams === false) {
+		if(!$this->_dataOverride && !$this->_processedUriParams) {
 			$this->_array              = $this->processUriParams();
 			$this->_processedUriParams = true;
 		}

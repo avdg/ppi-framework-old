@@ -1,8 +1,19 @@
 <?php
 
 abstract class PPI_Request_Abstract implements ArrayAccess, Iterator, Countable {
+
+	/**
+	 * The actual data we're dealing with
+	 *
+	 * @var array
+	 */
 	protected $_array = array();
 
+	/**
+	 * Has the data for this instantiated class been provided? or automatically collected
+	 *
+	 * @var bool
+	 */
 	protected $_isCollected = true;
 
 	/**

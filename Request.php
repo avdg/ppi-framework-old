@@ -103,9 +103,8 @@ class PPI_Request {
 		if (isset($env['get']) && (is_array($env['get']) || $env['get'] instanceof PPI_Request_Get)) {
 			$this->_get = $env['get'];
 		} else {
-			$this->_get = new PPI_Request_Get(array(
-				'uri' => $this->getUri()
-			));
+			$this->_get = new PPI_Request_Get();
+			$this->_get->setUri($this->getUri());
 		}
 
 		if (isset($env['post']) && (is_array($env['post']) || $env['post'] instanceof PPI_Request_Post)) {

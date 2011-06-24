@@ -14,11 +14,20 @@ class PPI_Request_Get extends PPI_Request_Abstract {
 	 *
 	 * @param array $options Some Options
 	 */
-	public function __construct(array $options = array()) {
-
-		if(isset($options['uri'])) {
-			$this->_uri = $options['uri'];
+	public function __construct(array $data = array()) {
+		if(!empty($data)) {
+			$this->_array = $data;
 		}
+	}
+
+	/**
+	 * Pass in the current URI for this class to interact against.
+	 *
+	 * @param string $uri
+	 * @return void
+	 */
+	public function setUri($uri) {
+		$this->_uri = $uri;
 	}
 
 	/**

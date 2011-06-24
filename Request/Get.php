@@ -2,23 +2,31 @@
 
 class PPI_Request_Get extends PPI_Request_Abstract {
 
+	/**
+	 * The current URI. This is used if we are automatically collecting params, we will need a URI
+	 *
+	 * @var null|string
+	 */
 	protected $_uri = null;
 
+	/**
+	 * Have we automatically processed the params?
+	 *
+	 * @var bool
+	 */
 	protected $_processedUriParams = false;
-
-	protected $_dataOverride = false;
 
 	/**
 	 * Constructor
 	 *
-	 * Stores the given $_GET data or tries to fetch
-	 * $_GET if the given array is empty or not given
+	 * If data is supplied then that data is used, otherwise we automatically
 	 *
-	 * @param array $options Some Options
+	 * @param array $data Supplied Data
 	 */
 	public function __construct(array $data = array()) {
+
 		if(!empty($data)) {
-			$this->_dataOverride = true;
+			$this->_isCollected = false;
 			$this->_array = $data;
 		}
 	}
@@ -52,31 +60,30 @@ class PPI_Request_Get extends PPI_Request_Abstract {
 	}
 
 	/**
-	 * Get the param
+	 * Override on offsetGet, this checks if we're supposed to automatically collect data
+	 * and if it has not done so already then we do that.
 	 *
-	 * @param  $offset
+	 * @param string $offset
 	 * @return mixed
 	 */
 	public function offsetGet($offset) {
-		if(!$this->_dataOverride && !$this->_processedUriParams) {
-			$this->_array              = $this->processUriParams();
-			$this->_processedUriParams = true;
+		if($this->_isCollected === true && $this->_processedUriParams === false) {
+			$this->_array = $this->processUriParams();
 		}
 		return parent::offsetGet($offset);
 	}
 
 	/**
-	 * Override on offsetExists, this gets data from $_GET first otherwise defaulting to URI params.
-	 * It also runs $this->processUriParams()
+	 * Override on offsetExists, this checks if we're supposed to automatically collect data
+	 * and if it has not done so already then we do that.
 	 *
-	 * @param  $offset
+	 * @param string $offset
 	 * @return bool
 	 */
 	public function offsetExists($offset) {
-		if($this->_processedUriParams === false) {
-			$this->_array              = $this->processUriParams();
-			$this->_processedUriParams = true;
+		if($this->_isCollected === true && $this->_processedUriParams === false) {
+			$this->_array = $this->processUriParams();
 		}
-		return isset($_GET[$offset]) ? $_GET[$offset] : parent::offsetExists($offset);
+		return parent::offsetExists($offset);
 	}
 }

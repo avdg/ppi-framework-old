@@ -124,6 +124,6 @@ class PPI_Autoload {
 	 * @return string
 	 */
 	static function convertClassName($p_sClassName) {
-		return str_replace('_', DS, $p_sClassName);
+		return strtr($p_sClassName, '_', DS);
 	}
 }

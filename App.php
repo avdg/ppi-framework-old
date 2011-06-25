@@ -215,15 +215,15 @@ class PPI_App {
 	                case 'swift':
 		                include_once(SYSTEMPATH . 'Vendor/Swift/swift_required_pear.php');
 		                break;
-/*
+
                     case 'solar':
+	                    include_once(SYSTEMPATH . 'Vendor/Solar.php');
                         PPI_Autoload::add('Solar', array(
                             'path'   => SYSTEMPATH . 'Vendor/',
                             'prefix' => 'Solar_'
                         ));
-                        Solar::start();
                         break;
- */
+
                 }
 
             }

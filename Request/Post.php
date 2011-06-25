@@ -3,12 +3,16 @@
 class PPI_Request_Post extends PPI_Request_Abstract {
 
 	/**
-	 * Obtain the information from $this->_array.
-	 * Override from $options['data']
+	 * Obtain information from POST. This can be passed in or it defaults to $_POST
 	 *
-	 * @param array $options
+	 * @param array $post
 	 */
-	public function __construct(array $options = array()) {
-		$this->_array = isset($options['data']) ? $options['data'] : $_POST;
+	public function __construct(array $post = array()) {
+		if(!empty($post)) {
+			$this->_isCollected = false;
+			$this->_array = $post;
+		} else {
+			$this->_array = $_POST;
+		}
 	}
 }

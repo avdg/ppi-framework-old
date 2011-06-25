@@ -1,19 +1,15 @@
 <?php
 
-class PPI_Request_ServerTest extends PHPUnit_Framework_TestCase
-{
-	public function setUp()
-	{
+class PPI_Request_ServerTest extends PHPUnit_Framework_TestCase {
+	public function setUp() {
 		$_SERVER = array('foo' => 'bar', 'bar' => 'foo');
 	}
 
-	public function tearDown()
-	{
+	public function tearDown() {
 		$_SERVER = array();
 	}
 
-	public function testIsCollected()
-	{
+	public function testIsCollected() {
 		$server = new PPI_Request_Server;
 		$this->assertTrue($server->isCollected());
 
@@ -21,11 +17,10 @@ class PPI_Request_ServerTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse($server->isCollected());
 
 		$server = new PPI_Request_Server(array());
-		$this->assertFalse($server->isCollected());
+		$this->assertTrue($server->isCollected());
 	}
 
-	public function testCollectServer()
-	{
+	public function testCollectServer() {
 		$server = new PPI_Request_Server;
 		$this->assertEquals('foo', $server['bar']);
 		$this->assertEquals('bar', $server['foo']);
@@ -33,8 +28,7 @@ class PPI_Request_ServerTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue($server->isCollected());
 	}
 
-	public function testCustomServer()
-	{
+	public function testCustomServer() {
 		$server = new PPI_Request_Server(array('drink' => 'beer'));
 		$this->assertEquals('beer', $server['drink']);
 		$this->assertEquals(null,   $server['foo']);

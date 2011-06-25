@@ -1,19 +1,15 @@
 <?php
 
-class PPI_Request_PostTest extends PHPUnit_Framework_TestCase
-{
-	public function setUp()
-	{
+class PPI_Request_PostTest extends PHPUnit_Framework_TestCase {
+	public function setUp() {
 		$_POST = array('foo' => 'bar', 'bar' => 'foo');
 	}
 
-	public function tearDown()
-	{
+	public function tearDown() {
 		$_POST = array();
 	}
 
-	public function testIsCollected()
-	{
+	public function testIsCollected() {
 		$post = new PPI_Request_Post;
 		$this->assertTrue($post->isCollected());
 
@@ -21,11 +17,10 @@ class PPI_Request_PostTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse($post->isCollected());
 
 		$post = new PPI_Request_Post(array());
-		$this->assertFalse($post->isCollected());
+		$this->assertTrue($post->isCollected());
 	}
 
-	public function testCollectPost()
-	{
+	public function testCollectPost() {
 		$post = new PPI_Request_Post;
 		$this->assertEquals('foo', $post['bar']);
 		$this->assertEquals('bar', $post['foo']);
@@ -33,8 +28,7 @@ class PPI_Request_PostTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue($post->isCollected());
 	}
 
-	public function testCustomPost()
-	{
+	public function testCustomPost() {
 		$post = new PPI_Request_Post(array('drink' => 'beer'));
 		$this->assertEquals('beer', $post['drink']);
 		$this->assertEquals(null,   $post['foo']);

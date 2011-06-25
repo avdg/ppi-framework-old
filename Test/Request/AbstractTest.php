@@ -73,6 +73,8 @@ class PPI_Request_AbstractTest extends PHPUnit_Framework_TestCase
 	}
 }
 
+
 class TestPPI_Request_Abstract extends PPI_Request_Abstract
 {
 }
+

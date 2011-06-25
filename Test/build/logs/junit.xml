@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="Request" tests="13" assertions="53" failures="0" errors="0" time="0.002125">
+    <testsuite name="PPI_Request_AbstractTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework/Test/Request/AbstractTest.php" fullPackage="PPI.Request" tests="5" assertions="24" failures="0" errors="0" time="0.001047">
+      <testcase name="testSetAndGetOffset" class="PPI_Request_AbstractTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework/Test/Request/AbstractTest.php" line="12" assertions="6" time="0.000761"/>
+      <testcase name="testShouldCallSet" class="PPI_Request_AbstractTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework/Test/Request/AbstractTest.php" line="26" assertions="6" time="0.000089"/>
+      <testcase name="testIterator" class="PPI_Request_AbstractTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework/Test/Request/AbstractTest.php" line="40" assertions="7" time="0.000102"/>
+      <testcase name="testCountable" class="PPI_Request_AbstractTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework/Test/Request/AbstractTest.php" line="56" assertions="4" time="0.000062"/>
+      <testcase name="testGetIsCollected" class="PPI_Request_AbstractTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework/Test/Request/AbstractTest.php" line="70" assertions="1" time="0.000033"/>
+    </testsuite>
+    <testsuite name="PPI_Request_GetTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework/Test/Request/GetTest.php" fullPackage="PPI.Request" tests="2" assertions="7" failures="0" errors="0" time="0.000532">
+      <testcase name="testIsCollected" class="PPI_Request_GetTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework/Test/Request/GetTest.php" line="15" assertions="3" time="0.000459"/>
+      <testcase name="testCustomGet" class="PPI_Request_GetTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework/Test/Request/GetTest.php" line="36" assertions="4" time="0.000073"/>
+    </testsuite>
+    <testsuite name="PPI_Request_PostTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework/Test/Request/PostTest.php" fullPackage="PPI.Request" tests="3" assertions="11" failures="0" errors="0" time="0.000265">
+      <testcase name="testIsCollected" class="PPI_Request_PostTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework/Test/Request/PostTest.php" line="15" assertions="3" time="0.000150"/>
+      <testcase name="testCollectPost" class="PPI_Request_PostTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework/Test/Request/PostTest.php" line="27" assertions="4" time="0.000058"/>
+      <testcase name="testCustomPost" class="PPI_Request_PostTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework/Test/Request/PostTest.php" line="36" assertions="4" time="0.000057"/>
+    </testsuite>
+    <testsuite name="PPI_Request_ServerTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework/Test/Request/ServerTest.php" fullPackage="PPI.Request" tests="3" assertions="11" failures="0" errors="0" time="0.000281">
+      <testcase name="testIsCollected" class="PPI_Request_ServerTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework/Test/Request/ServerTest.php" line="15" assertions="3" time="0.000158"/>
+      <testcase name="testCollectServer" class="PPI_Request_ServerTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework/Test/Request/ServerTest.php" line="27" assertions="4" time="0.000066"/>
+      <testcase name="testCustomServer" class="PPI_Request_ServerTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework/Test/Request/ServerTest.php" line="36" assertions="4" time="0.000057"/>
+    </testsuite>
+  </testsuite>
+</testsuites>

@@ -1,13 +1,12 @@
 <?php
+
 /**
- * Cookie Class
+ * Cookie class
  *
  * @package   Core
  * @author    Paul Dragoonis <dragoonis@php.net>
- * @author    Dayson Pais <dayson@epicwhale.org>
- * @copyright 2001-2010 Digiflex Development Team
- * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
- * @link      www.ppiframework.com
+ * @license   http://opensource.org/licenses/mit-license.php MIT
+ * @link      http://www.ppiframework.com
 */
 class PPI_Cookie {
 

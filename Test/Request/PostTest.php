@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * Unit test for the PPI Request Post
+ *
+ * @package   Core
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/mit-license.php MIT
+ * @link      http://www.ppiframework.com
+*/
 class PPI_Request_PostTest extends PHPUnit_Framework_TestCase {
 	public function setUp() {
 		$_POST = array('foo' => 'bar', 'bar' => 'foo');

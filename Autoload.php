@@ -1,11 +1,11 @@
 <?php
 /**
+ * The PPI Autoloader
  *
  * @package   Core
  * @author    Paul Dragoonis <dragoonis@php.net>
- * @copyright 2001-2010 Digiflex Development Team
  * @license   http://opensource.org/licenses/mit-license.php MIT
- * @link      www.ppiframework.com
+ * @link      http://www.ppiframework.com
 */
 class PPI_Autoload {
 
@@ -26,7 +26,7 @@ class PPI_Autoload {
 		)
 	);
 
-       
+
 	function __construct() {}
 
 	/**
@@ -35,16 +35,16 @@ class PPI_Autoload {
          * @return void
 	 */
 	static function register() {
-                spl_autoload_register(array('PPI_Autoload', 'autoload'));
+		spl_autoload_register(array('PPI_Autoload', 'autoload'));
 	}
 
 	/**
 	 * Unregister The PPI Autoload Function
-         * 
+         *
 	 * @return void
 	 */
 	static function unregister() {
-                spl_autoload_unregister(array('PPI_Autoload', 'autoload'));
+		spl_autoload_unregister(array('PPI_Autoload', 'autoload'));
 	}
 
 	/**
@@ -58,7 +58,7 @@ class PPI_Autoload {
 		foreach(self::$_libraries as $lib => $aOptions) {
 			$sPrefix = $aOptions['prefix'];
 			$sPath   = $aOptions['path'];
-            
+
 	        if(strpos($className, $sPrefix) !== false) {
 				// Hack for the PPI framework until path generation is delegated off elsewhere.
 				// We take off the PPI_ and APP_ from the class name as they're not directly part of the include path
@@ -82,8 +82,11 @@ class PPI_Autoload {
 	 * PPI_Autoload::add('Zend', array(
 	 *     'path' => SYSTEMPATH . 'Vendor/',
 	 *     'prefix' => 'Zend_'
-         * ));
-         * 
+     * ));
+     *
+	 * @todo This appears to be setting the include path to /Vendor/ whereas it should be
+	 *       setting it to /Vendor/Zend/ or /Vendor/Solar/
+	 *
 	 * @param string $key The Key, This is used for exists() and remove()
 	 * @param array $p_aOptions
 	 */

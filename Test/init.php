@@ -1,4 +1,13 @@
 <?php
+/**
+ * Unit test bootloader for PPI
+ *
+ * @package   Core
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/mit-license.php MIT
+ * @link      http://www.ppiframework.com
+*/
+
 date_default_timezone_set('Europe/Brussels');
 
 set_include_path(implode(PATH_SEPARATOR, array(

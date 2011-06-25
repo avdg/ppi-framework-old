@@ -17,6 +17,7 @@ class PPI_Request_GetTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testIsCollected() {
+
 		$get = new PPI_Request_Get();
 		$this->assertTrue($get->isCollected());
 

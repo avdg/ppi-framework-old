@@ -21,6 +21,9 @@
     <testsuite name="Request">
       <directory suffix="Test.php">Request</directory>
     </testsuite>
+    <testsuite name="Registry">
+      <directory suffix="Test.php">Registry</directory>
+    </testsuite>
   </testsuites>
 
 
@@ -37,7 +40,7 @@
  	<blacklist>
         <directory suffix=".php">PHPUnit</directory>
     </blacklist>
-    
+
    </filter>
 
 

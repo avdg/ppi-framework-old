@@ -1,6 +1,6 @@
 <?php
 /**
-* Unit test for the PPI Registry
+* Unit test for PPI Response
 *
 * @package   Core
 * @author    Paul Dragoonis <dragoonis@php.net>

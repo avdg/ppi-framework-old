@@ -1,18 +1,22 @@
 <?php
-	/**
-	* Unit test for the PPI Registry
-	*
-	* @package   Core
-	* @author    Paul Dragoonis <dragoonis@php.net>
-	* @license   http://opensource.org/licenses/mit-license.php MIT
-	* @link      http://www.ppiframework.com
-	*/
+/**
+* Unit test for the PPI Registry
+*
+* @package   Core
+* @author    Paul Dragoonis <dragoonis@php.net>
+* @license   http://opensource.org/licenses/mit-license.php MIT
+* @link      http://www.ppiframework.com
+*/
 class PPI_RegistryTest extends PHPUnit_Framework_TestCase {
 
 	protected $_reg = null;
 
 	public function setUp() {
 		$this->_reg = PPI_Registry::getInstance();
+	}
+
+	public function tearDown() {
+		unset($this->_reg);
 	}
 
 	public function testRemove() {

@@ -24,6 +24,12 @@
     <testsuite name="Registry">
       <directory suffix="Test.php">Registry</directory>
     </testsuite>
+    <testsuite name="Cache">
+      <directory suffix="Test.php">Cache</directory>
+    </testsuite>
+    <testsuite name="Response">
+      <directory suffix="Test.php">Response</directory>
+    </testsuite>
   </testsuites>
 
 

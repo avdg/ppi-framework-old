@@ -13,7 +13,7 @@ defined('DS')					|| define('DS', DIRECTORY_SEPARATOR);
 defined('ROOTPATH')				|| define('ROOTPATH', getcwd() . DS);
 defined('SYSTEMPATH')			|| define('SYSTEMPATH', dirname(__FILE__) . DS);
 defined('BASEPATH')				|| define('BASEPATH', dirname(__FILE__) . DS);
-
+defined('TESTPATH')              || define('TESTPATH', SYSTEMPATH . 'Test' . DS);
 defined('APPFOLDER')			|| define('APPFOLDER', ROOTPATH . 'App' . DS);
 
 

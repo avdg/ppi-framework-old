@@ -1,8 +1,8 @@
 <?php
-
 /**
  *
- * @version   1.0
+ * The PPI Response Class
+ *
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
  * @package   Core
@@ -30,7 +30,27 @@ class PPI_Response {
 	 */
 	protected $_cssFiles = array();
 
-	public function __construct() {
+	/**
+	 * The Flash Message for rendering
+	 *
+	 * @var array
+	 */
+	protected $_flash = array();
+
+	public function __construct(array $options = array()) {
+
+		if(isset($options['charset'])) {
+			$this->_charset = $options['charset'];
+		}
+		if(isset($options['jsFiles'])) {
+			$this->_jsFiles = $options['jsFiles'];
+		}
+		if(isset($options['cssFiles'])) {
+			$this->_cssFiles = $options['cssFiles'];
+		}
+		if(isset($options['flash'], $options['flash']['mode'], $options['flash']['message'])) {
+			$this->setFlash($options['flash']['message'], $options['flash']['mode'] === 'success');
+		}
 
 	}
 
@@ -120,11 +140,13 @@ class PPI_Response {
 		switch (gettype($p_mJavascript)) {
 			case 'string':
 				$this->_jsFiles[] = $p_mJavascript;
-				return;
+				break;
+
 			case 'array':
 				foreach ($p_mJavascript as $javascriptFile) {
 					$this->addJavascript($javascriptFile);
 				}
+				break;
 		}
 	}
 
@@ -136,11 +158,10 @@ class PPI_Response {
 	 * @return void
 	 */
 	public function setFlash($message, $success = true) {
-
-		PPI_Helper::getSession()->set('ppi_flash_message', array(
-			'mode' => $success ? 'success' : 'failure',
-			'message' => $message
-		));
+		$this->_flash = array(
+			'message' => $message,
+		    'mode'    => $success ? 'success' : 'failure'
+		);
 	}
 
 	/**
@@ -149,7 +170,7 @@ class PPI_Response {
 	 * @return mixed
 	 */
 	public function getFlash() {
-		return PPI_Helper::getSession()->get('ppi_flash_message');
+		return $this->_flash;
 	}
 
 	/**
@@ -158,7 +179,6 @@ class PPI_Response {
 	 * @return void
 	 */
 	public function getFlashAndClear() {
-
 		$flash = $this->getFlash();
 		$this->clearFlash();
 	}
@@ -166,10 +186,10 @@ class PPI_Response {
 	/**
 	 * Clear the flash message
 	 *
-	 * @return array
+	 * @return void
 	 */
 	public function clearFlash() {
-		return PPI_Helper::getSession()->remove('ppi_flash_message');
+		$this->_flash = array();
 	}
 
 	/**
@@ -179,5 +199,15 @@ class PPI_Response {
 	 */
 	public function getCharset() {
 		return $this->_charset;
+	}
+
+	/**
+	 * Set the charset
+	 *
+	 * @param string $charset
+	 * @return void
+	 */
+	public function setCharset($charset) {
+		$this->_charset = $charset;
 	}
 }

@@ -1,13 +1,19 @@
 <?php
 /**
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @copyright Digiflex Development
- * @package   Cache
- * @link      www.ppiframework.com
- */
+* PPI Cache handler
+*
+* @package   Cache
+* @author    Paul Dragoonis <dragoonis@php.net>
+* @license   http://opensource.org/licenses/mit-license.php MIT
+* @link      http://www.ppiframework.com
+*/
 class PPI_Cache {
 
+	/**
+	 * Defaults for the handler
+	 *
+	 * @var array
+	 */
     protected $_defaults = array(
         'handler'  => 'disk'
     );
@@ -33,7 +39,6 @@ class PPI_Cache {
 		}
 
         if(isset($p_aOptions['handler'])) {
-
             // If it's a pre instantiated cache handler then use that
             if(!is_string($p_aOptions['handler']) && $p_aOptions['handler'] instanceof PPI_Cache_Interface) {
                 $this->_handler = $p_aOptions['handler'];

@@ -106,7 +106,7 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 		if(!is_dir($sCacheDir)) {
 			try {
 			   mkdir($sCacheDir);
-			} catch(PPIException $e) {
+			} catch(PPI_Exception $e) {
 				throw new PPI_Exception('Unable to create directory:<br>(' . $sCacheDir . ')');
 			}
 		}
@@ -143,7 +143,7 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 		if(false === $this->exists($p_sKey)) {
 			return $p_mDefault;
 		}
-		$metaData = file_get_contents($this->getKeyMetaCachePath($p_sKey));
+		$metaData = unserialize(file_get_contents($this->getKeyMetaCachePath($p_sKey)));
 		$content = file_get_contents($this->getKeyCachePath($p_sKey));
 		return $metaData['serialized'] ? unserialize($content) : $content;
 	}

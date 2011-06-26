@@ -81,14 +81,12 @@ class PPI_Response {
 	 */
 	public function addStylesheet($p_mStylesheet) {
 
-		switch (gettype($p_mStylesheet)) {
-			case 'string':
+		if(is_string($p_mStylesheet)) {
 				$this->_cssFiles[] = $p_mStylesheet;
-				return;
-			case 'array':
-				foreach ($p_mStylesheet as $stylesheet) {
-					$this->addStylesheet($stylesheet);
-				}
+		} elseif(is_array($p_mStylesheet)) {
+			foreach ($p_mStylesheet as $stylesheet) {
+				$this->addStylesheet($stylesheet);
+			}
 		}
 	}
 

@@ -98,12 +98,16 @@ class PPI_Helper {
 	 * @return PPI_Session
 	 */
 	static function getSession($p_mOptions = null) {
-		if (!is_array($p_mOptions)) {
+		if ($p_mOptions !== null && !is_array($p_mOptions)) {
 			$config  = self::getConfig();
 			$options = isset($config->session) ? $config->session->toArray() : array();
 			$p_mOptions = $options;
 		}
-		return new PPI_Session($p_mOptions);
+		$session = self::getRegistry()->get('PPI_Session');
+		if(is_array($p_mOptions)) {
+			$session->defaults($p_mOptions);
+		}
+		return $session;
 	}
 
 	/**

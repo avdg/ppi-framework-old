@@ -57,11 +57,21 @@ class PPI_Session {
 			$this->_isCollected = false;
 			$this->_array[$this->_defaults['sessionNamespace']] = $p_aOptions['data'];
 		} else {
-			$this->_array[$this->_defaults['sessionNamespace']] = $_SESSION;
 			session_name($this->_defaults['sessionNamespace']);
 			session_start();
+			$this->_array[$this->_defaults['sessionNamespace']] = $_SESSION;
 		}
 
+	}
+
+	public function defaults(array $options) {
+		if(isset($p_aOptions['data'])) {
+			$this->_isCollected = false;
+			$this->_array[$this->_defaults['sessionNamespace']] = $p_aOptions['data'];
+		}
+
+		$this->_defaults = ($options + $this->_defaults);
+		$this->_defaults['sessionNamespace'] = $this->_defaults['frameworkSessionNamespace'] . '_' . $this->_defaults['sessionNamespace'];
 	}
 
 	/**

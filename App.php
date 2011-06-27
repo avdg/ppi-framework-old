@@ -174,7 +174,7 @@ class PPI_App {
 	        if($this->_envOptions['session'] === null) {
 	            $this->_envOptions['session'] = new PPI_Session();
 	        }
-            $registry->set('PPI_Session', $this->_session);
+            $registry->set('PPI_Session', $this->_envOptions['session']);
         }
 
         // Fire up the default dispatcher

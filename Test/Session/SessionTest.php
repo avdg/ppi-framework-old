@@ -19,14 +19,20 @@ class PPI_SessionTest extends PHPUnit_Framework_TestCase {
 		unset($this->_session);
 	}
 
-	public function testSession() {
+	public function testSessionGet() {
 		$this->assertEquals('bar', $this->_session->get('foo'));
+	}
+
+	public function testSessionSet() {
+
+		$this->_session->set('foo2', 'bar2');
+		$this->assertEquals('bar2', $this->_session->get('foo2'));
 	}
 
 	public function testSessionExists() {
 
 		$this->assertTrue($this->_session->exists('foo'));
-		$this->assertFalse($this->_session->exists('foo2'));
+		$this->assertFalse($this->_session->exists('foofoo'));
 	}
 
 	public function testSessionRemove() {
@@ -38,10 +44,8 @@ class PPI_SessionTest extends PHPUnit_Framework_TestCase {
 	public function testSessionRemoveAll() {
 
 		$this->_session->set('foo', 'bar');
-		$this->_session->set('foo2', 'bar2');
 		$this->_session->removeAll();
 		$this->assertFalse($this->_session->exists('foo') && $this->_session->exists('foo2'));
 
 	}
-
 }

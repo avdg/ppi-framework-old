@@ -25,6 +25,13 @@ class PPI_Session {
 		'frameworkSessionNamespace' => '__PPI'
 	);
 
+	/**
+	 * This detemines if this class auto collects data from $_SESSION or it has been given its own mock data directly.
+	 *
+	 * @var bool
+	 */
+	protected $_isCollected = true;
+
 
 	/**
 	 * The actual data we're manipulating this is only used for mock data.

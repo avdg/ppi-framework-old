@@ -15,6 +15,8 @@ set_include_path(implode(PATH_SEPARATOR, array(
        get_include_path(),
 )));
 
+defined('PPI_UNITTEST') || define('PPI_UNITTEST', true);
+
 require_once 'init.php';
 
 restore_error_handler();

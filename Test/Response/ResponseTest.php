@@ -24,65 +24,72 @@ class PPI_ResponseTest extends PHPUnit_Framework_TestCase {
 		unset($this->_response);
 	}
 
-	public function testCSS() {
+	public function testSetCSS() {
 
-		// Set/Get
 		$this->_response->addCSS('baz');
 		$cssFiles = $this->_response->getCSSFiles();
 		$this->assertEquals('foo', $cssFiles[0]);
 		$this->assertEquals('bar', $cssFiles[1]);
 		$this->assertEquals('baz', $cssFiles[2]);
+		$this->_response->clearCSS();
+	}
 
-		// Clear
+	public function testClearCSS() {
+
+		$this->_response->addCSS('baz');
 		$this->_response->clearCSS();
 		$cssFiles = $this->_response->getCSSFiles();
 		$this->assertTrue(empty($cssFiles));
-
 	}
 
-	public function testJS() {
+	public function testSetJS() {
 
-		// Set/Get
 		$this->_response->addJS('baz');
 		$jsFiles = $this->_response->getJSFiles();
 		$this->assertEquals('foo', $jsFiles[0]);
 		$this->assertEquals('bar', $jsFiles[1]);
 		$this->assertEquals('baz', $jsFiles[2]);
+		$this->_response->clearJS();
+	}
 
-		// Clear
+	public function testClearJS() {
+
+		$this->_response->addJS('foo');
 		$this->_response->clearJS();
 		$jsFiles = $this->_response->getJSFiles();
 		$this->assertTrue(empty($jsFiles));
-
 	}
 
-	public function testCharset() {
-
-		// Test Get/Set
+	public function testCharsetGet() {
 		$this->assertEquals('utf-8', $this->_response->getCharset());
+	}
 
-		// Test Override
+	public function testCharsetSet() {
+
 		$this->_response->setCharset('foo');
 		$this->assertEquals('foo', $this->_response->getCharset());
-
 	}
 
-	public function testFlash() {
+	public function testFlashGet() {
 
-		// Override
 		$flash = $this->_response->getFlash();
 		$this->assertTrue(isset($flash['mode'], $flash['message']));
 		$this->assertEquals('failure', $flash['mode']);
 		$this->assertEquals('There has been a failure', $flash['message']);
+	}
 
-		// Set
+	public function testFlashSet() {
+
 		$this->_response->setFlash('New Message', true);
 		$flash = $this->_response->getFlash();
 		$this->assertTrue(isset($flash['mode'], $flash['message']));
 		$this->assertEquals('success', $flash['mode']);
 		$this->assertEquals('New Message', $flash['message']);
+	}
 
-		// Clear
+	public function testFlashClear() {
+
+		$this->_response->setFlash('New Message', true);
 		$this->_response->clearFlash();
 		$flash = $this->_response->getFlash();
 		$this->assertTrue(empty($flash));

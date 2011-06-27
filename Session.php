@@ -37,12 +37,23 @@ class PPI_Session {
 
 		$this->_defaults['sessionNamespace'] = $this->_defaults['frameworkSessionNamespace'] . '_' . $this->_defaults['sessionNamespace'];
 
+
+		/**
+		 * This if statement allows PPI_Session to work in test mode
+		 * from the comment line.
+		 * 
+		 * @author Johnny Mast <mastjohnny@gmail.com>
+		 * @date June 27 2011
+		 */
+		if(php_sapi_name() == 'cli' || defined('PPI_UNITTEST')) {
+			$_SESSION[$this->_defaults['sessionNamespace']] = array();	
+		} else
 		if (false === self::$_started) {
 			self::$_started = true;
 			session_name($this->_defaults['sessionNamespace']);
 			session_start();
 		}
-
+	
 		if (!isset($_SESSION[$this->_defaults['sessionNamespace']])) {
 			$_SESSION[$this->_defaults['sessionNamespace']] = array();
 		}

@@ -183,13 +183,16 @@ class PPI_App {
 				'router' => $this->_envOptions['router']
 			));
         }
+
         $dispatch = new PPI_Dispatch($this->_envOptions['dispatcher']);
+
         PPI_Registry::getInstance()->set('PPI_Dispatch', $dispatch);
 
 	    // -- Set the PPI_Request object --
 	    if($this->_envOptions['request'] === null) {
 		    $this->_envOptions['request'] = new PPI_Request();
 	    }
+
 	    $registry->set('PPI_Request', $this->_envOptions['request']);
         // -------------- Library Autoloading Process --------------
         if(!empty($this->_config->system->autoloadLibs)) {
@@ -197,7 +200,7 @@ class PPI_App {
                 switch(strtolower(trim($sLib))) {
                     case 'zf':
                         PPI_Autoload::add('Zend', array(
-                            'path'   => SYSTEMPATH . 'Vendor/',
+                            'path'   => SYSTEMPATH . 'Vendor/Zend/',
                             'prefix' => 'Zend_'
                         ));
                         break;
@@ -219,7 +222,7 @@ class PPI_App {
                     case 'solar':
 	                    include_once(SYSTEMPATH . 'Vendor/Solar.php');
                         PPI_Autoload::add('Solar', array(
-                            'path'   => SYSTEMPATH . 'Vendor/',
+                            'path'   => SYSTEMPATH . 'Vendor/Solar/',
                             'prefix' => 'Solar_'
                         ));
                         break;

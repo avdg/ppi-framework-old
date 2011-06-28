@@ -42,6 +42,9 @@ set_include_path('.' . PATH_SEPARATOR . SYSTEMPATH . PATH_SEPARATOR . get_includ
 require 'Autoload.php';
 PPI_Autoload::register();
 
+PPI_Autoload::add('PPI', array('path' => SYSTEMPATH, 'prefix' => 'PPI_'));
+PPI_Autoload::add('APP', array('path' => APPFOLDER, 'prefix' => 'APP_'));
+
 // General stuff
 require 'common.php';
 // load up custom error handlers

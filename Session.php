@@ -49,29 +49,30 @@ class PPI_Session {
 		$this->_defaults = ($p_aOptions + $this->_defaults);
 		$this->_defaults['sessionNamespace'] = $this->_defaults['frameworkSessionNamespace'] . '_' . $this->_defaults['sessionNamespace'];
 
-		if (!isset($this->_array[$this->_defaults['sessionNamespace']])) {
-			$this->_array[$this->_defaults['sessionNamespace']] = array();
-		}
-
 		if(isset($p_aOptions['data'])) {
 			$this->_isCollected = false;
+			if (!isset($this->_array[$this->_defaults['sessionNamespace']])) {
+				$this->_array[$this->_defaults['sessionNamespace']] = array();
+			}
 			$this->_array[$this->_defaults['sessionNamespace']] = $p_aOptions['data'];
 		} else {
 			session_name($this->_defaults['sessionNamespace']);
 			session_start();
-			$this->_array[$this->_defaults['sessionNamespace']] = $_SESSION;
+			if (!isset($_SESSION[$this->_defaults['sessionNamespace']])) {
+				$_SESSION[$this->_defaults['sessionNamespace']] = array();
+			}
 		}
 
 	}
 
 	public function defaults(array $options) {
+
+		$this->_defaults = ($options + $this->_defaults);
+		$this->_defaults['sessionNamespace'] = $this->_defaults['frameworkSessionNamespace'] . '_' . $this->_defaults['sessionNamespace'];
 		if(isset($p_aOptions['data'])) {
 			$this->_isCollected = false;
 			$this->_array[$this->_defaults['sessionNamespace']] = $p_aOptions['data'];
 		}
-
-		$this->_defaults = ($options + $this->_defaults);
-		$this->_defaults['sessionNamespace'] = $this->_defaults['frameworkSessionNamespace'] . '_' . $this->_defaults['sessionNamespace'];
 	}
 
 	/**
@@ -81,6 +82,9 @@ class PPI_Session {
 	 * @return boolean
 	 */
 	public function exists($p_sKey) {
+		if($this->_isCollected) {
+			return array_key_exists($p_sKey, $_SESSION[$this->_defaults['sessionNamespace']]);
+		}
 		return array_key_exists($p_sKey, $this->_array[$this->_defaults['sessionNamespace']]);
 	}
 
@@ -91,8 +95,14 @@ class PPI_Session {
 	 */
 	public function removeAll() {
 
-		foreach ( (array) $this->_array[$this->_defaults['sessionNamespace']] as $key => $val) {
-			unset($this->_array[$this->_defaults['sessionNamespace']][$key]);
+		if($this->_isCollected) {
+			foreach($_SESSION[$this->_defaults['sessionNamespace']]as $key => $val) {
+				unset($_SESSION[$this->_defaults['sessionNamespace']][$key]);
+			}
+		} else {
+			foreach($this->_array[$this->_defaults['sessionNamespace']] as $key => $val) {
+				unset($this->_array[$this->_defaults['sessionNamespace']][$key]);
+			}
 		}
 	}
 
@@ -109,9 +119,18 @@ class PPI_Session {
 	public function remove($p_sKey, $p_sName = null) {
 
 		if (null === $p_sName) {
-			unset($this->_array[$this->_defaults['sessionNamespace']][$p_sKey]);
+			if($this->_isCollected) {
+				unset($_SESSION[$this->_defaults['sessionNamespace']][$p_sKey]);
+			} else {
+				unset($this->_array[$this->_defaults['sessionNamespace']][$p_sKey]);
+			}
 		} else {
-			unset($this->_array[$this->_defaults['sessionNamespace']][$p_sKey][$p_sName]);
+			if($this->_isCollected) {
+				unset($_SESSION[$this->_defaults['sessionNamespace']][$p_sKey][$p_sName]);
+			} else {
+				unset($this->_array[$this->_defaults['sessionNamespace']][$p_sKey][$p_sName]);
+			}
+
 		}
 	}
 
@@ -122,12 +141,18 @@ class PPI_Session {
 	 * @param mixed $p_mDefault Optional. Default is null
 	 * @return mixed
 	 */
-	public function get($p_sKey, $p_mDefault = null) {
+	public function get($key, $default = null) {
 
-		if (isset($this->_array[$this->_defaults['sessionNamespace']][$p_sKey])) {
-			return $this->_array[$this->_defaults['sessionNamespace']][$p_sKey];
+		if($this->_isCollected) {
+			if(isset($_SESSION[$this->_defaults['sessionNamespace']][$key])) {
+				return $_SESSION[$this->_defaults['sessionNamespace']][$key];
+			}
+		} else {
+			if(isset($this->_array[$this->_defaults['sessionNamespace']][$key])) {
+				return $this->_array[$this->_defaults['sessionNamespace']][$key];
+			}
 		}
-		return $p_mDefault;
+		return $default;
 	}
 
 	/**
@@ -138,7 +163,12 @@ class PPI_Session {
 	 * @return void
 	 */
 	public function set($p_sKey, $p_mData = true) {
-		$this->_array[$this->_defaults['sessionNamespace']][$p_sKey] = $p_mData;
+		if($this->_isCollected) {
+			$_SESSION[$this->_defaults['sessionNamespace']][$p_sKey] = $p_mData;
+		} else {
+			$this->_array[$this->_defaults['sessionNamespace']][$p_sKey] = $p_mData;
+		}
+
 	}
 
 	/**

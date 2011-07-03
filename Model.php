@@ -97,7 +97,7 @@ abstract class PPI_Model {
 		if (empty($p_sDBKey)) {
 			$p_sDBKey = "default";
 		}
-		if ($p_sTableName == '' || $p_sTableIndex == '') {
+		if ($p_sTableName == '') {
 			throw new PPI_Exception('Table name or index not found');
 		}
 		$this->sTableIndex = $p_sTableIndex;

@@ -10,35 +10,35 @@
 
 class PPI_Model_Config {
 
-    /**
-     * Has the config been read or not ?
-     *
-     * @var boolean
-     */
+	/**
+	 * Has the config been read or not ?
+	 *
+	 * @var boolean
+	 */
 	protected $bRead       = null;
 
-    /**
-     * The config object
-     *
-     * @var PPI_Config
-     */
+	/**
+	 * The config object
+	 *
+	 * @var PPI_Config
+	 */
 	protected $_oConfig    = null;
 
-    /**
-     * The config file that was parsed
-     *
-     * @var string
-     */
+	/**
+	 * The config file that was parsed
+	 *
+	 * @var string
+	 */
 	protected $_configFile = null;
 
 	function __construct() {}
 
-    /**
-     * Actually go and get the config parse it and store it for later retreival
-     *
-     * @param null $p_sConfigFile
-     * @return PPI_Config
-     */
+	/**
+	 * Actually go and get the config parse it and store it for later retreival
+	 *
+	 * @param null $p_sConfigFile
+	 * @return PPI_Config
+	 */
 	function getConfig($p_sConfigFile = null) {
 		$this->_configFile = $p_sConfigFile !== null ? $p_sConfigFile : 'general.ini';
 		if ($this->bRead === null) {
@@ -50,7 +50,7 @@ class PPI_Model_Config {
 
 	/**
 	 * Read the config file, only ini type implemented
-     *
+	 *
 	 * @todo Implement XML and PHP config files
 	 * @return void
 	 */
@@ -80,7 +80,7 @@ class PPI_Model_Config {
 
 	/**
 	 * Converts role name to role ID
-     *
+	 *
 	 * @param integer $p_roleID The Role ID
 	 * @return string
 	 */
@@ -95,7 +95,7 @@ class PPI_Model_Config {
 
 	/**
 	 * Get the Role ID from the Role Name
-     * 
+	 * 
 	 * @param string $p_roleName Role Name
 	 * @return integer
 	 */

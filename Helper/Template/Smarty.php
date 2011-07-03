@@ -9,28 +9,28 @@ require_once SYSTEMPATH . 'Vendor/Smarty/class.Smarty.php';
  */
 class PPI_Helper_Template_Smarty implements PPI_Interface_Template {
 
-    /**
-     * Rendering engine, in this case it's Smarty
-     * @var null|Smarty
-     */
+	/**
+	 * Rendering engine, in this case it's Smarty
+	 * @var null|Smarty
+	 */
 	protected $_renderer = null;
 
-    /**
-     * The path of the /App/View/ folder
-     * @var null|string
-     */
+	/**
+	 * The path of the /App/View/ folder
+	 * @var null|string
+	 */
 	protected $_viewPath = null;
 
-    /**
-     * The path to the Smarty library i.e: /Vendor/Smarty/
-     * @var null|string
-     */
+	/**
+	 * The path to the Smarty library i.e: /Vendor/Smarty/
+	 * @var null|string
+	 */
 	protected $_smartyPath = null;
 
 
-    /**
-     * Setup all the rendering variables
-     */
+	/**
+	 * Setup all the rendering variables
+	 */
 	function __construct() {
 
 		if(isset($options['config'])) {
@@ -60,16 +60,16 @@ class PPI_Helper_Template_Smarty implements PPI_Interface_Template {
 	 *
 	 * @param string $p_sTplFile The template to load up. For example the master template.
 	 * @throws PPI_Exception
-     * @return void
+	 * @return void
 	 */
 	function render($p_sTplFile) {
 		// Optional extension for smarty templates
 		$p_sTplFile = PPI_Helper::checkExtension($p_sTplFile, SMARTY_EXT);
 		$sTheme     = $this->_config->layout->view_theme;
 		$sPath      = $this->_viewPath. "$sTheme/$p_sTplFile";
-        if(!file_exists($sPath)) {
-            throw new PPI_Exception('Unable to load: ' . $sPath . ' file does not exist');
-        }
+		if(!file_exists($sPath)) {
+			throw new PPI_Exception('Unable to load: ' . $sPath . ' file does not exist');
+		}
 		$this->_renderer->display($sPath);
 	}
 
@@ -78,7 +78,7 @@ class PPI_Helper_Template_Smarty implements PPI_Interface_Template {
 	 *
 	 * @param string $key The variable name
 	 * @param string $val The variable value
-     * @return void
+	 * @return void
 	 */
 	function assign($key, $val) {
 		$this->_renderer->assign($key, $val);

@@ -23,28 +23,28 @@ class PPI_Exception extends Exception {
      *
      * @var int|string
      */
-	public $_line = '';
+	public $line = '';
 
     /**
      * The error code
      *
      * @var int|string
      */
-	public $_code = '';
+	public $code = '';
 
     /**
      * The error message
      *
      * @var string
      */
-	public $_message = '';
+	public $message = '';
 
     /**
      * The error filename
      *
      * @var string
      */
-	public $_file = '';
+	public $file = '';
 
     /**
      * The backtrace as an array
@@ -104,10 +104,6 @@ class PPI_Exception extends Exception {
 		parent::__construct($message);
 		$this->_traceString = $this->getTraceAsString();
 		$this->_traceArray	= $this->getTrace();
-		$this->_line 		= $this->getLine();
-		$this->_code 		= $this->getCode();
-		$this->_message 	= $this->getMessage();
-		$this->_file 		= $this->getFile();
 		$this->_queries 	= PPI_Helper::getRegistry()->get('PPI_Model_Queries', array());
 	}
 
@@ -146,101 +142,6 @@ class PPI_Exception extends Exception {
 		));
         exit;
 	}
-
-
-
-	/**
-     * Show this exception
-     *
-	 * @param string $p_aError Error information from the custom error log
-	 * @return void
-	 */
-	function show_exceptioned_error($p_aError = "") {
-
-		$p_aError['sql'] = PPI_Helper::getRegistry()->get('PPI_Model::Query_Backtrace', array());
-		if(!empty($p_aError)) {
-
-			try {
-				$logInfo = $p_aError;
-				unset($logInfo['code']);
-				$logInfo['sql'] = serialize($logInfo['sql']);
-				$oModel = new PPI_Model_Shared('ppi_exception', 'id');
-				$oModel->insert($logInfo);
-			} catch(PPI_Exception $e) {} catch(Exception $e) {}
-
-			try {
-				$oEmail    = new PPI_Email_PHPMailer();
-				$oConfig   = PPI_Helper::getConfig();
-				$url       = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-				$userAgent = $_SERVER['HTTP_USER_AGENT'];
-				$ip        = $_SERVER['REMOTE_ADDR'];
-				$referer   = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'Not Available';
-				if(isset($oConfig->system->error->email)) {
-
-				$emailBody = <<<EOT
-Hey Support Team,
-An error has occured. The following information will help you debug:
-
-Message:    {$p_aError['message']}
-Line:       {$p_aError['line']}
-File:       {$p_aError['file']}
-URL:        {$url}
-User Agent: {$userAgent}
-IP:         {$ip}
-Referer:    {$referer}
-Backtrace:  {$p_aError['backtrace']}
-
-EOT;
-					$aErrorConfig = $oConfig->system->error->email->toArray();
-					$aEmails = array_map('trim', explode(',', $aErrorConfig['to']));
-					foreach($aEmails as $email) {
-						$name = '';
-						if(strpos($email, ':') !== false) {
-							list($name, $email) = explode(':', $email, 2);
-						}
-						$oEmail->AddAddress($email, $name);
-					}
-
-					$fromEmail = $aErrorConfig['from'];
-					$fromName = '';
-					if(strpos($fromEmail, ':') !== false) {
-						list($fromName, $fromEmail) = explode(':', $fromEmail, 2);
-					}
-					$oEmail->SetFrom($fromEmail, $fromName);
-					$oEmail->Subject = $aErrorConfig['subject'];
-					$oEmail->Body = $emailBody;
-					$oEmail->Send();
-				}
-
-			} catch(PPI_Exception $e) {} catch(Exception $e) {}
-		}
-
-		$oApp = PPI_Helper::getRegistry()->get('PPI_App', false);
-		if($oApp === false) {
-			$sSiteMode = 'development';
-			$heading = "Exception";
-			require SYSTEMPATH.'View/fatal_code_error.php';
-			echo $header.$html.$footer;
-			exit;
-		}
-
-		$sSiteMode = $oApp->getSiteMode();
-		if($sSiteMode == 'development') {
-			$heading = "Exception";
-			$baseUrl = PPI_Helper::getConfig()->system->base_url;
-			require SYSTEMPATH.'View/code_error.php';
-			echo $header.$html.$footer;
-		} else {
-
-			$oView = new PPI_Controller();
-			$oView->render('framework/error', array(
-				'message' => $p_aError['message'],
-				'errorPageType' => '404'
-			));
-		}
-		exit;
-	}
-
 
 	/**
 	 * Show an error message

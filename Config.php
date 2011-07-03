@@ -11,11 +11,11 @@
 
 class PPI_Config {
 
-    /**
-     * The config object doing the parsing
-     *
-     * @var null|PPI_Config_Ini
-     */
+	/**
+	 * The config object doing the parsing
+	 *
+	 * @var null|PPI_Config_Ini
+	 */
 	protected $_oConfig    = null;
 
 	/**
@@ -30,7 +30,7 @@ class PPI_Config {
 	 *
 	 * Will check the file extension of your config filename and load up a specific parser
 	 * @param array $options The options
-     *
+	 *
 	 */
 	function __construct(array $options = array()) {
 		$this->_options = $options;

@@ -6,17 +6,17 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
  * @link      http://www.ppiframework.com
-*/
+ */
 class PPI_Autoload {
 
 	protected static $_classes = array();
 
-    /**
-     * The base list of libraries to check in the autoloader, these are the base two ones required
-     * for the framework and the skeleton app classes to be autoloaded
-     *
-     * @var array
-     */
+	/**
+	 * The base list of libraries to check in the autoloader, these are the base two ones required
+	 * for the framework and the skeleton app classes to be autoloaded
+	 *
+	 * @var array
+	 */
 	static protected $_libraries = array();
 
 
@@ -25,7 +25,7 @@ class PPI_Autoload {
 	/**
 	 * Register The PPI Autoload Function
 	 *
-         * @return void
+	 * @return void
 	 */
 	static function register() {
 		spl_autoload_register(array('PPI_Autoload', 'autoload'));
@@ -33,7 +33,7 @@ class PPI_Autoload {
 
 	/**
 	 * Unregister The PPI Autoload Function
-         *
+	 *
 	 * @return void
 	 */
 	static function unregister() {
@@ -65,16 +65,16 @@ class PPI_Autoload {
 			$sPath     = $aOptions['path'];
 
 			// Check for valid prefix here
-	        if(strpos($className, $sPrefix) !== false) {
+			if(strpos($className, $sPrefix) !== false) {
 
-			    // Convert Zend_Mail to just Mail and Solar_View to just view
-		        $file = $sPath . self::convertClassName(str_replace($sPrefix, '', $className));
+				// Convert Zend_Mail to just Mail and Solar_View to just view
+				$file = $sPath . self::convertClassName(str_replace($sPrefix, '', $className));
 
 				if(file_exists($file)) {
 					self::$_classes[$className] = $file;
 					return $file;
 				}
-	        }
+			}
 
 		}
 		return '';
@@ -82,13 +82,13 @@ class PPI_Autoload {
 
 	/**
 	 * Add a library to the autoloader
-         *
+	 *
 	 * @example
 	 * PPI_Autoload::add('Zend', array(
 	 *     'path' => SYSTEMPATH . 'Vendor/',
 	 *     'prefix' => 'Zend_'
-     * ));
-     *
+	 * ));
+	 *
 	 * @todo This appears to be setting the include path to /Vendor/ whereas it should be
 	 *       setting it to /Vendor/Zend/ or /Vendor/Solar/
 	 *

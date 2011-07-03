@@ -26,10 +26,10 @@ class PPI_Model_Exception extends PPI_Model
 		 return false;
 
 		$sQuery = "
-		 DELETE FROM
-		  ppi_errors
-		 WHERE
-		  id='".mysql_real_escape_string($p_iRecordID)."'";
-	  return  $this->query ($sQuery, __FUNCTION__);
+			DELETE FROM
+			ppi_errors
+			WHERE
+			id='".mysql_real_escape_string($p_iRecordID)."'";
+		return  $this->query ($sQuery, __FUNCTION__);
 	}
 }

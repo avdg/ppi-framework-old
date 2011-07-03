@@ -20,12 +20,12 @@
 <body>
 	<div id="content">
 		<h1><?php echo $heading; ?></h1>
-                <?php
-                  if (!empty ($message))
-                   echo $message;
-				  else
-				  echo 'The page you requested was not found.';
-                ?>
+			<?php
+				if (!empty ($message))
+					echo $message;
+				else
+					echo 'The page you requested was not found.';
+			?>
 	</div>
 </body>
 </html>

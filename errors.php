@@ -72,32 +72,6 @@ function ppi_exception_handler($oException) {
 		$oConfig = PPI_Helper::getConfig();
 		$error['sql'] = PPI_Helper::getRegistry()->get('PPI_Model::Queries_Backtrace', array());
 
-		// email the error with the backtrace information to the developer
-		if (!isset($oConfig->system->log_errors) || false !== $oConfig->system->log_errors) {
-
-			$oLog = new PPI_Model_Log();
-			$oLog->addExceptionLog(array(
-				'code'		=> $error['code'],
-				'message'	=> $error['message'],
-				'file'		=> $error['file'],
-				'line'		=> $error['line'],
-				'post'		=> serialize($error['post']),
-				'cookie'	=> serialize($error['cookie']),
-				'get'		=> serialize($error['get']),
-				'session'	=> serialize($error['session'])
-			));
-
-			if ($oConfig->system->email_errors) {
-				//@mail($oConfig->system->developer_email, 'PHP Exception For '.getHostname(), $emailContent);
-				//include CORECLASSPATH.'mail.php';
-				//$mail = new Mail();
-				//$mail->send();
-			}
-
-			// write the error to the php error log
-			writeErrorToLog($error['message'] . ' in file: ' . $error['file'] . ' on line: ' . $error['line']);
-			ppi_show_exceptioned_error($error);
-		}
 	} catch (PPI_Exception $e) {
 		writeErrorToLog($e->getMessage());
 	} catch (Exception $e) {
@@ -108,7 +82,6 @@ function ppi_exception_handler($oException) {
 	ppi_show_exceptioned_error($error);
 
 	// @todo This should go to an internal error page which doesn't use framework components and show the error code
-//	ppi_show_exceptioned_error($error);
 }
 
 function writeErrorToLog($message) {
@@ -138,8 +111,12 @@ function ppi_show_exceptioned_error($p_aError = "") {
 
 		try {
 			$logInfo = $p_aError;
-			unset($logInfo['code']);
+			$logInfo['cookie']  = serialize($logInfo['cookie']);
+			$logInfo['session'] = serialize($logInfo['session']);
+			$logInfo['get']     = serialize($logInfo['get']);
+			$logInfo['post']    = serialize($logInfo['post']);
 			$logInfo['sql'] = serialize($logInfo['sql']);
+			unset($logInfo['code']);
 			$oModel = new PPI_Model_Shared('ppi_exception', 'id');
 			$oModel->insert($logInfo);
 		} catch(PPI_Exception $e) {} catch(Exception $e) {}

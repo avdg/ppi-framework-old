@@ -186,4 +186,13 @@ class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
 		return $this->_dataPointer < $this->count();
 	}
 
+	/**
+	 * Convert this object to a string, returning the query used to generate this resultset.
+	 *
+	 * @return string
+	 */
+	function __toString() {
+		return $this->_statement->queryString;
+	}
+
 }

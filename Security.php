@@ -26,7 +26,7 @@ class PPI_Security {
 	 * @return boolean
 	 */
 	public static function checkCSRF($token) {
-		return self::getCSRF() === $token;
+		return $token !== null ? self::getCSRF() === $token : false;
 	}
 
 	/**

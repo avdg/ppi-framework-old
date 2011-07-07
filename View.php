@@ -146,12 +146,12 @@ class PPI_View {
 	 * @param PPI_Interface_Template $oTpl Templating renderer. Instance of PPI_Interface_Template
 	 * @param string $p_tplFile The template file to render
 	 * @param array $p_tplParams Optional user defined parameres
-	 * @return void
+	 * @return mixed
 	 */
-	public function setupRenderer(PPI_Interface_Template $oTpl, $p_tplFile, array $p_tplParams = array()) {
+	public function setupRenderer(PPI_Interface_Template $oTpl, $p_tplFile, array $params = array(), array $options = array()) {
 
 		// Default View Values
-		foreach ($p_tplParams as $key => $val) {
+		foreach ($params as $key => $val) {
 			$oTpl->assign($key, $val);
 		}
 
@@ -162,9 +162,9 @@ class PPI_View {
 
 		// Get the default view vars that come when you load a view page.
 		$defaultViewVars = $this->getDefaultRenderValues(array(
-					'viewDir'		=> $sViewDir,
-					'actionFile'	=> $p_tplFile
-				));
+			'viewDir'		=> $sViewDir,
+			'actionFile'	=> $p_tplFile
+		));
 
 		foreach ($defaultViewVars as $varName => $viewVar) {
 			$oTpl->assign($varName, $viewVar);
@@ -178,12 +178,38 @@ class PPI_View {
 		  }
 		 */
 
-		// Master template
-		$sMasterTemplate = $this->_masterTemplateFile !== null ? $this->_masterTemplateFile : $oTpl->getDefaultMasterTemplate();
-		$sMasterTemplate = PPI_Helper::checkExtension($sMasterTemplate, $oTpl->getTemplateExtension());
+		// The Scenarios where we only render the individual template and not the 'master template'
+		$nativeAjax        = isset($params['core']['is']['ajax']) && $params['core']['is']['ajax'];
+		$overrideAjax      = isset($params['isAjax']) && $params['isAjax'];
+		$fullLayoutDisable = isset($options['fullLayout']) && $options['fullLayout'] === false;
+		if($nativeAjax || $overrideAjax || $fullLayoutDisable) {
+			$template = $p_tplFile;
+		} else {
+			// Master template
+			$template = $this->_masterTemplateFile !== null ? $this->_masterTemplateFile : $oTpl->getDefaultMasterTemplate();
+			$template = PPI_Helper::checkExtension($template, $oTpl->getTemplateExtension());
+		}
+
+		// Are we loading a template from the cache?
+		if(isset($options['cache'], $options['cacheHandler']) && $options['cache']) {
+			if(!$options['cacheHandler'] instanceof PPI_Cache_Interface) {
+				throw new PPI_Exception('Unable to use cache handler, it does not implement PPI_Cache_Interface');
+			}
+			$cacheName = 'ppi-cached-template-' . str_replace(array('\\', '/'), '-', $template);
+			if($options['cacheHandler']->exists($cacheName)) {
+				return $options['cacheHandler']->get($cacheName);
+			}
+
+			ob_start();
+			$oTpl->render($template);
+			$content = ob_get_clean();
+			$ttl = isset($options['cacheTTL']) ? $options['cacheTTL'] : 0;
+			$options['cacheHandler']->set($cacheName, $content, $ttl);
+			return $content;
+		}
 
 		// Lets render baby !!
-		$oTpl->render($sMasterTemplate);
+		$oTpl->render($template);
 	}
 
 	/**
@@ -260,7 +286,6 @@ class PPI_View {
 	/**
 	 * Override the default template file, with optional include for the .php or .tpl extension
 	 *
-	 * @todo have this lookup the template engines default extension and remove the smarty param
 	 * @param string $p_sNewTemplateFile New Template Filename
 	 * @return void
 	 */
@@ -271,18 +296,14 @@ class PPI_View {
 	/**
 	 * The internal render function, this is called by $this->load('template');
 	 *
-	 * @todo finish this, have it accept 'template' at first.
 	 * @param string $template The template name to render
-	 * @param array $params Optional parameters
+	 * @param array $params Optional Parameters
+	 * @param array $options Optional Options
 	 * @return void
 	 */
-	public function render($template, array $params = array()) {
+	public function render($template, array $params = array(), array $options = array()) {
 
-		if (empty($this->_config->layout->renderer)) {
-			$sRenderer = $this->_defaultRenderer;
-		} else {
-			$sRenderer = $this->_config->layout->renderer;
-		}
+		$sRenderer = empty($this->_config->layout->renderer) ? $this->_defaultRenderer : $this->_config->layout->renderer;
 
 		switch ($sRenderer) {
 			case 'smarty':
@@ -293,11 +314,11 @@ class PPI_View {
 				$oTpl = new PPI_Helper_Template_Twig();
 				break;
 
-			#case 'php':
+			case 'php':
 			default:
 				$oTpl = new PPI_Helper_Template_PHP();
 				break;
 		}
-		$this->setupRenderer($oTpl, $template, array_merge($params, $this->_viewParams));
+		return $this->setupRenderer($oTpl, $template, array_merge($params, $this->_viewParams), $options);
 	}
 }

@@ -29,13 +29,16 @@ class PPI_Dispatch_Standard extends PPI_Dispatch_Abstract implements PPI_Dispatc
 	 * @return boolean
 	 */
 	function init() {
+
 		if($this->_router !== null) {
 			$this->_router->init();
 		}
+
 		// We found a true match for bad base url
 		if($this->checkBadBaseUrl() === true) {
 			PPI_Exception::show_404();
 		}
+
 		if($this->checkControllers() === false) {
 			PPI_Exception::show_404();
 		}

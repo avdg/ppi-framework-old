@@ -121,8 +121,6 @@ abstract class PPI_Dispatch_Abstract {
 
 			// Proceed with instantiation.
 			$oController = new $sContFilename();
-			// Did we specify a method ?
-			// Does our method exist on the class
 			if(!is_callable(array($oController, $sMethod))) {
 				return false;
 			}

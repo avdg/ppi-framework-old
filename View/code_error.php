@@ -111,7 +111,7 @@ foreach(array('POST' => $_POST, 'COOKIE' => $_COOKIE, 'SESSION' => $_SESSION, 'S
 	if(empty($block)) {
 		continue;
 	}
-	$block = nl2br(str_replace('  ', '&nbsp;&nbsp;', print_r($block, true)));
+	$block = nl2br(str_replace('  ', '&nbsp;&nbsp;', htmlspecialchars(print_r($block, true), ENT_QUOTES, 'UTF-8')));
 	$class = $title == 'SERVER' ? 'server_info' : '';
 $html .= <<<OUTPUT
 			<div class="accordion">

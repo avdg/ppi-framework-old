@@ -53,8 +53,7 @@ class PPI_Controller {
 		if(!isset($p_tplParams['isAjax']) && $this->is('ajax')) {
 			$p_tplParams['isAjax'] = true;
 		}
-
-		$this->render($p_tplFile, $p_tplParams);
+		return $this->render($p_tplFile, $p_tplParams);
 	}
 
 	/**
@@ -429,9 +428,9 @@ class PPI_Controller {
 	 *
 	 * @param string $template
 	 * @param array $options
-	 * @return void
+	 * @return mixed
 	 */
-	public function render($template, array $options = array()) {
+	public function render($template, array $params = array(), $options = array()) {
 
 		$core = array();
 
@@ -452,9 +451,8 @@ class PPI_Controller {
 		$core['files']['css'] = $this->_response->getCSSFiles();
 		$core['files']['js']  = $this->_response->getJSFiles();
 
-		$options['core'] = $core;
+		$params['core'] = $core;
 
-		$this->_view->render($template, $options);
-
+		return $this->_view->render($template, $params, $options);
 	}
 }

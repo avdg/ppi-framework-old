@@ -111,11 +111,11 @@ function ppi_show_exceptioned_error($p_aError = "") {
 
 		try {
 			$logInfo = $p_aError;
-			$logInfo['cookie']  = serialize($logInfo['cookie']);
-			$logInfo['session'] = serialize($logInfo['session']);
-			$logInfo['get']     = serialize($logInfo['get']);
-			$logInfo['post']    = serialize($logInfo['post']);
-			$logInfo['sql'] = serialize($logInfo['sql']);
+			foreach(array('cookie', 'session', 'get', 'post', 'sql') as $field) {
+				if(isset($logInfo[$field])) {
+					$logInfo[$field] = serialize($logInfo[$field]);
+				}
+			}
 			unset($logInfo['code']);
 			$oModel = new PPI_Model_Shared('ppi_exception', 'id');
 			$oModel->insert($logInfo);

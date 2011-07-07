@@ -196,7 +196,6 @@ abstract class PPI_Model {
 	 * @return void
 	 */
 	private function appendQueryList($p_sQuery) {
-
 		$oRegistry = PPI_Helper::getRegistry();
 		$oRegistry->set('PPI_Model::Queries_Backtrace', array_merge($oRegistry->get('PPI_Model::Queries_Backtrace', array()), (array)$p_sQuery));
 	}
@@ -867,6 +866,7 @@ abstract class PPI_Model {
 		if (is_numeric($var)) {
 			return $var;
 		}
+
 		return $this->rHandler->quote($var);
 	}
 

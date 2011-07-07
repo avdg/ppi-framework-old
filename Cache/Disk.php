@@ -99,9 +99,7 @@ class PPI_Cache_Disk implements PPI_Cache_Interface {
 	public function set($p_sKey, $p_mData, $p_iTTL = 0) {
 
 		$sPath = $this->getKeyCachePath($p_sKey);
-
 		$this->remove($p_sKey);
-
 		$sCacheDir = dirname($sPath);
 		if(!is_dir($sCacheDir)) {
 			try {

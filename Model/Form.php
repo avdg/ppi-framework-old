@@ -13,13 +13,13 @@ class PPI_Model_Form  {
 	 */
 	private $_formStructure 		= array();
 
-    /**
-     * 
-     * 
-     * @var array
-     */
+	/**
+	 * 
+	 * 
+	 * @var array
+	 */
 	private $_formFields 			= array();
-    
+
 	/**
 	 * The list of errors assigned against a form field
 	 * @var array $_elementErrors
@@ -34,49 +34,49 @@ class PPI_Model_Form  {
 
 	/**
 	 * The hooker object to allow user control over the behaviour of FormBuilder
-     *
+	 *
 	 * @var object The FormBuilder Hooker
 	 */
 	protected $oHooker				= null;
 
 	/**
 	 * The symbolic name assigned to this current form.
-     *
+	 *
 	 * @var string $_formName
 	 */
 	protected $_formName 				= '';
 
 	/**
 	 * The method attribute on the <form> tag
-     *
+	 *
 	 * @var string $_formMethod
 	 */
 	protected $_formMethod 			= '';
 
 	/**
 	 * Whether or not the setDefaults() function has been called
-     *
+	 *
 	 * @var boolean $_defaultsApplied
 	 */
 	protected $_defaultsApplied 		= false;
 
 	/**
 	 * Whether or not to render the <form> tag
-     *
+	 *
 	 * @var boolean $_renderFormTag
 	 */
 	protected $_renderFormTag 		= true;
 
 	/**
 	 * Whether or not to render the submit button on the form
-     *
+	 *
 	 * @var boolean $_renderSubmitTag
 	 */
 	protected $_renderSubmitTag 		= true;
 
 	/**
 	 * Whether or not to perform JS validation when rendering the form.
-     *
+	 *
 	 * @var boolean $renderJSValidation
 	 */
 	protected $_renderJSValidation    = true;
@@ -85,42 +85,42 @@ class PPI_Model_Form  {
 	 * We use this variable to determine the predefined amount of keys against a field
 	 * This means any fields not in this list will be added to the fields declaration
 	 * EG: 'class' => 'myClass' will be converted to class="myClass"
-     *
+	 *
 	 * @var array $_reservedKeys
 	 */
 	protected $_reservedKeys			= array('type', 'value', 'label', 'options', 'name');
 
 	/**
 	 * To determine if recaptcha has been set on one of the fields
-     *
+	 *
 	 * @var boolean $_isReCaptcha
 	 */
 	protected $_isReCaptcha			= false;
 
 	/**
 	 * Not sure what this is need to identify but i think it's the field name that's been assigned a recaptcha type
-     *
+	 *
 	 * @var array $_captchaFields
 	 */
 	protected $_captchaFields			= array();
 
 	/**
 	 * To determine whether or not tineMCE has been initiated on one of the fields
-     *
+	 *
 	 * @var boolean $_isTinyMCEEnabled
 	 */
 	protected $_isTinyMCEEnabled		= false;
 
-    /**
-     * The constructor
-     * Setup the hooker object
-     */
+	/**
+	 * The constructor
+	 * Setup the hooker object
+	 */
 	function __construct() {
 		$this->oHooker = new APP_Formbuilder_Hooker();
 	}
 	/**
 	 * Initialise the form with name,action and method.
-     *
+	 *
 	 * @param string $formName
 	 * @param string $formAction
 	 * @param string $formMethod
@@ -136,7 +136,7 @@ class PPI_Model_Form  {
 
 	/**
 	 * Add an error against a specific field.
-     *
+	 *
 	 * @param string $elementName
 	 * @param string $errorMessage
 	 * @return void
@@ -151,7 +151,7 @@ class PPI_Model_Form  {
 
 	/**
 	 * Checks if the form is validated
-     *
+	 *
 	 * @return boolean
 	 */
 	function isValidated() {
@@ -171,7 +171,7 @@ class PPI_Model_Form  {
 
 	/**
 	 * Checks if the form has been submitted or not.
-     *
+	 *
 	 * @return boolean
 	 */
 	function isSubmitted() {
@@ -193,7 +193,7 @@ class PPI_Model_Form  {
 
 	/**
 	 * Overwrites the submit label for the form
-     *
+	 *
 	 * @param string $sLabel The Label
 	 * @return void
 	 */
@@ -205,7 +205,7 @@ class PPI_Model_Form  {
 
 	/**
 	 * This disables the <form></form> tags from being renered
-     *
+	 *
 	 * @return void
 	 */
 	function disableForm() {
@@ -214,7 +214,7 @@ class PPI_Model_Form  {
 
 	/**
 	 * Disables the submit button from being rendered
-     *
+	 *
 	 * @return void
 	 */
 	function disableSubmit() {
@@ -223,7 +223,7 @@ class PPI_Model_Form  {
 
 	/**
 	 * Enables the submit button from being rendered
-     *
+	 *
 	 * @return void
 	 */
 	function enableSubmit() {
@@ -232,7 +232,7 @@ class PPI_Model_Form  {
 
 	/**
 	 * This enables the <form></form> tags from being renered
-     *
+	 *
 	 * @return void
 	 */
 	function enableForm() {
@@ -242,7 +242,7 @@ class PPI_Model_Form  {
 	/**
 	 * This gets the submitted values from the form.
 	 * If $fields is submitted then it only returns the fields specified. Otherwise gets all fields
-     *
+	 *
 	 * @param array [$fields] Key => Value result of the form
 	 * @return array
 	 */
@@ -289,11 +289,11 @@ class PPI_Model_Form  {
 	/**
 	 * Setting the form structure for formBuilder, this can come from a pre-created array.
 	 * If the $structure parameter isn't passed it knows to get this form from the DB.
-     *
+	 *
 	 * @todo If a recaptcha form element is found, then we automatically set a rule for it.
 	 * @param false|array $structure The structure, if this is false then it tries to get the structure from the DB
-     * @throw PPI_Exception
-     * @return void
+	 * @throw PPI_Exception
+	 * @return void
 	 */
 	function setFormStructure($structure = false) {
 		if($structure === false) {
@@ -373,7 +373,7 @@ class PPI_Model_Form  {
 
 	/**
 	 * Sets the default values for the form fields specified
-     *
+	 *
 	 * @param array $defaults
 	 * @return void
 	 */
@@ -393,7 +393,7 @@ class PPI_Model_Form  {
 
 	/**
 	 * This is used to update the form defaults. Performs a hook to FormHooker->dataModify
-     *
+	 *
 	 * @return void
 	 */
 	function refreshDefaults() {
@@ -413,7 +413,7 @@ class PPI_Model_Form  {
 	}
 	/**
 	 * Validates an error or an array of errors against one field at a time.
-     *
+	 *
 	 * @return boolean
 	 */
 	function validateForm() {
@@ -542,7 +542,7 @@ class PPI_Model_Form  {
 
 	/**
 	 * Get the options for the form
-     *
+	 *
 	 * @return array
 	 */
 	function getFormDetails() {
@@ -559,7 +559,7 @@ class PPI_Model_Form  {
 
 	/**
 	 * Get the form structure
-     *
+	 *
 	 * @return array
 	 */
 	function getFormStructure() {
@@ -568,7 +568,7 @@ class PPI_Model_Form  {
 
 	/**
 	 * Get the combined information to be passed to the view renderer
-     *
+	 *
 	 * @return array
 	 */
 	function getRenderInformation() {
@@ -581,9 +581,9 @@ class PPI_Model_Form  {
 
 	/**
 	 * Get the form errors
-     *
+	 *
 	 * @param boolean $count Default is false. If false will give the errors, else a count of the errors
-     * @return array
+	 * @return array
 	 */
 	function getFormErrors($count = false) {
 		return ($count === false) ? $this->_elementErrors : count($this->_elementErrors);
@@ -591,7 +591,7 @@ class PPI_Model_Form  {
 
 	/**
 	 * Get the form name
-     *
+	 *
 	 * @return integer
 	 */
 	function getFormName() {
@@ -600,7 +600,7 @@ class PPI_Model_Form  {
 
 	/**
 	 * Get the form ID
-     *
+	 *
 	 * @return integer
 	 */
 	function getFormID() {
@@ -608,9 +608,9 @@ class PPI_Model_Form  {
 	}
 	/**
 	 * Enable tinyMCE rendering
-     *
+	 *
 	 * @param boolean $p_sType
-     * @return void
+	 * @return void
 	 */
 	function setTinyMCE($p_sType) {
 		if(!is_bool($p_sType)) {
@@ -620,7 +620,7 @@ class PPI_Model_Form  {
 	}
 	/**
 	 * Get if tinyMCE is enabled
-     * 
+	 * 
 	 * @return boolean
 	 */
 	function getTinyMCE() {

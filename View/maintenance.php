@@ -7,7 +7,7 @@
  * @copyright Digiflex Development
  * @package   PPI
  */
-	header("HTTP/1.1 500 Internal error");
+header("HTTP/1.1 500 Internal error");
 ?>
 
 <html>

@@ -149,7 +149,7 @@ class PPI_Helper {
 	static function getObjectFromRegistry($p_sClass) {
 		$registry = PPI_Registry::getInstance();
 		if(!$registry->exists($p_sClass)) {
-		    $oClass = new $p_sClass();
+			$oClass = new $p_sClass();
 			$registry->set($p_sClass, $oClass);
 			return $oClass;
 		}
@@ -191,7 +191,7 @@ class PPI_Helper {
 	/**
 	 * Obtain the extension from a filename
 	 *
-     * @todo Move to PPI_File
+	 * @todo Move to PPI_File
 	 * @todo Convert to pathinfo
 	 * @param string $fileName The file's filename
 	 * @return string
@@ -205,7 +205,7 @@ class PPI_Helper {
 
 	/**
 	 * Check if a file has a particular extension. If it does not have the extension then we add it.
-     *
+	 *
 	 * @todo Make this look for the last "." then take it from there so we're not vulnerable to file.php.txt
 	 * @param string $p_sTemplateFile Filename
 	 * @param string $p_sExtension Extension
@@ -220,7 +220,7 @@ class PPI_Helper {
 
 	/**
 	 * Get the current full url
-     *
+	 *
 	 * @todo match this with $this->getCurrUrl()
 	 * @return string
 	 */

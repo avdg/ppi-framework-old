@@ -10,14 +10,14 @@ abstract class PPI_Dispatch_Abstract {
 
 	/**
 	 * The Config object
-     *
+	 *
 	 * @var object
 	 */
 	protected $_config;
 
 	/**
 	 * The Full Url
-     *
+	 *
 	 * @var string
 	 */
 	protected $_fullUrl;
@@ -50,9 +50,9 @@ abstract class PPI_Dispatch_Abstract {
 	 */
 	protected $_router;
 
-    /**
-     * The constructor
-     */
+	/**
+	 * The constructor
+	 */
 	function __construct() {
 		$this->_config = PPI_Helper::getConfig();
 		$this->_fullUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 'https' : 'http') .
@@ -63,7 +63,7 @@ abstract class PPI_Dispatch_Abstract {
 	 * Checks to theee if the base url has been misconfigured or not
 	 * Will return true if there is indeed a bad base url match.
 	 * Will return false if there is not bad base url match.
-     *
+	 *
 	 * @return boolean
 	 */
 	function checkBadBaseUrl() {
@@ -72,7 +72,7 @@ abstract class PPI_Dispatch_Abstract {
 
 	/**
 	 * Get the URI segments after the base url
-     *
+	 *
 	 * @return array
 	 */
 	function getURISegments() {
@@ -87,7 +87,7 @@ abstract class PPI_Dispatch_Abstract {
 
 	/**
 	 * Checks if a controller exists, if so - dispatch it otherwise return false
-     *
+	 *
 	 * @todo check if ($_SERVER ["REQUEST_URI"] == "/") {
 	 * @return boolean
 	 */
@@ -134,7 +134,7 @@ abstract class PPI_Dispatch_Abstract {
 	 * Set the controller class
 	 *
 	 * @param object $p_oController
-     * @return void
+	 * @return void
 	 */
 	function setController($p_oController) {
 		$this->_controller = $p_oController;
@@ -144,7 +144,7 @@ abstract class PPI_Dispatch_Abstract {
 	 * Set the controller class name
 	 *
 	 * @param string $p_sController
-     * @return void
+	 * @return void
 	 */
 	function setControllerName($p_sController) {
 		$this->_controllerName = $p_sController;
@@ -172,7 +172,7 @@ abstract class PPI_Dispatch_Abstract {
 	 * Set the method for the chosen controller
 	 *
 	 * @param string $p_sMethod
-     * @return void
+	 * @return void
 	 */
 	function setMethod($p_sMethod) {
 		$this->_method = $p_sMethod;

@@ -13,14 +13,14 @@ class PPI_Model_Auth extends PPI_Model {
 	protected $_name = 'ppi_auth';
 	protected $_primary = 'id';
 	public $_addEditFormStructure = array(
-        'fields' => array(
-                'controller'    => array('type' => 'dropdown', 'label' => 'Controller', 'options' => ''),
-                'method'        => array('type' => 'text', 'label' => 'Method (optional)', 'size' => 30),
-                'role_name'     => array('type' => 'dropdown', 'label' => 'User Role', 'options' => ''),
-                'type'     		=> array('type' => 'dropdown', 'label' => 'Access Type', 'options' => array('1' => 'allow', '2' => 'deny')),
-         ),
-        'rules' => array(
-                'controller'    => array('type' => 'required', 'message' => 'Controller cannot be blank')
+			'fields' => array(
+				'controller'    => array('type' => 'dropdown', 'label' => 'Controller', 'options' => ''),
+				'method'        => array('type' => 'text', 'label' => 'Method (optional)', 'size' => 30),
+				'role_name'     => array('type' => 'dropdown', 'label' => 'User Role', 'options' => ''),
+				'type'     		=> array('type' => 'dropdown', 'label' => 'Access Type', 'options' => array('1' => 'allow', '2' => 'deny')),
+				),
+			'rules' => array(
+				'controller'    => array('type' => 'required', 'message' => 'Controller cannot be blank')
 		)
 	);
 

@@ -9,26 +9,26 @@
  */
 class PPI_Dispatch {
 
-    /**
-     * The actual helper doing the dispatching
-     *
-     * @var object that implements PPI_Dispatch_Interface
-     */
+	/**
+	 * The actual helper doing the dispatching
+	 *
+	 * @var object that implements PPI_Dispatch_Interface
+	 */
 	protected $_helper = null;
 
 	protected $_render404 = false;
 
-    /**
-     * The router doing the routing
-     *
-     * @var PPI_Router
-     */
+	/**
+	 * The router doing the routing
+	 *
+	 * @var PPI_Router
+	 */
 	protected $_router = null;
 
-    /**
-     * Identify and store the appropriate Controller and Methods to dispatch at a later time when calling dispatch()
-     *
-     */
+	/**
+	 * Identify and store the appropriate Controller and Methods to dispatch at a later time when calling dispatch()
+	 *
+	 */
 	function __construct(PPI_Dispatch_Interface $p_oDispatch) {
 		$this->_helper = $p_oDispatch;
 		if($this->_helper->init() === false) {
@@ -39,7 +39,7 @@ class PPI_Dispatch {
 	/**
 	 * Call the dispatch process for the current  set helper
 	 *
-     * @return void
+	 * @return void
 	 */
 	function dispatch() {
 		if($this->_render404) {

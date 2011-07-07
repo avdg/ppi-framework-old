@@ -28,7 +28,7 @@
 	class PPI_Model_Log {
 
 		function addExceptionLog(array $p_aError) {
-			$oDB = new PPI_Model_Shared('ppi_exceptions', 'id');
+			$oDB = new PPI_Model_Shared('ppi_exception', 'id');
 			$oDB->putRecord($p_aError);
 		}
 

@@ -100,6 +100,12 @@ class PPI_Request {
 	 */
 	function __construct(array $env = array()) {
 
+		if (isset($env['server']) && (is_array($env['server']) || $env['server'] instanceof PPI_Request_Server)) {
+			$this->_server = $env['server'];
+		} else {
+			$this->_server = new PPI_Request_Server();
+		}
+
 		if (isset($env['get']) && (is_array($env['get']) || $env['get'] instanceof PPI_Request_Get)) {
 			$this->_get = $env['get'];
 		} else {
@@ -111,12 +117,6 @@ class PPI_Request {
 			$this->_post = $env['post'];
 		} else {
 			$this->_post = new PPI_Request_Post();
-		}
-
-		if (isset($env['server']) && (is_array($env['server']) || $env['server'] instanceof PPI_Request_Server)) {
-			$this->_server = $env['server'];
-		} else {
-			$this->_server = new PPI_Request_Server();
 		}
 	}
 
@@ -150,6 +150,15 @@ class PPI_Request {
 			return $this->_post->all();
 		}
 		return isset($this->_post[$key]) ? $this->_post[$key] : $default;
+	}
+
+
+	function server($key = null, $default = null) {
+
+		if($key === null) {
+			return $this->_server->all();
+		}
+		return isset($this->_server[$key]) ? $this->_server[$key] : $default;
 	}
 
 	/**
@@ -276,6 +285,15 @@ class PPI_Request {
 			case 'userAgent':
 				return isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
 
+			case 'domain':
+				$url = parse_url($this->getUrl());
+				return ifset($uri['host'], '');
+				break;
+
+			case 'subdomain':
+				throw new PPI_Exception('Not yet developed');
+				break;
+
 			case 'browser':
 			case 'browserVersion':
 			case 'browserAndVersion':
@@ -294,7 +312,7 @@ class PPI_Request {
 	function getUri() {
 
 		if (null === $this->_uri) {
-			$this->_uri = PPI_Helper::getRegistry()->get('PPI::Request_URI');
+			$this->_uri = PPI_Helper::getRegistry()->get('PPI::Request_URI', $this->_server['REQUEST_URI']);
 		}
 		return $this->_uri;
 	}

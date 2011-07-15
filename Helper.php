@@ -2,53 +2,10 @@
 /**
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
- * @copyright Digiflex Development
  * @package   Helper
  * @link      www.ppiframework.com
  */
 class PPI_Helper {
-
-	/**
-	 *
-	 *
-	 * @var null
-	 */
-	private static $_instance = null;
-
-	/**
-	 * The initialise function to create the instance
-	 * @return void
-	 */
-	protected static function init() {
-		self::setInstance(new PPI_Helper());
-	}
-
-
-	/**
-	 * The function used to initially set the instance
-	 *
-	 * @param PPI_Helper $instance
-	 * @throws PPI_Exception
-	 * @return void
-	 */
-	static function setInstance(PPI_Helper $instance) {
-		if (self::$_instance !== null) {
-			throw new PPI_Exception('PPI_Helper is already initialised');
-		}
-		self::$_instance = $instance;
-	}
-
-	/**
-	 * Obtain the instance if it exists, if not create it
-	 *
-	 * @return PPI_Helper
-	 */
-	static function getInstance() {
-		if (self::$_instance === null) {
-			self::init();
-		}
-		return self::$_instance;
-	}
 
 	/**
 	 * Function to recursively trim strings
@@ -69,7 +26,7 @@ class PPI_Helper {
 	 * @return object
 	 */
 	static function getConfig() {
-		return PPI_Registry::getInstance()->get('PPI_Config');
+		return PPI_Registry::get('PPI_Config');
 	}
 
 	/**
@@ -78,7 +35,7 @@ class PPI_Helper {
 	 * @return object
 	 */
 	static function getDispatcher() {
-		return PPI_Registry::getInstance()->get('PPI_Dispatch');
+		return PPI_Registry::get('PPI_Dispatch');
 	}
 
 	/**
@@ -103,7 +60,7 @@ class PPI_Helper {
 			$options = isset($config->session) ? $config->session->toArray() : array();
 			$p_mOptions = $options;
 		}
-		$session = self::getRegistry()->get('PPI_Session');
+		$session = PPI_Registry::get('PPI_Session');
 		if(is_array($p_mOptions)) {
 			$session->defaults($p_mOptions);
 		}
@@ -146,14 +103,13 @@ class PPI_Helper {
 		return self::getObjectFromRegistry('PPI_Security');
 	}
 
-	static function getObjectFromRegistry($p_sClass) {
-		$registry = PPI_Registry::getInstance();
-		if(!$registry->exists($p_sClass)) {
-			$oClass = new $p_sClass();
-			$registry->set($p_sClass, $oClass);
+	static function getObjectFromRegistry($class) {
+		if(!PPI_Registry::exists($class)) {
+			$oClass = new $class();
+			PPI_Registry::set($class, $oClass);
 			return $oClass;
 		}
-		return $registry->get($p_sClass);
+		return PPI_Registry::get($class);
 	}
 
 	/**

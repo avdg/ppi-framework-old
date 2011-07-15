@@ -163,10 +163,8 @@ class PPI_App {
 
         $this->_config = $this->_config->getConfig();
 
-        $registry = PPI_Registry::getInstance();
-
 	    // -- Set the config into the registry for quick read/write --
-        $registry->set('PPI_Config', $this->_config);
+        PPI_Registry::set('PPI_Config', $this->_config);
 
         // ------------- Initialise the session -----------------
         if(!headers_sent()) {
@@ -174,7 +172,7 @@ class PPI_App {
 	        if($this->_envOptions['session'] === null) {
 	            $this->_envOptions['session'] = new PPI_Session();
 	        }
-            $registry->set('PPI_Session', $this->_envOptions['session']);
+            PPI_Registry::set('PPI_Session', $this->_envOptions['session']);
         }
 
         // Fire up the default dispatcher
@@ -186,14 +184,14 @@ class PPI_App {
 
         $dispatch = new PPI_Dispatch($this->_envOptions['dispatcher']);
 
-        PPI_Registry::getInstance()->set('PPI_Dispatch', $dispatch);
+        PPI_Registry::set('PPI_Dispatch', $dispatch);
 
 	    // -- Set the PPI_Request object --
 	    if($this->_envOptions['request'] === null) {
 		    $this->_envOptions['request'] = new PPI_Request();
 	    }
 
-	    $registry->set('PPI_Request', $this->_envOptions['request']);
+	    PPI_Registry::set('PPI_Request', $this->_envOptions['request']);
         // -------------- Library Autoloading Process --------------
         if(!empty($this->_config->system->autoloadLibs)) {
             foreach(explode(',', $this->_config->system->autoloadLibs) as $sLib) {
@@ -232,7 +230,7 @@ class PPI_App {
             }
         }
 
-        $registry->set('PPI_App', $this);
+        PPI_Registry::set('PPI_App', $this);
 
         return $this; // Fluent Interface
     }
@@ -243,7 +241,7 @@ class PPI_App {
      * @return $this Fluent interface
      */
     function dispatch() {
-		$dispatch = PPI_Registry::getInstance()->get('PPI_Dispatch');
+		$dispatch = PPI_Registry::get('PPI_Dispatch');
         $dispatch->dispatch();
         return $this;
     }

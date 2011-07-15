@@ -23,10 +23,10 @@ class PPI_Cache_Redis implements PPI_Cache_Interface {
 	protected $_handler = null;
 
 	/**
-	 * @param array $p_aOptions The options that override the default
+	 * @param array $options The options that override the default
 	 */
-	function __construct(array $p_aOptions = array()) {
-		$this->_defaults = ($p_aOptions + $this->_defaults);
+	function __construct(array $options = array()) {
+		$this->_defaults = ($options + $this->_defaults);
 	}
 
 	function init() {
@@ -38,40 +38,40 @@ class PPI_Cache_Redis implements PPI_Cache_Interface {
 
 	/**
 	 * Get a value from cache
-	 * @param mixed $p_mKey The Key(s)
+	 * @param mixed $key The Key(s)
 	 * @return mixed
 	 */
-	function get($p_mKey) {
-		return is_array($p_mKey) ? $this->_handler->getMultiple($p_mKey) : $this->_handler->get($p_mKey);
+	function get($key) {
+		return is_array($key) ? $this->_handler->getMultiple($key) : $this->_handler->get($key);
 	}
 
 	/**
 	 * Set a value in the cache
-	 * @param string $p_sKey The Key
-	 * @param mixed $p_mData The Data
-	 * @param mixed $p_mTTL The Time To Live. Integer or String (strtotime)
+	 * @param string $key The Key
+	 * @param mixed $data The Data
+	 * @param mixed $ttl The Time To Live. Integer or String (strtotime)
 	 * @return boolean True on succes, False on failure.
 	 */
-	function set($p_sKey, $p_mData, $p_mTTL = null) {
-		if(null !== $p_mTTL && is_string($p_mData)) {
-			$p_mTTL = strtotime($p_mTTL);
+	function set($key, $data, $ttl = null) {
+		if(null !== $ttl && is_string($data)) {
+			$ttl = strtotime($ttl);
 		}
-		return $this->_handler->set($p_sKey, $p_mData, ifset($p_mTTL,  $this->_defaults['expiry']));
+		return $this->_handler->set($key, $data, ifset($ttl,  $this->_defaults['expiry']));
 	}
 
 	/**
 	 * Check if a key exists in the cache
-	 * @param string $p_sKey The Key
+	 * @param string $key The Key
 	 * @return boolean
 	 */
-	function exists($p_sKey) { return $this->_handler->exists($p_sKey); }
+	function exists($key) { return $this->_handler->exists($key); }
 
 	/**
 	 * Remove a key from the cacheincre
-	 * @param string $p_sKey The Key
+	 * @param string $key The Key
 	 * @return boolean
 	 */
-	function remove($p_sKey) { return $this->_handler->delete($p_sKey); }
+	function remove($key) { return $this->_handler->delete($key); }
 
 	/**
 	 * Wipe the cache contents
@@ -83,20 +83,20 @@ class PPI_Cache_Redis implements PPI_Cache_Interface {
 	/**
 	 * Increment a numerical value
 	 *
-	 * @param string $p_sKey The Key
-	 * @param numeric $p_iInc The incremental value
+	 * @param string $key The Key
+	 * @param numeric $inc The incremental value
 	 * @return numeric
 	 */
-	function increment($p_sKey, $p_iInc = 1) { return $this->_handler->incr($p_sKey, $p_iInc); }
+	function increment($key, $inc = 1) { return $this->_handler->incr($key, $inc); }
 
 	/**
 	 * Enter description here...
 	 *
-	 * @param string $p_sKey The Key
-	 * @param numeric $p_iDec The decremental value
+	 * @param string $key The Key
+	 * @param numeric $dec The decremental value
 	 * @return numeric
 	 */
-	function decrement($p_sKey, $p_iDec = 1) { return $this->_handler->decr($p_sKey, $p_iDec); }
+	function decrement($key, $dec = 1) { return $this->_handler->decr($key, $dec); }
 
 	/**
 	 * Check if the Redis extension has been loaded and is enabled in its configuration.

@@ -29,24 +29,24 @@ class PPI_Cache {
 	 * The options to the cache layer. This can be an array of options
 	 * or a string of the driver name eg: new PPI_Cache('apc');
 	 *
-	 * @param array|string $p_aOptions
+	 * @param array|string $options
 	 */
-	function __construct($p_aOptions = array()) {
+	function __construct(array $options = array()) {
 
 		// We now let you specify the handler as a string for quickness.
-		if(is_string($p_aOptions)) {
-			$p_aOptions = array('handler' => $p_aOptions);
+		if(is_string($options)) {
+			$options = array('handler' => $options);
 		}
 
-        if(isset($p_aOptions['handler'])) {
+        if(isset($options['handler'])) {
             // If it's a pre instantiated cache handler then use that
-            if(!is_string($p_aOptions['handler']) && $p_aOptions['handler'] instanceof PPI_Cache_Interface) {
-                $this->_handler = $p_aOptions['handler'];
-                unset($p_aOptions['handler']);
+            if(!is_string($options['handler']) && $options['handler'] instanceof PPI_Cache_Interface) {
+                $this->_handler = $options['handler'];
+                unset($options['handler']);
             }
         }
 
-        $this->_defaults = ($p_aOptions + $this->_defaults);
+        $this->_defaults = ($options + $this->_defaults);
 
         // If no handler was passed in, then we setup that handler now by the string name: i.e: 'disk'
         if($this->_handler === null) {
@@ -57,14 +57,13 @@ class PPI_Cache {
 	/**
 	 * Initialise the cache handler
      *
-	 * @param array $p_aOptions The options to go into the cache initialisation
+	 * @param string $handler The handler name
 	 * @return void
 	 * @throws PPI_Exception
-	 *
 	 */
-	function setupHandler($p_sHandler) {
-		$p_sHandler = strtolower($p_sHandler);
-        $handler = 'PPI_Cache_' . ucfirst($p_sHandler);
+	function setupHandler($handler) {
+		$handler = strtolower($handler);
+        $handler = 'PPI_Cache_' . ucfirst($handler);
 		$this->_handler = new $handler($this->_defaults);
         if($this->_handler->enabled() === false) {
             throw new PPI_Exception('The cache driver ' . $handler . ' is currently disabled.');
@@ -75,42 +74,42 @@ class PPI_Cache {
     /**
      * Get a key value from the cache
      *
-     * @param string $p_sKey The Key
+     * @param string $key The Key
      * @return mixed
      */
-    function get($p_sKey) {
-    	return $this->_handler->get($p_sKey);
+    function get($key) {
+    	return $this->_handler->get($key);
     }
 
     /**
      * Set a value in the cache
      *
-     * @param string $p_sKey The Key
-     * @param mixed $p_mValue The Value
+     * @param string $key The Key
+     * @param mixed $value The Value
      * @return boolean
      */
-    function set($p_sKey, $p_mValue) {
-    	return $this->_handler->set($p_sKey, $p_mValue);
+    function set($key, $value) {
+    	return $this->_handler->set($key, $value);
     }
 
     /**
      * Check if a key exists in the cache
      *
-     * @param string $p_sKey The Key
+     * @param string $key The Key
      * @return boolean
      */
-    function exists($p_sKey) {
-    	return $this->_handler->exists($p_sKey);
+    function exists($key) {
+    	return $this->_handler->exists($key);
     }
 
     /**
      * Remove a value from the cache by key
      *
-     * @param string $p_sKey The Key
+     * @param string $key The Key
      * @return boolean
      */
-    function remove($p_sKey) {
-    	return $this->_handler->remove($p_sKey);
+    function remove($key) {
+    	return $this->_handler->remove($key);
     }
 
 }

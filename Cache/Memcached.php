@@ -47,51 +47,51 @@ class PPI_Cache_Memcached implements PPI_Cache_Interface {
 	/**
 	 * Get a value from cache
 	 *
-	 * @param string $p_sKey The Key
+	 * @param string $key The Key
 	 * @return mixed
 	 */
-	function get($p_sKey) {
+	function get($key) {
 		if(false === $this->_serverAdded) {
 			$this->addServer('localhost');
 		}
-		return $this->_handler->get($p_sKey);
+		return $this->_handler->get($key);
 	}
 
 	/**
 	 * Set a value in the cache
 	 *
-	 * @param string $p_sKey The Key
-	 * @param mixed $p_mData The Data
-	 * @param integer $p_mTTL The Time To Live
+	 * @param string $key The Key
+	 * @param mixed $data The Data
+	 * @param integer $ttl The Time To Live
 	 * @return boolean
 	 */
-	function set($p_sKey, $p_mData, $p_mTTL = 0) {
+	function set($key, $data, $ttl = 0) {
 		if(false === $this->_serverAdded) {
 			$this->addServer('localhost');
 		}
-		return $this->_handler->set($p_sKey, $p_mData, (is_numeric($p_mTTL) ? $p_mTTL : strtotime($p_mTTL)));
+		return $this->_handler->set($key, $data, (is_numeric($ttl) ? $ttl : strtotime($ttl)));
 	}
 
 	/**
 	 * Increment a cache value
 	 *
-	 * @param string $p_sKey The Key
-	 * @param numeric $p_mIncrement The incremental value
+	 * @param string $key The Key
+	 * @param numeric $inc The incremental value
 	 * @return numeric
 	 */
-	function increment($p_sKey, $p_mIncrement) {
-		return $this->_handler->increment($p_sKey, $p_mIncrement);
+	function increment($key, $inc) {
+		return $this->_handler->increment($key, $inc);
 	}
 
 	/**
 	 * Decrement a cache value
 	 *
-	 * @param string $p_sKey The Key
-	 * @param numeric $p_mDecrement The Decremental Value
+	 * @param string $key The Key
+	 * @param numeric $dec The Decremental Value
 	 * @return numeric
 	 */
-	function decrement($p_sKey, $p_mDecrement) {
-		return $this->_handler->decrement($p_sKey, $p_mDecrement);
+	function decrement($key, $dec) {
+		return $this->_handler->decrement($key, $dec);
 	}
 
 	/**
@@ -104,19 +104,19 @@ class PPI_Cache_Memcached implements PPI_Cache_Interface {
 	/**
 	 * Check if a key exists in the cache
 	 *
-	 * @param string $p_mKey The Key
+	 * @param string $key The Key
 	 * @return boolean
 	 */
-	function exists($p_sKey) {}
+	function exists($key) {}
 
 	/**
 	 * Remove a key from the cache
 	 *
-	 * @param string $p_sKey The Key
+	 * @param string $key The Key
 	 * @return boolean
 	 */
-	function remove($p_sKey) {
-		return $this->_handler->delete($p_sKey);
+	function remove($key) {
+		return $this->_handler->delete($key);
 	}
 
 	/**

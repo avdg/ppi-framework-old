@@ -2,12 +2,10 @@
 
 /**
  *
- * @version   1.0
- * @author	Paul Dragoonis <dragoonis@php.net>
+ * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
- * @copyright Digiflex Development
  * @package   Cache
- * @link	  www.ppiframework.com
+ * @link	  http://xzc www.ppiframework.com
  */
 
 interface PPI_Cache_Interface {
@@ -16,10 +14,10 @@ interface PPI_Cache_Interface {
 	 * Get cache contents
 	 *
 	 * @abstract
-	 * @param  string $p_sKey The Key
+	 * @param  string $key The Key
 	 * @return mixed
 	 */
-	function get($p_sKey);
+	function get($key);
 
 	/**
 	 * Perform any initialisation steps on the driver. (such as ->connect())
@@ -33,50 +31,50 @@ interface PPI_Cache_Interface {
 	 * Set cache contents
 	 *
 	 * @abstract
-	 * @param string $p_sKey The Key
-	 * @param  mixed $p_mData The Data
-	 * @param int $p_iTTL The TTL (Time to live)
+	 * @param string $key The Key
+	 * @param  mixed $data The Data
+	 * @param int $ttl The TTL (Time to live)
 	 * @return boolean
 	 */
-	function set($p_sKey, $p_mData, $p_iTTL = 0);
+	function set($key, $data, $ttl = 0);
 
 	/**
 	 * Check if cache contents exists
 	 *
 	 * @abstract
-	 * @param mixed $p_mKey The Key(s)
+	 * @param mixed $key The Key(s)
 	 * @return boolean
 	 */
-	function exists($p_mKey);
+	function exists($key);
 
 	/**
 	 * Remove cache content
 	 *
 	 * @abstract
-	 * @param  $p_sKey
+	 * @param  $key
 	 * @return boolean
 	 */
-	function remove($p_sKey);
+	function remove($key);
 
 	/**
 	 * Increment the cache value
 	 *
 	 * @abstract
-	 * @param string $p_sKey The Key
-	 * @param numeric $p_mIncrement The Incremental Value
+	 * @param string $key The Key
+	 * @param numeric $inc The Incremental Value
 	 * @return int
 	 */
-	function increment($p_sKey, $p_mIncrement);
+	function increment($key, $inc);
 
 	/**
 	 * Decrement the cache value
 	 *
 	 * @abstract
-	 * @param string $p_sKey The Key
-	 * @param mixed $p_mDecrement The Decremental Value
+	 * @param string $key The Key
+	 * @param mixed $dec The Decremental Value
 	 * @return int
 	 */
-	function decrement($p_sKey, $p_mDecrement);
+	function decrement($key, $dec);
 
 	/**
 	 * Check if a cache driver is enabled

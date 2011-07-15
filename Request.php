@@ -152,7 +152,13 @@ class PPI_Request {
 		return isset($this->_post[$key]) ? $this->_post[$key] : $default;
 	}
 
-
+	/**
+	 * Get a value from the SERVER.
+	 *
+	 * @param string $key
+	 * @param mixed $default
+	 * @return array|null
+	 */
 	function server($key = null, $default = null) {
 
 		if($key === null) {

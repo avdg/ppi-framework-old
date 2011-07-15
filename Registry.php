@@ -1,14 +1,12 @@
 <?php
 
 /**
- * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
- * @copyright Digiflex Development
  * @package   Core
  * @link      www.ppiframework.com
  */
-class PPI_Registry extends ArrayObject {
+class PPI_Registry {
 
 	/**
 	 * Registry object provides storage for shared objects.
@@ -17,12 +15,19 @@ class PPI_Registry extends ArrayObject {
 	private static $_instance = null;
 
 	/**
-	 * Constructs a parent ArrayObject with default to allow acces as an object
-	 * @param array $array Initial data for the parent
-	 * @param integer $flags ArrayObject Initial flags for ArrayObject
+	 * The registrys internal data
+	 *
+	 * @var array
 	 */
-	public function __construct($array = array(), $flags = parent::ARRAY_AS_PROPS) {
-		parent::__construct($array, $flags);
+	private static $_vars = array();
+
+	/**
+	 * @param array $array Initial data for the registry
+	 */
+	public function __construct(array $data = array()) {
+		if(!empty($data)) {
+			self::$_vars = $data;
+		}
 	}
 
 	/**
@@ -40,11 +45,11 @@ class PPI_Registry extends ArrayObject {
 	/**
 	 * Set the default registry instance to a specified instance.
 	 *
-	 * @param PPI_Registry $registry An object instance of type PPI_Registry
+	 * @param object $registry An object instance of type PPI_Registry
 	 * @return void
 	 * @throws PPI_Exception if registry is already initialized.
 	 */
-	public static function setInstance(PPI_Registry $registry) {
+	public static function setInstance($registry) {
 		if (self::$_instance !== null) {
 			throw new PPI_Exception('Registry is already initialized');
 		}
@@ -57,7 +62,7 @@ class PPI_Registry extends ArrayObject {
 	 * @return void
 	 */
 	protected static function init() {
-		self::setInstance(new PPI_Registry());
+		self::setInstance(new PPI_Registry_Legacy());
 	}
 
 	/**
@@ -72,30 +77,19 @@ class PPI_Registry extends ArrayObject {
 	 * @return mixed
 	 * @throws PPI_Exception if no entry is registerd for $index.
 	 */
-	public static function get($p_sKey, $p_mDefault = null) {
-
-		$instance = self::getInstance();
-		$bExists = $instance->offsetExists($p_sKey);
-		if ($p_mDefault === null && !$bExists) {
-			throw new PPI_Exception("No entry is registered for key '$p_sKey'");
-		}
-		return $bExists ? $instance->offsetGet($p_sKey) : $p_mDefault;
+	public static function get($key, $default = null) {
+		return ifset(self::$_vars[$key], $default);
 	}
 
 	/**
-	 * setter method, basically same as offsetSet().
+	 * Set a value in the registry
 	 *
-	 * This method can be called from an object of type PPI_Registry, or it
-	 * can be called statically.  In the latter case, it uses the default
-	 * static instance stored in the class.
-	 *
-	 * @param string $index The location in the ArrayObject in which to store
-	 *   the value.
+	 * @param string $index
 	 * @param mixed $value The object to store in the ArrayObject.
 	 * @return void
 	 */
 	public static function set($index, $value) {
-		self::$_instance->offsetSet($index, $value);
+		self::$_vars[$index] = $value;
 	}
 
 	/**
@@ -105,7 +99,7 @@ class PPI_Registry extends ArrayObject {
 	 * @return void
 	 */
 	public static function remove($index) {
-		self::$_instance->offsetUnset($index);
+		unset(self::$_vars[$index]);
 	}
 
 	/**
@@ -115,16 +109,6 @@ class PPI_Registry extends ArrayObject {
 	 * @return mixed
 	 */
 	public static function exists($index) {
-		return self::$_instance->offsetExists($index);
-	}
-
-	/**
-	 * @param string $index
-	 * @return mixed
-	 *
-	 * Workaround for http://bugs.php.net/bug.php?id=40442
-	 */
-	public function offsetExists($index) {
-		return array_key_exists($index, $this);
+		return array_key_exists($index, self::$_vars);
 	}
 }

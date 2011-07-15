@@ -19,16 +19,12 @@ class PPI_Registry {
 	 *
 	 * @var array
 	 */
-	private static $_vars = array();
+	protected static $_vars = array();
 
 	/**
 	 * @param array $array Initial data for the registry
 	 */
-	public function __construct(array $data = array()) {
-		if(!empty($data)) {
-			self::$_vars = $data;
-		}
-	}
+	public function __construct() {}
 
 	/**
 	 * Retrieves the default instance of the registry, if it doesn't exist then we create it.
@@ -37,7 +33,7 @@ class PPI_Registry {
 	 */
 	public static function getInstance() {
 		if (self::$_instance === null) {
-			self::init();
+			self::legacyInit();
 		}
 		return self::$_instance;
 	}
@@ -61,19 +57,27 @@ class PPI_Registry {
 	 *
 	 * @return void
 	 */
-	protected static function init() {
+	protected static function legacyInit() {
 		self::setInstance(new PPI_Registry_Legacy());
 	}
 
 	/**
-	 * getter method, basically same as offsetGet().
+	 * Initialisation function, currently used to set mock data
 	 *
-	 * This method can be called from an object of type PPI_Registry, or it
-	 * can be called statically.  In the latter case, it uses the default
-	 * static instance stored in the class.
+	 * @static
+	 * @param array $options
+	 * @return void
+	 */
+	public static function init(array $options = array()) {
+		if(isset($options['data']) && !empty($options['data'])) {
+			self::$_vars = $options['data'];
+		}
+	}
+
+	/**
+	 * Get a value from the registey
 	 *
-	 * @param string $index - get the value associated with $index
-	 * @todo Decide wether to default to null if the key is not found, instead of throwing an exception.
+	 * @param string $index
 	 * @return mixed
 	 * @throws PPI_Exception if no entry is registerd for $index.
 	 */

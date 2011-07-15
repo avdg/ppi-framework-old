@@ -33,7 +33,7 @@ function ppi_error_handler($errno = '', $errstr = "", $errfile = "", $errline = 
 		$error['backtrace'] = $oException->_traceString;
 	}
 
-	$error['sql'] = PPI_Helper::getRegistry()->get('PPI_Model::Queries_Backtrace', array());
+	$error['sql'] = PPI_Registry::get('PPI_Model::Queries_Backtrace', array());
 	// this function has the exit() call in it, so we must put it last
 	ppi_show_exceptioned_error($error);
 }
@@ -64,13 +64,13 @@ function ppi_exception_handler($oException) {
 
 	try {
 
-		if (!PPI_Registry::getInstance()->exists('PPI_Config')) {
+		if (!PPI_Registry::exists('PPI_Config')) {
 			ppi_show_exceptioned_error($error);
 			return;
 		}
 
 		$oConfig = PPI_Helper::getConfig();
-		$error['sql'] = PPI_Helper::getRegistry()->get('PPI_Model::Queries_Backtrace', array());
+		$error['sql'] = PPI_Registry::get('PPI_Model::Queries_Backtrace', array());
 
 	} catch (PPI_Exception $e) {
 		writeErrorToLog($e->getMessage());

@@ -112,7 +112,7 @@ function php_check_version() {
  */
 function is_db_installed() {
 
-	$config = PPI_Registry::getInstance()->get('config');
+	$config = PPI_Registry::get('config');
 	$oUser	= new PPI_Model_User();
 	$rows	= $oUser->query('SELECT ' . $config->system->defaultUserTable . ' FROM ' . $config->system->defaultUserTable . ' LIMIT 1');
 	return array() !== $rows;
@@ -122,7 +122,7 @@ function is_db_installed() {
  * Check if a variable is set and not empty and return a default if false
  * @param <type> $var
  * @param <type> $alt
- * @return <type> 
+ * @return <type>
  */
 function ifset(&$var, $alt=null) {
 

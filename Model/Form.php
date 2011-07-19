@@ -14,8 +14,8 @@ class PPI_Model_Form  {
 	private $_formStructure 		= array();
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @var array
 	 */
 	private $_formFields 			= array();
@@ -281,7 +281,8 @@ class PPI_Model_Form  {
 		$submitFields = $this->oHooker->preRetreival($submitFields);
 
 		// Clean the inputs
-		$submitFields = PPI_Helper::getInstance()->arrayTrim($submitFields);
+		$helper = new PPI_Helper();
+		$submitFields = $helper->arrayTrim($submitFields);
 		return $submitFields;
 	}
 
@@ -620,7 +621,7 @@ class PPI_Model_Form  {
 	}
 	/**
 	 * Get if tinyMCE is enabled
-	 * 
+	 *
 	 * @return boolean
 	 */
 	function getTinyMCE() {

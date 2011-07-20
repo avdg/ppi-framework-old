@@ -44,7 +44,6 @@ class PPI_Router implements PPI_Router_Interface {
 		include $this->getRoutingFile();
 		$uri = str_replace(PPI_Helper::getConfig()->system->base_url, '/', PPI_Helper::getFullUrl());
 		$route = $uri;
-
 		// Loop through the route array looking for wild-cards
 		foreach ($routes as $key => $val) {
 			// Convert wild-cards to RegEx
@@ -58,6 +57,12 @@ class PPI_Router implements PPI_Router_Interface {
 				$route = $val;
 				break;
 			}
+		}
+
+		// We don't currently want to send query string data back up the chain, this can only effectively
+		// Be matched currently using a route and our routes have matched nothing. Remove query string values.
+		if( ($pos = strpos($route, '?')) !== false) {
+			$route = substr($route, 0, $pos);
 		}
 		$this->setMatchedRoute($route);
 	}

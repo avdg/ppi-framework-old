@@ -1,0 +1,45 @@
+<?php
+
+class PPI_Request_Url extends PPI_Request_Abstract {
+
+	/**
+	 * Constructor
+	 *
+	 * If data is supplied then that data is used, otherwise we automatically
+	 *
+	 * @param array $data Supplied Data
+	 */
+	public function __construct($data = null) {
+		if (is_string($data)) {
+			$this->_array = $this->processUriParams($data);
+			$this->_isCollected = false;
+
+		} else {
+			if (is_array($data)) {
+				$this->_array = $data;
+			}
+
+			$this->_isCollected = false;
+		}
+	}
+
+	/**
+	 * Process the URI Parameters into a clean hashmap for isset() calling later.
+	 *
+	 * @return array
+	 */
+	protected function processUriParams($uri) {
+		$params    = array();
+		$uriParams = explode('/', trim($uri, '/'));
+		$count     = count($uriParams);
+
+		if($count > 0) {
+			for($i = 0; $i < $count; $i++) {
+				$val = isset($uriParams[($i + 1)]) ? $uriParams[($i + 1)] : null;
+				$params[$uriParams[$i]] = urldecode(is_numeric($val) ? (int) $val : $val);
+			}
+		}
+
+		return $params;
+	}
+}

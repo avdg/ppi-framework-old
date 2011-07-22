@@ -25,9 +25,9 @@ class PPI_Request_GetTest extends PHPUnit_Framework_TestCase {
 		$this->assertFalse($get->isCollected());
 
 		$get = new PPI_Request_Get(array());
-		$this->assertTrue($get->isCollected());
+		$this->assertFalse($get->isCollected());
 	}
-/*
+
 	public function testCollectGet()
 	{
 		$get = new PPI_Request_Get;
@@ -36,7 +36,7 @@ class PPI_Request_GetTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(null,  $get['random']);
 		$this->assertTrue($get->isCollected());
 	}
-*/
+
 	public function testCustomGet() {
 		$get = new PPI_Request_Get(array('drink' => 'beer'));
 		$this->assertEquals('beer', $get['drink']);

@@ -11,35 +11,26 @@ class PPI_RegistryTest extends PHPUnit_Framework_TestCase {
 
 	protected $_reg = null;
 
-	public function setUp() {
-		$this->_reg = PPI_Registry::getInstance();
-	}
+	public function setUp() {}
 
-	public function tearDown() {
-		unset($this->_reg);
-	}
+	public function tearDown() {}
 
 	public function testRemove() {
-		$this->_reg->set('foo', 'foo');
-		$this->_reg->remove('foo');
-		$this->assertFalse($this->_reg->exists('foo'));
+		PPI_Registry::set('foo', 'foo');
+		PPI_Registry::remove('foo');
+		$this->assertFalse(PPI_Registry::exists('foo'));
 	}
 
 	public function testSet() {
-		$this->_reg->set('foo', 'foo');
-		$this->assertEquals('foo', $this->_reg->get('foo'));
-		$this->_reg->remove('foo');
+		PPI_Registry::set('foo', 'foo');
+		$this->assertEquals('foo', PPI_Registry::get('foo'));
+		PPI_Registry::remove('foo');
 	}
 
 	public function testIsset() {
-		$this->_reg->set('foo2', 'foo');
-		$this->assertFalse($this->_reg->exists('foo'));
-		$this->assertTrue($this->_reg->exists('foo2'));
-		$this->_reg->remove('foo2');
-	}
-
-	public function testDoubleInstance() {
-		$this->setExpectedException('PPI_Exception');
-		$this->_reg->setInstance(new PPI_Registry());
+		PPI_Registry::set('foo2', 'foo');
+		$this->assertFalse(PPI_Registry::exists('foo'));
+		$this->assertTrue(PPI_Registry::exists('foo2'));
+		PPI_Registry::remove('foo2');
 	}
 }

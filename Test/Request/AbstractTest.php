@@ -60,6 +60,21 @@ class PPI_Request_AbstractTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(2, count($viewed));
 	}
 
+	public function testGetAll()
+	{
+		$this->assertEquals(array(), $this->object->all());
+
+		$this->object['foo'] = 'bar';
+		$this->assertEquals(array('foo' => 'bar'), $this->object->all());
+
+		$this->object['bar'] = 'foo';
+		$this->assertEquals(array('foo' => 'bar', 'bar' => 'foo'),
+			$this->object->all());
+
+		$this->object['foo'] = null;
+		$this->assertEquals(array('bar' => 'foo'), $this->object->all());
+	}
+
 	public function testCountable()
 	{
 		$this->assertEquals(0, count($this->object));

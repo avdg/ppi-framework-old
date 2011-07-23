@@ -18,30 +18,39 @@ class PPI_Request_UrlTest extends PHPUnit_Framework_TestCase {
 
 	public function testIsCollected() {
 
-		$get = new PPI_Request_Url();
-		$this->assertFalse($get->isCollected());
+		$url = new PPI_Request_Url();
+		$this->assertFalse($url->isCollected());
 
-		$get = new PPI_Request_Url(array('drink' => 'beer'));
-		$this->assertFalse($get->isCollected());
+		$url = new PPI_Request_Url(array('drink' => 'beer'));
+		$this->assertFalse($url->isCollected());
 
-		// @todo - pass a string to the constructor to get it to process
-		// the string and set isCollected to true
+		$url = new PPI_Request_Url('/foo/bar/');
+		$this->assertFalse($url->isCollected());
 	}
 
 	public function testCollectGetQuery()
 	{
-		$get = new PPI_Request_Url($this->_data);
-		$this->assertEquals('foo', $get['bar']);
-		$this->assertEquals('bar', $get['foo']);
-		$this->assertEquals(null,  $get['random']);
-		$this->assertFalse($get->isCollected());
+		$url = new PPI_Request_Url($this->_data);
+		$this->assertEquals('foo', $url['bar']);
+		$this->assertEquals('bar', $url['foo']);
+		$this->assertEquals(null,  $url['random']);
+		$this->assertFalse($url->isCollected());
 	}
 
 	public function testCustomGetQuery() {
-		$get = new PPI_Request_Url(array('drink' => 'beer'));
-		$this->assertEquals('beer', $get['drink']);
-		$this->assertEquals(null,   $get['foo']);
-		$this->assertEquals(null,   $get['random']);
-		$this->assertFalse($get->isCollected());
+		$url = new PPI_Request_Url(array('drink' => 'beer'));
+		$this->assertEquals('beer', $url['drink']);
+		$this->assertEquals(null,   $url['foo']);
+		$this->assertEquals(null,   $url['random']);
+		$this->assertFalse($url->isCollected());
+	}
+
+	public function testUrlString()
+	{
+		$url = new PPI_Request_Url('/drink/beer');
+		$this->assertEquals('beer', $url['drink']);
+		$this->assertEquals(null,   $url['beer']);
+
+		$this->assertFalse($url->isCollected());
 	}
 }

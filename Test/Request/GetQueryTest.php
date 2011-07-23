@@ -44,4 +44,11 @@ class PPI_Request_GetQueryTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(null,   $get['random']);
 		$this->assertFalse($get->isCollected());
 	}
+
+	public function testGetString() {
+		$get = new PPI_Request_Get('first=value&arr[]=foo+bar&arr[]=baz');
+		$this->assertEquals('value',   $get['first']);
+		$this->assertEquals('foo bar', $get['arr'][0]);
+		$this->assertEquals('baz',     $get['arr'][1]);
+	}
 }

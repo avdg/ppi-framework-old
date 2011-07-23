@@ -45,8 +45,7 @@ class PPI_Request_UrlTest extends PHPUnit_Framework_TestCase {
 		$this->assertFalse($url->isCollected());
 	}
 
-	public function testUrlString()
-	{
+	public function testUrlString() {
 		$url = new PPI_Request_Url('/drink/beer');
 		$this->assertEquals('beer', $url['drink']);
 		$this->assertEquals(null,   $url['beer']);

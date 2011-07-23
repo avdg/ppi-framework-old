@@ -22,6 +22,7 @@ class PPI_Request_Url extends PPI_Request_Abstract {
 	/**
 	 * Process the URI Parameters into a clean hashmap for isset() calling later.
 	 *
+	 * @param string $uri The URI
 	 * @return array
 	 */
 	protected function processUriParams($uri) {

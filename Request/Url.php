@@ -12,15 +12,11 @@ class PPI_Request_Url extends PPI_Request_Abstract {
 	public function __construct($data = null) {
 		if (is_string($data)) {
 			$this->_array = $this->processUriParams($data);
-			$this->_isCollected = false;
-
-		} else {
-			if (is_array($data)) {
-				$this->_array = $data;
-			}
-
-			$this->_isCollected = false;
+		} elseif (is_array($data)) {
+			$this->_array = $data;
 		}
+
+		$this->_isCollected = false;
 	}
 
 	/**
@@ -33,11 +29,9 @@ class PPI_Request_Url extends PPI_Request_Abstract {
 		$uriParams = explode('/', trim($uri, '/'));
 		$count     = count($uriParams);
 
-		if($count > 0) {
-			for($i = 0; $i < $count; $i++) {
-				$val = isset($uriParams[($i + 1)]) ? $uriParams[($i + 1)] : null;
-				$params[$uriParams[$i]] = urldecode(is_numeric($val) ? (int) $val : $val);
-			}
+		for($i = 0; $i < $count; $i++) {
+			$val = isset($uriParams[($i + 1)]) ? $uriParams[($i + 1)] : null;
+			$params[$uriParams[$i]] = urldecode(is_numeric($val) ? (int) $val : $val);
 		}
 
 		return $params;

@@ -11,13 +11,33 @@
 class PPI_Request {
 
 	/**
-	 * Environment variables
+	 * The URI variables. eg: www.domain.com/some/uri/variables/here
 	 *
-	 * @var array|arrayAccess
+	 * @var null|object
 	 */
 	protected $_get = null;
+
+	/**
+	 * The POST data
+	 *
+	 * @var null|object
+	 */
 	protected $_post = null;
+
+	/**
+	 * The SERVER data
+	 *
+	 * @var null|object
+	 */
 	protected $_server = null;
+
+	/**
+	 * The query string data. eg: www.domain.com?query=string&data=here
+	 *
+	 * @var null|object
+	 */
+
+	protected $_getQuery = null;
 	/**
 	 * Remote vars cache for the getRemove() function
 	 *
@@ -106,10 +126,16 @@ class PPI_Request {
 			$this->_server = new PPI_Request_Server();
 		}
 
-		if (isset($env['get']) && (is_array($env['get']) || $env['get'] instanceof PPI_Request_Get)) {
+		if (isset($env['get']) && (is_array($env['get']) || $env['get'] instanceof PPI_Request_Url)) {
 			$this->_get = $env['get'];
 		} else {
-			$this->_get = new PPI_Request_Url($this->getUri);
+			$this->_get = new PPI_Request_Url($this->getUri());
+		}
+
+		if (isset($env['getQuery']) && (is_array($env['getQuery']) || $env['getQuery'] instanceof PPI_Request_Get)) {
+			$this->_getQuery = $env['getQuery'];
+		} else {
+			$this->_getQuery = new PPI_Request_Get();
 		}
 
 		if (isset($env['post']) && (is_array($env['post']) || $env['post'] instanceof PPI_Request_Post)) {
@@ -123,17 +149,32 @@ class PPI_Request {
 	 * Obtain a url segments value pair by specifying the key.
 	 * eg: /key/val/key2/val2 - by specifying key, you get val, by specifying key2, you get val2.
 	 *
-	 * @param string $var
+	 * @param string $key
 	 * @param mixed $default
 	 * @return mixed
 	 */
-	function get($var, $default = null) {
+	function get($key, $default = null) {
 
-		if (isset($_GET[$var])) {
-			return urldecode(is_numeric($var) ? (int)$var : $var);
+		if($key === null) {
+			return $this->_get->all();
 		}
-		return isset($this->_get[$var]) ? $this->_get[$var] : $default;
+		return isset($this->_get[$key]) ? $this->_get[$key] : $default;
 	}
+
+	/**
+	 * Get variables from the Query String.
+	 * eg: www.domain.com?foo=bar. Asking for 'foo' will return you 'bar'
+	 *
+	 * @param string $key The Key
+	 * @param null $default The default value is $key doesn't exist.
+	 * @return mixed
+	 */
+	function getQuery($key = null, $default = null) {
+
+		if($key === null) {
+			return $this->_getQuery->all();
+		}
+		return isset($this->_getQuery[$key]) ? $this->_getQuery[$key] : $default;	}
 
 	/**
 	 * Retrieve information passed via the $_POST array.

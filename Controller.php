@@ -323,6 +323,17 @@ class PPI_Controller {
 	}
 
 	/**
+	 * Get a parametere from the query string aka $_GET
+	 *
+	 * @param string $key The Key
+	 * @param null $default The default value is $key doesn't exist
+	 * @return mixed
+	 */
+	protected function getQuery($key, $default = null) {
+		return $this->_request->getQuery($key, $default);
+	}
+
+	/**
 	 * Access the HTTP POST variables
 	 *
 	 * @param string $p_sVar The variable name to access

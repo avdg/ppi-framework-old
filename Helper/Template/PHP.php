@@ -15,6 +15,13 @@ class PPI_Helper_Template_PHP implements PPI_Interface_Template {
 	protected $_viewVars = array();
 
 	/**
+	 * The config object
+	 *
+	 * @var null|object
+	 */
+	protected $_config = null;
+
+	/**
 	 * The constructor
 	 *
 	 * @param array $options
@@ -30,23 +37,55 @@ class PPI_Helper_Template_PHP implements PPI_Interface_Template {
 	/**
 	 * Actually load in the view and render it.
 	 *
-	 * @param string $p_sTemplateFile The filename to load, such as the master template
+	 * @param string $templateName The filename to load, such as the master template
 	 * @return void
 	 */
-	function render($p_sTemplateFile) {
-		// Optional extension for php templates
-		$p_sTplFile = PPI_Helper::checkExtension($p_sTemplateFile, EXT);
-		$sTheme     = PPI_Helper::getConfig()->layout->view_theme;
-		$sPath      = VIEWPATH . "$sTheme/$p_sTemplateFile";
-		if(!file_exists($sPath)) {
-			throw new PPI_Exception('Unable to load template: ' . $sPath . ' file does not exist');
-		}
+	function render($templateName) {
 
+		$this->checkTemplateExists($templateName);
 		foreach($this->_viewVars as $key => $var) {
 			$$key = $var;
 		}
-		
-		include_once($sPath);
+		include_once($this->getTemplatePath($templateName));
+	}
+
+	/**
+	 * Get the full path to the template file by providing the template name
+	 *
+	 * @param string $templateName
+	 * @return string
+	 *
+	 * @todo Have a hashmap class property to store $templateName => path for caching.
+	 * This means we don't need to lookup the config or check if an extension persists.
+	 */
+	function getTemplatePath($templateName) {
+		return VIEWPATH
+		       . $this->_config->layout->view_theme
+		       . DS
+		       . PPI_Helper::checkExtension($templateName, EXT);
+	}
+
+	/**
+	 * Check if a template exists
+	 *
+	 * @param string $templateName The Template Name
+	 * @return bool
+	 */
+	public function templateExists($templateName) {
+		return file_exists($this->getTemplatePath($templateName));
+	}
+
+	/**
+	 * Check if a template exists. If it does not, throw an exception
+	 *
+	 * @throws PPI_Exception
+	 * @param string $templateName The Template Name
+	 * @return void
+	 */
+	protected function checkTemplateExists($templateName) {
+		if(!$this->templateExists($templateName)) {
+			throw new PPI_Exception('Unable to load template: ' . $templateName . ' file does not exist');
+		}
 	}
 
 	/**

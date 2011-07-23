@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Handles server variables
+ *
+ * @see http://www.faqs.org/rfcs/rfc3875.html
+ */
 class PPI_Request_Server extends PPI_Request_Abstract {
 	/**
 	 * Constructor

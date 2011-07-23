@@ -14,24 +14,36 @@ class PPI_View {
 	 * @var array
 	 */
 	protected $_viewParams = array();
+
 	/**
 	 * The current set view theme
 	 *
 	 * @var null|string
 	 */
 	protected $_viewTheme = null;
+
 	/**
 	 * The master template file
 	 *
 	 * @var null|string
 	 */
 	protected $_masterTemplateFile = null;
+
 	/**
 	 * Default renderer, PHP helper
 	 *
 	 * @var string $_defaultRenderer
 	 */
 	private $_defaultRenderer = 'php';
+
+	/**
+	 * The active renderer.
+	 * This variable is used so we don't have to instantiate the renderer multuple times.
+	 *
+	 * @var null|object
+	 */
+	protected $_activeRenderer = null;
+
 	/**
 	 * CSS Files to be rendered
 	 *
@@ -231,11 +243,7 @@ class PPI_View {
 	public function getDefaultRenderValues(array $options) {
 
 		$authData = PPI_Helper::getSession()->getAuthData();
-		$request = array(
-			'controller'	=> '',
-			'method'		=> ''
-		);
-
+		$request = array('controller' => '', 'method' => '');
 		$registry = PPI_Helper::getRegistry();
 
 		// Sometimes a render is forced before the PPI_Dispatch object has finished instantiating
@@ -283,6 +291,7 @@ class PPI_View {
 		}
 		throw new PPI_Exception('Unable to find View Key: ' . $key);
 	}
+
 	/**
 	 * Override the default template file, with optional include for the .php or .tpl extension
 	 *
@@ -304,21 +313,47 @@ class PPI_View {
 	public function render($template, array $params = array(), array $options = array()) {
 
 		$sRenderer = empty($this->_config->layout->renderer) ? $this->_defaultRenderer : $this->_config->layout->renderer;
+		return $this->setupRenderer($this->getRenderer($sRenderer), $template, array_merge($params, $this->_viewParams), $options);
+	}
 
-		switch ($sRenderer) {
+	/**
+	 * Get the active renderer
+	 *
+	 * @param string $rendererName The renderer name
+	 * @return object
+	 */
+	protected function getRenderer($rendererName = '') {
+
+		if($this->_activeRenderer !== null) {
+			return $this->_activeRenderer;
+		}
+
+		switch ($rendererName) {
 			case 'smarty':
-				$oTpl = new PPI_Helper_Template_Smarty();
+				$this->_activeRenderer = new PPI_Helper_Template_Smarty();
 				break;
 
 			case 'twig':
-				$oTpl = new PPI_Helper_Template_Twig();
+				$this->_activeRenderer = new PPI_Helper_Template_Twig();
 				break;
 
 			case 'php':
 			default:
-				$oTpl = new PPI_Helper_Template_PHP();
+				$this->_activeRenderer = new PPI_Helper_Template_PHP();
 				break;
 		}
-		return $this->setupRenderer($oTpl, $template, array_merge($params, $this->_viewParams), $options);
+
+		return $this->_activeRenderer;
+	}
+
+	/**
+	 * Check if a template exists
+	 *
+	 * @param string $templateName The template Name
+	 * @return bool
+	 */
+	public function templateExists($templateName) {
+		$sRenderer = empty($this->_config->layout->renderer) ? $this->_defaultRenderer : $this->_config->layout->renderer;
+		return $this->getRenderer($sRenderer)->templateExists($templateName);
 	}
 }

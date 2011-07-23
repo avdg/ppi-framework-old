@@ -102,4 +102,14 @@ class PPI_Helper_Template_Smarty implements PPI_Interface_Template {
 		return 'template.tpl';
 	}
 
+	/**
+	 * This is yet to be developed
+	 *
+	 * @param string $templateName The Template Name
+	 * @return bool
+	 */
+	function templateExists($templateName) {
+		return true;
+	}
+
 }

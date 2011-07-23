@@ -38,4 +38,12 @@ interface PPI_Interface_Template {
 	 */
 	function getDefaultMasterTemplate();
 
+	/**
+	 * Check if a template exists
+	 *
+	 * @param string $templateName
+	 * @return void
+	 */
+	function templateExists($templateName);
+
 }

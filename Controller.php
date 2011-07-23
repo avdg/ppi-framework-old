@@ -50,6 +50,7 @@ class PPI_Controller {
 	 * @return void
 	 */
 	protected function load($p_tplFile, $p_tplParams = array()) {
+
 		if(!isset($p_tplParams['isAjax']) && $this->is('ajax')) {
 			$p_tplParams['isAjax'] = true;
 		}
@@ -74,6 +75,7 @@ class PPI_Controller {
      * @return void
 	 */
 	protected function set($p_mKeys, $p_mValue = null) {
+
 		if(is_scalar($p_mKeys)) {
 			$p_mKeys = array($p_mKeys => $p_mValue);
 		}
@@ -144,6 +146,16 @@ class PPI_Controller {
 	 */
 	protected function setTemplateFile($p_sNewTemplateFile) {
 		$this->_view->setTemplateFile($p_sNewTemplateFile);
+	}
+
+	/**
+	 * Check if a template exists
+	 *
+	 * @param string $templateName The template Name
+	 * @return bool
+	 */
+	protected function templateExists($templateName) {
+		return $this->_view->templateExists($templateName);
 	}
 
 

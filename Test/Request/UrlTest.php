@@ -9,32 +9,32 @@
 */
 class PPI_Request_UrlTest extends PHPUnit_Framework_TestCase {
 	public function setUp() {
-		$_Url = array('foo' => 'bar', 'bar' => 'foo');
+		$this->_data = array('foo' => 'bar', 'bar' => 'foo');
 	}
 
 	public function tearDown() {
-		$_Url = array();
+		$this->_data = array();
 	}
 
 	public function testIsCollected() {
 
 		$get = new PPI_Request_Url();
-		$this->assertTrue($get->isCollected());
+		$this->assertFalse($get->isCollected());
 
 		$get = new PPI_Request_Url(array('drink' => 'beer'));
 		$this->assertFalse($get->isCollected());
 
-		$get = new PPI_Request_Url(array());
-		$this->assertFalse($get->isCollected());
+		// @todo - pass a string to the constructor to get it to process
+		// the string and set isCollected to true
 	}
 
 	public function testCollectGetQuery()
 	{
-		$get = new PPI_Request_Url;
+		$get = new PPI_Request_Url($this->_data);
 		$this->assertEquals('foo', $get['bar']);
 		$this->assertEquals('bar', $get['foo']);
 		$this->assertEquals(null,  $get['random']);
-		$this->assertTrue($get->isCollected());
+		$this->assertFalse($get->isCollected());
 	}
 
 	public function testCustomGetQuery() {

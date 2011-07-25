@@ -8,16 +8,9 @@
  * @link      http://www.ppiframework.com
 */
 
-date_default_timezone_set('Europe/Brussels');
+date_default_timezone_set('UTC');
 
-set_include_path(implode(PATH_SEPARATOR, array(
-       dirname(__FILE__).'/../',
-       get_include_path(),
-)));
-
-defined('PPI_UNITTEST') || define('PPI_UNITTEST', true);
-
-require_once 'init.php';
+require_once dirname(__FILE__) . '/../init.php';
 
 restore_error_handler();
 restore_exception_handler();

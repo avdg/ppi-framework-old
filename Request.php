@@ -44,11 +44,11 @@ class PPI_Request {
 	 * @var array
 	 */
 	protected $_remoteVars = array(
-		'ip'				=> '',
-		'userAgent'			=> '',
-		'browser'			=> '',
-		'browserVersion'	=> '',
-		'browserAndVersion'	=> ''
+		'ip'                 => '',
+		'userAgent'          => '',
+		'browser'            => '',
+		'browserVersion'     => '',
+		'browserAndVersion'  => ''
 	);
 	/**
 	 * Vars cache for the is() function
@@ -56,9 +56,9 @@ class PPI_Request {
 	 * @var array
 	 */
 	protected $_isVars = array(
-		'ajax'		=> null,
-		'mobile'	=> null,
-		'ssl'		=> null
+		'ajax'     => null,
+		'mobile'   => null,
+		'ssl'	   => null
 	);
 	/**
 	 * Mapping fields for get_browser()

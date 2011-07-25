@@ -10,8 +10,7 @@ class PPI_Request_Session extends PPI_Request_Abstract
 	 *
 	 * @param array $session
 	 */
-	public function __construct(array $session = null)
-	{
+	public function __construct(array $session = null) {
 		if ($session !== null) {
 			$this->_array        = $session;
 			$this->_isCollected  = false;
@@ -30,8 +29,7 @@ class PPI_Request_Session extends PPI_Request_Abstract
 	 *
 	 * @return void
 	 */
-	public function offsetSet($offset, $value)
-	{
+	public function offsetSet($offset, $value) {
 		if ($value === null) {
 			return $this->offsetUnset($offset);
 		}
@@ -52,8 +50,7 @@ class PPI_Request_Session extends PPI_Request_Abstract
 	 *
 	 * @return void
 	 */
-	public function offsetUnset($offset)
-	{
+	public function offsetUnset($offset) {
 		unset($this->_array[$offset]);
 
 		if ($this->_isCollected) {

@@ -11,8 +11,7 @@ class PPI_Request_Cookie extends PPI_Request_Abstract
 	 *
 	 * @param array $cookies
 	 */
-	protected function __construct(array $cookies = null)
-	{
+	protected function __construct(array $cookies = null) {
 		if($cookies !== null) {
 			$this->_array       = $cookies;
 			$this->_isCollected = false;
@@ -33,8 +32,7 @@ class PPI_Request_Cookie extends PPI_Request_Abstract
 	 *
 	 * @return void
 	 */
-	protected function offsetSet($offset, $value)
-	{
+	protected function offsetSet($offset, $value) {
 		if ($value === null) {
 			return $this->offsetUnset($offset);
 		}
@@ -58,8 +56,7 @@ class PPI_Request_Cookie extends PPI_Request_Abstract
 	 *
 	 * @return void
 	 */
-	protected function offsetUnset($offset)
-	{
+	protected function offsetUnset($offset) {
 		$this->_array[$offset] = null;
 
 		if ($this->_isCollected) {

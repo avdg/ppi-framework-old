@@ -66,9 +66,9 @@ class PPI_Request {
 	 * @var array
 	 */
 	protected $_userAgentMap = array(
-		'browser'				=> 'browser',
-		'browserVersion'		=> 'version',
-		'browserAndVersion'		=> 'parent'
+		'browser'             => 'browser',
+		'browserVersion'      => 'version',
+		'browserAndVersion'   => 'parent'
 	);
 	/**
 	 * The browser data from

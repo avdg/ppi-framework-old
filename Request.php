@@ -283,8 +283,8 @@ class PPI_Request {
 		switch ($var) {
 			case 'ajax':
 				if ($this->_isVars['ajax'] === null) {
-					$this->_isVars['ajax'] = isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-							&& strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] === 'xmlhttprequest');
+					$this->_isVars['ajax'] = isset($this->_server['HTTP_X_REQUESTED_WITH'])
+							&& strtolower($this->_server['HTTP_X_REQUESTED_WITH'] === 'xmlhttprequest');
 				}
 				return $this->_isVars['ajax'];
 
@@ -322,14 +322,14 @@ class PPI_Request {
 		switch ($var) {
 
 			case 'ip':
-				return isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0';
+				return isset($this->_server['REMOTE_ADDR']) ? $this->_server['REMOTE_ADDR'] : '0.0.0.0';
 
 			case 'referer':
 			case 'referrer':
-				return isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+				return isset($this->_server['HTTP_REFERER']) ? $this->_server['HTTP_REFERER'] : '';
 
 			case 'userAgent':
-				return isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+				return isset($this->_server['HTTP_USER_AGENT']) ? $this->_server['HTTP_USER_AGENT'] : '';
 
 			case 'domain':
 				$url = parse_url($this->getUrl());
@@ -371,7 +371,7 @@ class PPI_Request {
 	function getProtocol() {
 
 		if (null === $this->_protocol) {
-			$this->_protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 'https' : 'http';
+			$this->_protocol = isset($this->_server['HTTPS']) && $this->_server['HTTPS'] == 'on' ? 'https' : 'http';
 		}
 		return $this->_protocol;
 	}
@@ -384,7 +384,7 @@ class PPI_Request {
 	function getUrl() {
 
 		if ($this->_url === null) {
-			$this->_url = $this->getProtocol() . '://' . str_replace('www.', '', $_SERVER['HTTP_HOST']) . $_SERVER['REQUEST_URI'];
+			$this->_url = $this->getProtocol() . '://' . str_replace('www.', '', $this->_server['HTTP_HOST']) . $this->_server['REQUEST_URI'];
 		}
 		return $this->_url;
 	}
@@ -419,7 +419,7 @@ class PPI_Request {
 	protected function getRequestMethod() {
 
 		if (null === $this->_requestMethod) {
-			$this->_requestMethod = $_SERVER['REQUEST_METHOD'];
+			$this->_requestMethod = $this->_server['REQUEST_METHOD'];
 		}
 		return $this->_requestMethod;
 	}

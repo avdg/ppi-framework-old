@@ -58,7 +58,7 @@ class PPI_Request {
 	protected $_isVars = array(
 		'ajax'     => null,
 		'mobile'   => null,
-		'ssl'	   => null
+		'ssl'      => null
 	);
 	/**
 	 * Mapping fields for get_browser()

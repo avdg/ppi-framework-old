@@ -27,6 +27,13 @@ class PPI_Helper_Template_Smarty implements PPI_Interface_Template {
 	 */
 	protected $_smartyPath = null;
 
+	/**
+	 * The file extension to associate with smarty template files
+	 *
+	 * @var null|string
+	 */
+	protected $_rendererExt = null;
+
 
 	/**
 	 * Setup all the rendering variables
@@ -64,7 +71,7 @@ class PPI_Helper_Template_Smarty implements PPI_Interface_Template {
 	 */
 	function render($p_sTplFile) {
 		// Optional extension for smarty templates
-		$p_sTplFile = PPI_Helper::checkExtension($p_sTplFile, SMARTY_EXT);
+		$p_sTplFile = PPI_Helper::checkExtension($p_sTplFile, $this->getTemplateExtension());
 		$sTheme     = $this->_config->layout->view_theme;
 		$sPath      = $this->_viewPath. "$sTheme/$p_sTplFile";
 		if(!file_exists($sPath)) {
@@ -90,7 +97,12 @@ class PPI_Helper_Template_Smarty implements PPI_Interface_Template {
 	 * @return string
 	 */
 	function getTemplateExtension() {
-		return !empty($this->_config->layout->rendererExt) ? $this->_config->layout->rendererExt : '.tpl';
+		if($this->_rendererExt == null) {
+			$this->_rendererExt = !empty($this->_config->layout->rendererExt)
+				? $this->_config->layout->rendererExt
+				: '.tpl';
+		}
+		return $this->_rendererExt;
 	}
 
 	/**

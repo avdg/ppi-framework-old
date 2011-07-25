@@ -28,10 +28,7 @@ defined('VIEWPATH')				|| define('VIEWPATH', APPFOLDER . 'View' . DS);
 defined('CONTROLLERPATH')		|| define('CONTROLLERPATH', APPFOLDER . 'Controller' . DS);
 defined('CONFIGPATH')			|| define('CONFIGPATH', APPFOLDER . 'Config' . DS);
 
-defined('SMARTYPATH')			|| define('SMARTYPATH', SYSTEMPATH . 'Vendor' . DS . 'Smarty/');
 defined('EXT')					|| define('EXT', '.php');
-defined('SMARTY_EXT')			|| define('SMARTY_EXT', '.tpl');
-
 
 // ------- system constants -------
 defined('PPI_VERSION')			|| define('PPI_VERSION', '1.1');

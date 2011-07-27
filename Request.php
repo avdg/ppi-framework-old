@@ -134,6 +134,12 @@ class PPI_Request {
 	 */
 	function __construct(array $env = array()) {
 
+		if (isset($env['session']) && (is_array($env['session']) || $env['session'] instanceof PPI_Request_Session)) {
+			$this->_session = $env['session'];
+		} else {
+			$this->_session = new PPI_Request_Session();
+		}
+
 		if (isset($env['server']) && (is_array($env['server']) || $env['server'] instanceof PPI_Request_Server)) {
 			$this->_server = $env['server'];
 		} else {
@@ -145,7 +151,6 @@ class PPI_Request {
 		} else {
 			$this->_cookie = new PPI_Request_Cookie();
 		}
-
 		if (isset($env['get']) && (is_array($env['get']) || $env['get'] instanceof PPI_Request_Url)) {
 			$this->_get = $env['get'];
 		} else {
@@ -162,12 +167,6 @@ class PPI_Request {
 			$this->_post = $env['post'];
 		} else {
 			$this->_post = new PPI_Request_Post();
-		}
-		
-		if (isset($env['session']) && (is_array($env['session']) || $env['session'] instanceof PPI_Request_Session)) {
-			$this->_session = $env['session'];
-		} else {
-			$this->_session = new PPI_Request_Session();
 		}
 	}
 

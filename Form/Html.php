@@ -3,7 +3,7 @@
 /**
  * Form class will help in automating rendering forms
  *
- * @author    Alexey Shein <confik@gmail.com>
+ * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
  * @package   Core
  * @link      www.ppiframework.com

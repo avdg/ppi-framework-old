@@ -15,7 +15,9 @@ class PPI_Request_Session extends PPI_Request_Abstract
 			$this->_array        = $session;
 			$this->_isCollected  = false;
 		} else {
-			$this->_array = $_SESSION;
+			if(isset($_SESSION)) {
+				$this->_array = $_SESSION;
+			}
 		}
 	}
 

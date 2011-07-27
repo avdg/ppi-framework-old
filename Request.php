@@ -162,7 +162,8 @@ class PPI_Request {
 			$this->_post = $env['post'];
 		} else {
 			$this->_post = new PPI_Request_Post();
-
+		}
+		
 		if (isset($env['session']) && (is_array($env['session']) || $env['session'] instanceof PPI_Request_Session)) {
 			$this->_session = $env['session'];
 		} else {

@@ -140,7 +140,7 @@ class PPI_Request {
 			$this->_server = new PPI_Request_Server();
 		}
 
-		if (isset($env['cookie'] && (is_array($env['cookie'] || $env['cookie'] instanceof PPI_Request_Cookie)) {
+		if (isset($env['cookie']) && (is_array($env['cookie'] || $env['cookie'] instanceof PPI_Request_Cookie))) {
 			$this->_cookie = $env['cookie'];
 		} else {
 			$this->_cookie = new PPI_Request_Cookie();

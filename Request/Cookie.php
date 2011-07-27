@@ -32,7 +32,7 @@ class PPI_Request_Cookie extends PPI_Request_Abstract
 	 *
 	 * @return void
 	 */
-	protected function offsetSet($offset, $value) {
+	function offsetSet($offset, $value) {
 		if ($value === null) {
 			return $this->offsetUnset($offset);
 		}

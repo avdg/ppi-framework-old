@@ -204,10 +204,15 @@ class PPI_View {
 
 		// Are we loading a template from the cache?
 		if(isset($options['cache'], $options['cacheHandler']) && $options['cache']) {
+
 			if(!$options['cacheHandler'] instanceof PPI_Cache_Interface) {
 				throw new PPI_Exception('Unable to use cache handler, it does not implement PPI_Cache_Interface');
 			}
-			$cacheName = 'ppi-cached-template-' . str_replace(array('\\', '/'), '-', $template);
+
+			$cacheName = ifset($options['cachePrefix'], '')
+					   . 'ppi-cached-template-'
+			           . str_replace(array('\\', '/'), '-', $template);
+
 			if($options['cacheHandler']->exists($cacheName)) {
 				return $options['cacheHandler']->get($cacheName);
 			}

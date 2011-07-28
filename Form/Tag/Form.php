@@ -16,8 +16,8 @@ class PPI_Form_Tag_Form extends PPI_Form_Tag implements PPI_Form_Tag_Interface {
 	 */
 	function __construct(array $options = array()) {
 
-		$options['action'] = ifset($options['action'], '');
-		$options['method'] = ifset($options['method'], '');
+		$options['action'] = isset($options['action']) ? $options['action'] : '';
+		$options['method'] = isset($options['method']) ? $options['method'] : 'get';
 		$this->_attributes = $options;
 	}
 

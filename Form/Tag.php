@@ -21,9 +21,9 @@ abstract class PPI_Form_Tag {
 	 * @param string $value The attribute value
 	 * @return mixed
 	 */
-	public function attr($name, $value = '') {
+	public function attr($name, $value = null) {
 
-		if(empty($value)) {
+		if(null === $value) {
 			return isset($this->_attributes[$name]) ? $this->_attributes[$name] : '';
 		} else {
 			$this->_attributes[$name] = $value;

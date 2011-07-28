@@ -4,20 +4,18 @@ class PPI_Form_HtmlTest extends PHPUnit_Framework_TestCase {
 
 	function testCreateFormSetsActionAttribute() {
 		$form = $this->createForm();
-		$this->assertEquals('index.php', $form->getAttribute('action'));
+		$this->assertEquals('index.php', $form->attr('action'));
 	}
 
-	/**
-	 * @expectedException PPI_Exception
-	 */
-	function testCreatingFormWithEmptyActionAttributeThrowsException() {
-		$form = $this->createForm('');
+	function testCreatingFormWithNoParametersCreatesFormWithEmptyAction() {
+		$form = new PPI_Form_Tag_Form();
+		$this->assertEquals('<form action=""></form>', $form->render());
 	}
 
 	function testCreateFormWithTwoParametersSetsMethod() {
 		$form = $this->createFormWithMethod('post');
-		$this->assertEquals('index.php', $form->getAttribute('action'));
-		$this->assertEquals('post', $form->getAttribute('method'));
+		$this->assertEquals('index.php', $form->attr('action'));
+		$this->assertEquals('post', $form->attr('method'));
 	}
 
 	function testRenderShouldRenderFormTagWithAttributes() {
@@ -34,15 +32,15 @@ class PPI_Form_HtmlTest extends PHPUnit_Framework_TestCase {
 
 	function testSetAttributesAreRendered() {
 		$form = $this->createForm();
-		$form->setAttribute('name', 'myform');
+		$form->attr('name', 'myform');
 		$expected = '<form action="index.php" name="myform"></form>';
 		$this->assertEquals($expected, $form->render());
 	}
 
-	function testEmptyAttributesArentRendered() {
-		$form = $this->createFormWithMethod('');
-		$form->setAttribute('class', '');
-		$expected = '<form action="index.php"></form>';
+	function testEmptyAttributesShouldBeRendered() {
+		$form = $this->createForm();
+		$form->attr('class', '');
+		$expected = '<form action="index.php" class=""></form>';
 		$this->assertEquals($expected, $form->render());
 	}
 
@@ -54,11 +52,11 @@ class PPI_Form_HtmlTest extends PHPUnit_Framework_TestCase {
 	}
 
 	private function createFormWithMethod($method, $action = 'index.php') {
-		return new PPI_Form_Html($action, $method);
+		return new PPI_Form_Tag_Form(array('action' => $action, 'method' => $method));
 	}
 
 	private function createForm($action = 'index.php') {
-		return new PPI_Form_Html($action);
+		return new PPI_Form_Tag_Form(array('action' => $action));
 	}
 }
 

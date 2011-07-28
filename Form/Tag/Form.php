@@ -15,21 +15,8 @@ class PPI_Form_Tag_Form extends PPI_Form_Tag implements PPI_Form_Tag_Interface {
 	 * @param array $options
 	 */
 	function __construct(array $options = array()) {
-
 		$options['action'] = isset($options['action']) ? $options['action'] : '';
-		$options['method'] = isset($options['method']) ? $options['method'] : 'get';
 		$this->_attributes = $options;
-	}
-
-	/**
-	 * Getter and setter for attributes
-	 *
-	 * @param string $name
-	 * @param mixed $value
-	 * @return mixed
-	 */
-	function attr($name, $value = '') {
-		return parent::attr($name, $value = '');
 	}
 
 	/**
@@ -39,7 +26,7 @@ class PPI_Form_Tag_Form extends PPI_Form_Tag implements PPI_Form_Tag_Interface {
 	 */
 	function render() {
 		$attrs = $this->buildAttrs();
-		return "<form $attrs>";
+		return "<form $attrs></form>";
 	}
 
 	/**

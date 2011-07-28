@@ -13,7 +13,7 @@ class PPI_Crud {
 	 */
 	function getFormStructure($file) {
 		$file = CONFIGPATH.'Forms/'.$file.".yaml";
-		if (extension_loaded('yaml')) {
+		if(extension_loaded('yaml')) {
 			// do stuff here -- with yaml
 			return yaml_parse_file($file);
 		} else {

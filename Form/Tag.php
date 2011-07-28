@@ -21,7 +21,7 @@ abstract class PPI_Form_Tag {
 	 * @param string $value The attribute value
 	 * @return mixed
 	 */
-	protected function attr($name, $value = '') {
+	public function attr($name, $value = '') {
 
 		if(empty($value)) {
 			return isset($this->_attributes[$name]) ? $this->_attributes[$name] : '';
@@ -36,7 +36,7 @@ abstract class PPI_Form_Tag {
 	 * @param string $attr
 	 * @return bool
 	 */
-	protected function hasAttr($attr) {
+	public function hasAttr($attr) {
 		return isset($this->_attributes[$attr]);
 	}
 
@@ -70,7 +70,7 @@ abstract class PPI_Form_Tag {
 	 * @param string $value
 	 * @return string
 	 */
-	protected function escape($value) {
+	public function escape($value) {
 		return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
 	}
 

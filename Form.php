@@ -54,13 +54,25 @@ class PPI_Form {
 	 * @param string $name
 	 * @param array $dropdownValues
 	 * @param array $options
-	 * @return void
+	 * @return string
 	 */
 	function select($name, array $dropdownValues, array $options = array()) {
 		return $this->add('select', array(
 			'name'           => $name,
 			'dropdownValues' => $dropdownValues
 		) + $options);
+	}
+
+	/**
+	 * Add a dropdown field. This is just an alias to $this->select()
+	 *
+	 * @param string $name
+	 * @param array $dropdownValues
+	 * @param array $options
+	 * @return string
+	 */
+	function dropdown($name, array $dropdownValues, array $options = array()) {
+		return $this->select($name, $dropdownValues, $options);
 	}
 
 	/**
@@ -97,7 +109,11 @@ class PPI_Form {
 					$selected = $options['selected'];
 					unset($options['selected']);
 				}
+/*
+				if(isset($options['multiSelect'])) {
 
+				}
+*/
 				$field = new PPI_Form_Tag_Select($options);
 				if(isset($values)) {
 					$field->setValues($values);

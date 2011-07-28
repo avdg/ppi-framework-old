@@ -70,7 +70,7 @@ abstract class PPI_Form_Tag {
 	 * @param string $value
 	 * @return string
 	 */
-	public function escape($value) {
+	protected function escape($value) {
 		return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
 	}
 

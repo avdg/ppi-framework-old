@@ -24,7 +24,7 @@ abstract class PPI_Form_Tag {
 	protected function attr($name, $value = '') {
 
 		if(empty($value)) {
-			return ifset($this->_attributes[$name], '');
+			return isset($this->_attributes[$name]) ? $this->_attributes[$name] : '';
 		} else {
 			$this->_attributes[$name] = $value;
 		}

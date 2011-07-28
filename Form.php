@@ -49,6 +49,17 @@ class PPI_Form {
 	}
 
 	/**
+	 * Add a hidden field
+	 *
+	 * @param string $name
+	 * @param array $options
+	 * @return string
+	 */
+	function hidden($name, array $options = array()) {
+		return $this->add('hidden', array('name' => $name) + $options);
+	}
+
+	/**
 	 * Add a select (dropdown) field
 	 *
 	 * @param string $name
@@ -96,6 +107,10 @@ class PPI_Form {
 
 			case 'submit':
 				$field = new PPI_Form_Tag_Submit($options);
+				break;
+
+			case 'hidden':
+				$field = new PPI_Form_Tag_Hidden($options);
 				break;
 
 			case 'select':

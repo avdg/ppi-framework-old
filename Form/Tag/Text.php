@@ -27,7 +27,17 @@ class PPI_Form_Tag_Text extends PPI_Form_Tag implements PPI_Form_Tag_Interface {
 	 * @return mixed
 	 */
 	function attr($name, $value = '') {
-		return parent::attr($name, $value = '');
+		return parent::attr($name, $value);
+	}
+
+	/**
+	 * Check if an attribute exists
+	 *
+	 * @param string $attr
+	 * @return bool
+	 */
+	function hasAttr($attr) {
+		return parent::hasAttr($attr);
 	}
 
 	/**

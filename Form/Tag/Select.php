@@ -35,17 +35,6 @@ class PPI_Form_Tag_Select extends PPI_Form_Tag implements PPI_Form_Tag_Interface
 		$this->_attributes = $options;
 	}
 
-	/**
-	 * Getter and setter for attributes
-	 *
-	 * @param string $name
-	 * @param mixed $value
-	 * @return mixed
-	 */
-	function attr($name, $value = '') {
-		return parent::attr($name, $value = '');
-	}
-
 
 	/**
 	 * Set the value of this field

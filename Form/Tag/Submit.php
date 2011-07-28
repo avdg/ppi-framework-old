@@ -19,27 +19,6 @@ class PPI_Form_Tag_Submit extends PPI_Form_Tag implements PPI_Form_Tag_Interface
 	}
 
 	/**
-	 * Getter and setter for attributes
-	 *
-	 * @param string $name
-	 * @param mixed $value
-	 * @return mixed
-	 */
-	function attr($name, $value = '') {
-		return parent::attr($name, $value);
-	}
-
-	/**
-	 * Check if an attribute exists
-	 *
-	 * @param string $attr
-	 * @return bool
-	 */
-	function hasAttr($attr) {
-		return parent::hasAttr($attr);
-	}
-
-	/**
 	 * Set the value of this field
 	 *
 	 * @param string $value

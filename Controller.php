@@ -3,6 +3,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
  * @package   Controller
+ * @link      www.ppiframework.com
  */
 class PPI_Controller {
 

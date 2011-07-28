@@ -26,7 +26,7 @@ class PPI_Form_Tag_Form extends PPI_Form_Tag implements PPI_Form_Tag_Interface {
 	 */
 	function render() {
 		$attrs = $this->buildAttrs();
-		return "<form $attrs></form>";
+		return "<form $attrs>";
 	}
 
 	/**

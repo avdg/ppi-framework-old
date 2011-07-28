@@ -9,7 +9,7 @@ class PPI_Form_HtmlTest extends PHPUnit_Framework_TestCase {
 
 	function testCreatingFormWithNoParametersCreatesFormWithEmptyAction() {
 		$form = new PPI_Form_Tag_Form();
-		$this->assertEquals('<form action=""></form>', $form->render());
+		$this->assertEquals('<form action="">', $form->render());
 	}
 
 	function testCreateFormWithTwoParametersSetsMethod() {
@@ -20,12 +20,12 @@ class PPI_Form_HtmlTest extends PHPUnit_Framework_TestCase {
 
 	function testRenderShouldRenderFormTagWithAttributes() {
 		$form = $this->createForm();
-		$this->assertEquals('<form action="index.php"></form>', $form->render());
+		$this->assertEquals('<form action="index.php">', $form->render());
 	}
 
 	function testToStringCallsRender() {
 		$form = $this->createForm();
-		$expected = '<form action="index.php"></form>';
+		$expected = '<form action="index.php">';
 		$this->assertEquals($expected, $form->render());
 		$this->assertEquals($expected, (string) $form);
 	}
@@ -33,20 +33,20 @@ class PPI_Form_HtmlTest extends PHPUnit_Framework_TestCase {
 	function testSetAttributesAreRendered() {
 		$form = $this->createForm();
 		$form->attr('name', 'myform');
-		$expected = '<form action="index.php" name="myform"></form>';
+		$expected = '<form action="index.php" name="myform">';
 		$this->assertEquals($expected, $form->render());
 	}
 
 	function testEmptyAttributesShouldBeRendered() {
 		$form = $this->createForm();
 		$form->attr('class', '');
-		$expected = '<form action="index.php" class=""></form>';
+		$expected = '<form action="index.php" class="">';
 		$this->assertEquals($expected, $form->render());
 	}
 
 	function testRenderedAttributesAreProperlyEscaped() {
 		$form = $this->createForm('Some attributes may \'">< contain garbage');
-		$expected = '<form action="Some attributes may &#039;&quot;&gt;&lt; contain garbage"></form>';
+		$expected = '<form action="Some attributes may &#039;&quot;&gt;&lt; contain garbage">';
 		$this->assertEquals($expected, $form->render());
 
 	}

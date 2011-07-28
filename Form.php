@@ -49,6 +49,21 @@ class PPI_Form {
 	}
 
 	/**
+	 * Add a select (dropdown) field
+	 *
+	 * @param string $name
+	 * @param array $dropdownValues
+	 * @param array $options
+	 * @return void
+	 */
+	function select($name, array $dropdownValues, array $options = array()) {
+		return $this->add('select', array(
+			'name'           => $name,
+			'dropdownValues' => $dropdownValues
+		) + $options);
+	}
+
+	/**
 	 * Add a field to our form.
 	 *
 	 * @param string $fieldType
@@ -69,6 +84,28 @@ class PPI_Form {
 
 			case 'submit':
 				$field = new PPI_Form_Tag_Submit($options);
+				break;
+
+			case 'select':
+			case 'dropdown':
+
+				if(isset($options['dropdownValues'])) {
+					$values = $options['dropdownValues'];
+					unset($options['dropdownValues']);
+				}
+				if(isset($options['selected'])) {
+					$selected = $options['selected'];
+					unset($options['selected']);
+				}
+
+				$field = new PPI_Form_Tag_Select($options);
+				if(isset($values)) {
+					$field->setValues($values);
+				}
+				if(isset($selected)) {
+					$field->setValue($selected);
+				}
+
 				break;
 
 			default:

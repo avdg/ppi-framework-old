@@ -78,10 +78,6 @@ class PPI_Form {
 		return $field->render();
 	}
 
-	function render() {
-		return $this->_output;
-	}
-
 	/**
 	 * Method to bind data from an entity to a form element
 	 *

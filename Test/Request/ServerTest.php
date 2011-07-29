@@ -24,7 +24,7 @@ class PPI_Request_ServerTest extends PHPUnit_Framework_TestCase {
 		$this->assertFalse($server->isCollected());
 
 		$server = new PPI_Request_Server(array());
-		$this->assertTrue($server->isCollected());
+		$this->assertFalse($server->isCollected());
 	}
 
 	public function testCollectServer() {

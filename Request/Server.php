@@ -8,8 +8,8 @@ class PPI_Request_Server extends PPI_Request_Abstract {
 	 *
 	 * @param array $server
 	 */
-	public function __construct(array $server = array()) {
-		if(!empty($server)) {
+	public function __construct(array $server = null) {
+		if($server !== null) {
 			$this->_isCollected = false;
 			$this->_array = $server;
 		} else {

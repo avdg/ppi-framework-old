@@ -179,6 +179,7 @@ class PPI_Response {
 	public function getFlashAndClear() {
 		$flash = $this->getFlash();
 		$this->clearFlash();
+		return $flash;
 	}
 
 	/**

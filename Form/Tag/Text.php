@@ -30,6 +30,15 @@ class PPI_Form_Tag_Text extends PPI_Form_Tag implements PPI_Form_Tag_Interface {
 	}
 
 	/**
+	 * Get the value of this field.
+	 *
+	 * @return string
+	 */
+	function getValue() {
+		return $this->_attributes['value'];
+	}
+
+	/**
 	 * Render this tag
 	 *
 	 * @return string

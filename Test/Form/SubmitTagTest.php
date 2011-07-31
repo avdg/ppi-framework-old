@@ -58,6 +58,20 @@ class PPI_Form_SubmitTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('bar', $submit->attr('foo'));
 	}
 
+	function testGetValues() {
+		$submit = new PPI_Form_Tag_Submit(array(
+			'value' => 'submitvalue'
+		));
+		$this->assertEquals('submitvalue', $submit->getValue());
+		$this->assertEquals('submitvalue', $submit->attr('value'));
+	}
+
+	function testSetValue() {
+		$submit = new PPI_Form_Tag_Submit();
+		$submit->setValue('submitvalue');
+		$this->assertEquals('submitvalue', $submit->getValue());
+	}
+
 
 
 }

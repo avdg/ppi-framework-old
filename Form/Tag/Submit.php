@@ -25,7 +25,16 @@ class PPI_Form_Tag_Submit extends PPI_Form_Tag implements PPI_Form_Tag_Interface
 	 * @return void
 	 */
 	function setValue($value) {
-		$this->attr('value', $value);
+		$this->_attributes['value'] = $value;
+	}
+
+	/**
+	 * Get the value of this field.
+	 *
+	 * @return string
+	 */
+	function getValue() {
+		return $this->_attributes['value'];
 	}
 
 	/**

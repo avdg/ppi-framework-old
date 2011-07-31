@@ -56,4 +56,18 @@ class PPI_Test_PasswordTagTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('bar', $pass->attr('foo'));
 	}
 
+	function testGetValues() {
+		$pass = new PPI_Form_Tag_Password(array(
+			'value' => 'password'
+		));
+		$this->assertEquals('password', $pass->getValue());
+		$this->assertEquals('password', $pass->attr('value'));
+	}
+
+	function testSetValue() {
+		$pass = new PPI_Form_Tag_Password();
+		$pass->setValue('password');
+		$this->assertEquals('password', $pass->getValue());
+	}
+
 }

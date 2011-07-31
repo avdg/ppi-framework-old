@@ -56,4 +56,18 @@ class PPI_Test_TextTagTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('bar', $text->attr('foo'));
 	}
 
+	function testGetValues() {
+		$text = new PPI_Form_Tag_Text(array(
+			'value' => 'textvalue'
+		));
+		$this->assertEquals('textvalue', $text->getValue());
+		$this->assertEquals('textvalue', $text->attr('value'));
+	}
+
+	function testSetValue() {
+		$text = new PPI_Form_Tag_Text();
+		$text->setValue('textvalue');
+		$this->assertEquals('textvalue', $text->getValue());
+	}
+
 }

@@ -38,6 +38,20 @@ class PPI_Form {
 	}
 
 	/**
+	 * Add a password field to our form
+	 *
+	 * @param string $name
+	 * @param array $options
+	 * @return string
+	 */
+	function password($name, array $options = array()) {
+		if(!empty($name)) {
+			return $this->add('password', array('name' => $name) + $options);
+		}
+		return '';
+	}
+
+	/**
 	 * Add a submit field
 	 *
 	 * @param string $value
@@ -103,6 +117,10 @@ class PPI_Form {
 
 			case 'text':
 				$field = new PPI_Form_Tag_Text($options);
+				break;
+
+			case 'password':
+				$field = new PPI_Form_Tag_Password($options);
 				break;
 
 			case 'submit':

@@ -69,6 +69,19 @@ class PPI_Form_HiddenTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('bar', $submit->attr('foo'));
 	}
 
+	function testGetValues() {
+		$hidden = new PPI_Form_Tag_Hidden(array(
+			'value' => 'hiddenvalue'
+		));
+		$this->assertEquals('hiddenvalue', $hidden->getValue());
+		$this->assertEquals('hiddenvalue', $hidden->attr('value'));
+	}
+
+	function testSetValue() {
+		$hidden = new PPI_Form_Tag_Hidden();
+		$hidden->setValue('hiddenvalue');
+		$this->assertEquals('hiddenvalue', $hidden->getValue());
+	}
 
 
 }

@@ -29,6 +29,17 @@ class PPI_Form_HiddenTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($output, '<input type="hidden" value="hiddenValue" name="hiddenName" id="bar">');
 	}
 
+
+	function testDirectClass__toString() {
+		$submit = new PPI_Form_Tag_Hidden(array(
+			'value' => 'hiddenValue',
+			'name'  => 'hiddenName',
+			'id'    => 'bar'
+		));
+		$output = (string) $submit;
+		$this->assertEquals($output, '<input type="hidden" value="hiddenValue" name="hiddenName" id="bar">');
+	}
+
 	function testHasAttr() {
 		$submit = new PPI_Form_Tag_Hidden(array(
 			'value' => 'Register',

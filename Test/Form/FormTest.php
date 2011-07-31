@@ -44,6 +44,13 @@ class PPI_Form_HtmlTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($expected, $form->render());
 	}
 
+	function testEmptyAttributesShouldBeRendered__toString() {
+		$form = $this->createForm();
+		$form->attr('class', '');
+		$expected = '<form action="index.php" class="">';
+		$this->assertEquals($expected, (string) $form);
+	}
+
 	function testRenderedAttributesAreProperlyEscaped() {
 		$form = $this->createForm('Some attributes may \'">< contain garbage');
 		$expected = '<form action="Some attributes may &#039;&quot;&gt;&lt; contain garbage">';

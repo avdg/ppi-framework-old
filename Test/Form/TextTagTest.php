@@ -29,6 +29,16 @@ class PPI_Test_TextTagTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($output, '<input type="text" value="Register" name="username" id="bar">');
 	}
 
+	function testDirectClass__toString() {
+		$text = new PPI_Form_Tag_Text(array(
+			'value' => 'Register',
+			'name'  => 'username',
+			'id'    => 'bar'
+		));
+		$output = (string) $text;
+		$this->assertEquals($output, '<input type="text" value="Register" name="username" id="bar">');
+	}
+
 	function testHasAttr() {
 		$text = new PPI_Form_Tag_Text(array(
 			'value' => 'Register',

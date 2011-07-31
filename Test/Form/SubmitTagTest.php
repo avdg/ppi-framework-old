@@ -29,6 +29,17 @@ class PPI_Form_SubmitTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($output, '<input type="submit" value="Register" name="foo" id="bar">');
 	}
 
+
+	function testDirectClass__toString() {
+		$submit = new PPI_Form_Tag_Submit(array(
+			'value' => 'Register',
+			'name'  => 'foo',
+			'id'    => 'bar'
+		));
+		$output = (string) $submit;
+		$this->assertEquals($output, '<input type="submit" value="Register" name="foo" id="bar">');
+	}
+
 	function testHasAttr() {
 		$submit = new PPI_Form_Tag_Submit(array(
 			'value' => 'Register',

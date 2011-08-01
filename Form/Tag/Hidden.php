@@ -8,7 +8,7 @@
  * @link      www.ppiframework.com
  *
  */
-class PPI_Form_Tag_Hidden extends PPI_Form_Tag implements PPI_Form_Tag_Interface {
+class PPI_Form_Tag_Hidden extends PPI_Form_Tag {
 
 	/**
 	 * The constructor

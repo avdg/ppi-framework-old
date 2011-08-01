@@ -15,6 +15,13 @@ abstract class PPI_Form_Tag {
 
 
 	/**
+	 * Render the tag
+	 *
+	 * @return void
+	 */
+	abstract protected function render();
+
+	/**
 	 * Getter and setter for attributes
 	 *
 	 * @param string $name The attribute name

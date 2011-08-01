@@ -7,7 +7,7 @@
  * @package   Form
  * @link      www.ppiframework.com
  */
-class PPI_Form_Tag_Select extends PPI_Form_Tag implements PPI_Form_Tag_Interface {
+class PPI_Form_Tag_Select extends PPI_Form_Tag {
 
 	const optionsFormat = '<option %svalue="%s">%s</option>';
 	const selectFormat = '<select %s>%s</select>';

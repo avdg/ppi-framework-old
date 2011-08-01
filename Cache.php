@@ -89,7 +89,7 @@ class PPI_Cache {
      * @param integer $ttl The TTL
      * @return boolean
      */
-    function set($key, $value, $ttl) {
+    function set($key, $value, $ttl = 0) {
     	return $this->_handler->set($key, $value, $ttl);
     }
 

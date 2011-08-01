@@ -86,10 +86,11 @@ class PPI_Cache {
      *
      * @param string $key The Key
      * @param mixed $value The Value
+     * @param integer $ttl The TTL
      * @return boolean
      */
-    function set($key, $value) {
-    	return $this->_handler->set($key, $value);
+    function set($key, $value, $ttl) {
+    	return $this->_handler->set($key, $value, $ttl);
     }
 
     /**

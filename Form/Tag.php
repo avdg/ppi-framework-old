@@ -74,5 +74,14 @@ abstract class PPI_Form_Tag {
 		return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
 	}
 
+	/**
+	 * When echo'ing this tag class, we call render
+	 *
+	 * @return string
+	 */
+	public function __toString() {
+		return $this->render();
+	}
+
 
 }

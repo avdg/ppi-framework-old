@@ -45,13 +45,4 @@ class PPI_Form_Tag_Submit extends PPI_Form_Tag implements PPI_Form_Tag_Interface
 	function render() {
 		return '<input type="submit" ' . $this->buildAttrs() . '>';
 	}
-
-	/**
-	 * When echo'ing this tag class, we call render
-	 *
-	 * @return string
-	 */
-	function __toString() {
-		return $this->render();
-	}
 }

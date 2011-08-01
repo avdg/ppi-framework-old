@@ -82,12 +82,4 @@ class PPI_Form_Tag_Select extends PPI_Form_Tag implements PPI_Form_Tag_Interface
 		return sprintf(self::selectFormat, $this->buildAttrs(), $this->buildOptions());
 	}
 
-	/**
-	 * When echo'ing this tag class, we call render
-	 *
-	 * @return string
-	 */
-	function __toString() {
-		return $this->render();
-	}
 }

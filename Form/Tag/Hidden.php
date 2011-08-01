@@ -48,12 +48,4 @@ class PPI_Form_Tag_Hidden extends PPI_Form_Tag implements PPI_Form_Tag_Interface
 		return '<input type="hidden" ' . $this->buildAttrs() . '>';
 	}
 
-	/**
-	 * When echo'ing this tag class, we call render
-	 *
-	 * @return string
-	 */
-	function __toString() {
-		return $this->render();
-	}
 }

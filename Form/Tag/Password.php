@@ -46,13 +46,4 @@ class PPI_Form_Tag_Password extends PPI_Form_Tag implements PPI_Form_Tag_Interfa
 	function render() {
 		return '<input type="password" ' . $this->buildAttrs() . '>';
 	}
-
-	/**
-	 * When echo'ing this tag class, we call render
-	 *
-	 * @return string
-	 */
-	function __toString() {
-		return $this->render();
-	}
 }

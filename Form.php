@@ -38,6 +38,20 @@ class PPI_Form {
 	}
 
 	/**
+	 * Add a textarea field to our form
+	 *
+	 * @param string $name
+	 * @param array $options
+	 * @return string
+	 */
+	function textarea($name, array $options = array()) {
+		if(!empty($name)) {
+			return $this->add('textarea', array('name' => $name) + $options);
+		}
+		return '';
+	}
+
+	/**
 	 * Add a password field to our form
 	 *
 	 * @param string $name
@@ -117,6 +131,10 @@ class PPI_Form {
 
 			case 'text':
 				$field = new PPI_Form_Tag_Text($options);
+				break;
+
+			case 'textarea':
+				$field = new PPI_Form_Tag_Textarea($options);
 				break;
 
 			case 'password':

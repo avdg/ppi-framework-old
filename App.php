@@ -153,12 +153,14 @@ class PPI_App {
 
         // Fire up the default config handler
         if($this->_envOptions['config'] === null) {
+
 			$this->_config = new PPI_Config(array(
 				'configBlock'     => $this->_envOptions['configBlock'],
 				'configFile'      => $this->_envOptions['configFile'],
 				'cacheConfig'     => $this->_envOptions['cacheConfig'],
 				'configCachePath' => $this->_envOptions['configCachePath']
 			));
+
         }
 
         $this->_config = $this->_config->getConfig();
@@ -214,7 +216,7 @@ class PPI_App {
 
 	                // @todo - test this.
 	                case 'swift':
-		                include_once(SYSTEMPATH . 'Vendor/Swift/swift_required_pear.php');
+		                include_once(SYSTEMPATH . 'Vendor/Swift/swift_required.php');
 		                break;
 
                     case 'solar':

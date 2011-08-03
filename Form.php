@@ -66,6 +66,20 @@ class PPI_Form {
 	}
 
 	/**
+	 * Add a checkbox field to our form
+	 *
+	 * @param string $name
+	 * @param array $options
+	 * @return string
+	 */
+	function checkbox($name, array $options = array()) {
+		if(!empty($name)) {
+			return $this->add('checkbox', array('name' => $name) + $options);
+		}
+		return '';
+	}
+
+	/**
 	 * Add a submit field
 	 *
 	 * @param string $value
@@ -143,6 +157,10 @@ class PPI_Form {
 
 			case 'submit':
 				$field = new PPI_Form_Tag_Submit($options);
+				break;
+
+			case 'checkbox':
+				$field = new PPI_Form_Tag_Checkbox($options);
 				break;
 
 			case 'hidden':

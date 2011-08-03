@@ -25,7 +25,6 @@ defined('PLUGINMODELPATH')		|| define('PLUGINMODELPATH', PLUGINPATH . 'models' .
 // ---- app paths ------
 defined('MODELPATH')			|| define('MODELPATH', APPFOLDER . 'Model' . DS);
 defined('VIEWPATH')				|| define('VIEWPATH', APPFOLDER . 'View' . DS);
-defined('VENDORPATH')           || define('VENDORPATH',   SYSTEMPATH . 'Vendor' . DS);
 defined('CONTROLLERPATH')		|| define('CONTROLLERPATH', APPFOLDER . 'Controller' . DS);
 defined('CONFIGPATH')			|| define('CONFIGPATH', APPFOLDER . 'Config' . DS);
 defined('SMARTYPATH')			|| define('SMARTYPATH', SYSTEMPATH . 'Vendor' . DS . 'Smarty/');

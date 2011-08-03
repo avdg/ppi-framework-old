@@ -80,6 +80,20 @@ class PPI_Form {
 	}
 
 	/**
+	 * Add a radio field to our form
+	 *
+	 * @param string $name
+	 * @param array $options
+	 * @return string
+	 */
+	function radio($name, array $options = array()) {
+		if(!empty($name)) {
+			return $this->add('radio', array('name' => $name) + $options);
+		}
+		return '';
+	}
+
+	/**
 	 * Add a submit field
 	 *
 	 * @param string $value
@@ -161,6 +175,10 @@ class PPI_Form {
 
 			case 'checkbox':
 				$field = new PPI_Form_Tag_Checkbox($options);
+				break;
+
+			case 'radio':
+				$field = new PPI_Form_Tag_Radio($options);
 				break;
 
 			case 'hidden':

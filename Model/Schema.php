@@ -52,7 +52,7 @@ class PPI_Model_Schema extends PPI_Model {
         $file = CONFIGPATH.'Forms/'.$file.".yaml";
         if(extension_loaded('yaml')) {
 			// do stuff here -- with yaml
-			//return yaml_parse_file($file);
+			$yaml = yaml_emit($cols);
 		} else {
 			// use spyc
 			$yaml = Spyc::YAMLDump($cols);

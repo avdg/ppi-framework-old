@@ -258,7 +258,7 @@ class PPI_Request {
 	 * @return boolean
 	 */
 	function hasPost($p_sKey) {
-		return array_key_exists($p_sKey, $_POST);
+		return array_key_exists($p_sKey, $this->_post);
 	}
 
 	/**
@@ -269,8 +269,8 @@ class PPI_Request {
 	 */
 	function removePost($p_sKey) {
 
-		if (isset($_POST[$p_sKey])) {
-			unset($_POST[$p_sKey]);
+		if (isset($this->_post[$p_sKey])) {
+			unset($this->_post[$p_sKey]);
 			return true;
 		}
 		return false;
@@ -284,7 +284,7 @@ class PPI_Request {
 	 * @return void
 	 */
 	function addPost($p_sKey, $p_mValue) {
-		$_POST[$p_sKey] = $p_mValue;
+		$this->_post[$p_sKey] = $p_mValue;
 	}
 
 	/**
@@ -309,7 +309,7 @@ class PPI_Request {
 			case 'ajax':
 				if ($this->_isVars['ajax'] === null) {
 					$this->_isVars['ajax'] = isset($this->_server['HTTP_X_REQUESTED_WITH'])
-							&& strtolower($this->_server['HTTP_X_REQUESTED_WITH'] === 'xmlhttprequest');
+							&& strtolower($this->_server['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
 				}
 				return $this->_isVars['ajax'];
 
@@ -409,7 +409,7 @@ class PPI_Request {
 	function getUrl() {
 
 		if ($this->_url === null) {
-			$this->_url = $this->getProtocol() . '://' . str_replace('www.', '', $this->_server['HTTP_HOST']) . $this->_server['REQUEST_URI'];
+			$this->_url = $this->getProtocol() . '://' . $this->_server['HTTP_HOST'] . $this->_server['REQUEST_URI'];
 		}
 		return $this->_url;
 	}

@@ -13,6 +13,13 @@ abstract class PPI_Form_Tag {
 	 */
 	protected $_attributes = array();
 
+	/**
+	 * The rules for this field
+	 *
+	 * @var array
+	 */
+	protected $_rules = array();
+
 
 	/**
 	 * Render the tag
@@ -88,6 +95,26 @@ abstract class PPI_Form_Tag {
 	 */
 	public function __toString() {
 		return $this->render();
+	}
+
+	/**
+	 * Set a rule on this field
+	 *
+	 * @param string $ruleType
+	 * @param string $ruleValue
+	 * @return void
+	 */
+	public function setRule($ruleType, $ruleValue = '') {
+		$this->_rules[$ruleType] = array('type' => $ruleType, 'value' => $ruleValue);
+	}
+
+	/**
+	 * Get the rule on this field
+	 *
+	 * @return array
+	 */
+	public function getRule($ruleType) {
+		return isset($this->_rules[$ruleType]) ? $this->_rules[$ruleType] : array();
 	}
 
 

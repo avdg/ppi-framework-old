@@ -80,4 +80,17 @@ class PPI_Test_RadioboxTagTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('foo_radio', $radio->getValue());
 	}
 
+	function testGetSetRule() {
+
+		$field = new PPI_Form_Tag_Radio();
+
+		$field->setRule('required');
+		$this->assertTrue(count($field->getRule('required')) > 0);
+
+		$field->setRule('maxlength', 32);
+		$rule = $field->getRule('maxlength');
+		$this->assertEquals($rule['value'], 32);
+		$this->assertEquals($rule['type'], 'maxlength');
+	}
+
 }

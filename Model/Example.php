@@ -7,8 +7,8 @@ class PPI_Model_Example {
 			$this->_connection = $options['connection'];
 		} else {
 			// Our PDO Connection
-			$datasource = new PPI_DataSource();
-			$this->_connection = $datasource->get('main');
+			$ds = new PPI_DataSource();
+			$this->_connection = $ds->factory('main');
 		}
 	}
 

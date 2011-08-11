@@ -1,5 +1,4 @@
 <?php
-use Doctrine\Common\ClassLoader;
 class PPI_DataSource {
 
 	protected static $_sources = array();
@@ -20,73 +19,41 @@ class PPI_DataSource {
 
 	function factory($key) {
 
+		// Connection Caching
 		if(isset(self::$_connections[$key])) {
 			return self::$_connections[$key];
 		}
 
+		// Check that we asked for a valid key
 		if(!isset(self::$_sources[$key])) {
 			throw new PPI_Exception('Invalid DataSource Key: ' . $key);
 		}
 
+		// See if re recognise our data source's type
 		$driverOptions = self::$_sources[$key];
 		if(!isset(self::$_driverTypeMap[$driverOptions['type']])) {
 			throw new PPI_Exception('Invalid DataSource Type: ' . $driverOptions['type']);
 		}
 
+		// Our type of driver tells us where to fetch the driver from
 		$driverType = self::$_driverTypeMap[$driverOptions['type']];
+
 		switch($driverType) {
 
 			case 'pdo':
-				$conn = $this->getPDO($driverOptions);
+				$suffix = 'PDO';
 				break;
 
 			case 'mongo':
-				$conn = $this->getMongo($driverOptions);
+				$suffix = 'Mongo';
 		}
 
-		self::$_connections[$key] = $conn; // Connection Caching
-		return $conn;
+		$adapterName = 'PPI_DataSource_' . $suffix;
+		$adapter = new $adapterName();
+		$driver = $adapter->getDriver($driverOptions);
+		self::$_connections[$key] = $driver; // Connection Caching
+		return $driver;
 
-	}
-
-	function getPDO(array $config = array()) {
-
-		require VENDORPATH . 'Doctrine/Doctrine/Common/ClassLoader.php';
-		$classLoader = new ClassLoader('Doctrine', VENDORPATH . 'Doctrine');
-		$classLoader->register();
-		$connObject = new \Doctrine\DBAL\Configuration();
-
-		// We map our config options to Doctrine's naming of them
-		$connParamsMap = array(
-			'database' => 'dbname',
-			'username' => 'user',
-			'hostname' => 'host'
-		);
-
-		foreach($connParamsMap as $key => $param) {
-			if(isset($config[$key])) {
-				$config[$param] = $config[$key];
-				unset($config[$key]);
-			}
-		}
-
-		$driverMap = array(
-			'mysql'  => 'pdo_mysql',
-			'sqlite' => 'pdo_sqlite',
-			'pgsql'  => 'pdo_pgsql',
-			'oci'    => 'pdo_oci',
-			'oci8'   => 'oci8',
-			'db2'    => 'ibm_db2',
-			'ibm'    => 'pdo_ibm',
-			'sqlsrv' => 'pdo_sqlsrv'
-		);
-
-		$config['driver'] = $driverMap[$config['type']];
-		return \Doctrine\DBAL\DriverManager::getConnection($config, $connObject);
-	}
-
-	function getMongo() {
-		// TBC..
 	}
 
 	static function add($key, array $options) {

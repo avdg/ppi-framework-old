@@ -1,4 +1,10 @@
 <?php
+/**
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/mit-license.php MIT
+ * @package   DataSource
+ * @link      www.ppiframework.com
+ */
 class PPI_DataSource {
 
 	protected static $_sources = array();

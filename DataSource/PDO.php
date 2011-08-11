@@ -27,18 +27,8 @@ class PPI_DataSource_PDO {
 			}
 		}
 
-		$driverMap = array(
-			'mysql'  => 'pdo_mysql',
-			'sqlite' => 'pdo_sqlite',
-			'pgsql'  => 'pdo_pgsql',
-			'oci'    => 'pdo_oci',
-			'oci8'   => 'oci8',
-			'db2'    => 'ibm_db2',
-			'ibm'    => 'pdo_ibm',
-			'sqlsrv' => 'pdo_sqlsrv'
-		);
-
-		$config['driver'] = $driverMap[$config['type']];
+		$config['driver'] = $config['type'];
+		unset($config['type']);
 		return \Doctrine\DBAL\DriverManager::getConnection($config, $connObject);
 
 	}

@@ -3,17 +3,6 @@ class PPI_DataSource {
 
 	protected static $_sources = array();
 	protected static $_connections = array();
-	protected static $_driverTypeMap = array(
-		'mysql'  => 'pdo',
-		'sqlite' => 'pdo',
-		'pgsql'  => 'pdo',
-		'oci'    => 'pdo',
-		'oci8'   => 'pdo',
-		'db2'    => 'pdo',
-		'ibm'    => 'pdo',
-		'sqlsrv' => 'pdo',
-		'mongo'  => 'mongo'
-	);
 
 	function __construct() {}
 
@@ -30,27 +19,19 @@ class PPI_DataSource {
 		}
 
 		// See if re recognise our data source's type
-		$driverOptions = self::$_sources[$key];
-		if(!isset(self::$_driverTypeMap[$driverOptions['type']])) {
-			throw new PPI_Exception('Invalid DataSource Type: ' . $driverOptions['type']);
-		}
+		$options = self::$_sources[$key];
 
-		// Our type of driver tells us where to fetch the driver from
-		$driverType = self::$_driverTypeMap[$driverOptions['type']];
-
-		switch($driverType) {
-
-			case 'pdo':
-				$suffix = 'PDO';
-				break;
-
-			case 'mongo':
-				$suffix = 'Mongo';
+		if($options['type'] === 'mongo') {
+			$suffix = 'Mongo';
+		} elseif(substr($options['type'], 0, 4) === 'pdo_') {
+			$suffix = 'PDO';
+		} else {
+			$suffix = $options['type'];
 		}
 
 		$adapterName = 'PPI_DataSource_' . $suffix;
 		$adapter = new $adapterName();
-		$driver = $adapter->getDriver($driverOptions);
+		$driver = $adapter->getDriver($options);
 		self::$_connections[$key] = $driver; // Connection Caching
 		return $driver;
 

@@ -21,6 +21,10 @@ class PPI_DataSource {
 		// See if re recognise our data source's type
 		$options = self::$_sources[$key];
 
+		if(!isset($options['prefix'])) {
+			$options['prefix'] = 'PPI_DataSource_';
+		}
+
 		if($options['type'] === 'mongo') {
 			$suffix = 'Mongo';
 		} elseif(substr($options['type'], 0, 4) === 'pdo_') {
@@ -29,9 +33,10 @@ class PPI_DataSource {
 			$suffix = $options['type'];
 		}
 
-		$adapterName = 'PPI_DataSource_' . $suffix;
-		$adapter = new $adapterName();
-		$driver = $adapter->getDriver($options);
+		$adapterName = $options['prefix'] . $suffix;
+		$adapter     = new $adapterName();
+		$driver      = $adapter->getDriver($options);
+		
 		self::$_connections[$key] = $driver; // Connection Caching
 		return $driver;
 

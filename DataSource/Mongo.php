@@ -14,6 +14,7 @@ class PPI_DataSource_Mongo {
 	}
 
 	function getDriver(array $config) {
+		
 		if (!class_exists('Mongo')) {
 			throw new PPI_Exception('Mongo extension is missing');
 		}

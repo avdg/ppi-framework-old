@@ -13,7 +13,9 @@ class PPI_DataSource_Mongo {
         }
 
         $uri =  'mongodb://'
-            .((isset($config['user'])) ? $config['user'] . ((isset($config['pass'])) ? ':' . $config['pass'] : '') .'@' : '')
+            .((isset($config['user'])) ?
+                $config['user'] . ((isset($config['pass'])) ? ':' . $config['pass'] : '') .'@'
+                : '')
             .((isset($config['host'])) ? $config['host'] : 'localhost')
             .((isset($config['port'])) ? ':' . $config['port'] : '');
 
@@ -26,7 +28,10 @@ class PPI_DataSource_Mongo {
             $this->conn[$uri] = new Mongo($uri, $config['options']);
         }
         
-        return $this->conn[$uri]->selectDB($config['dbname']);
+        if (!empty($config['database'])) {
+            return $this->conn[$uri]->selectDB($config['database']);
+        } 
+        return $this->conn[$uri];
     }
 
 }

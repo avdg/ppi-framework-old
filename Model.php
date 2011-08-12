@@ -556,6 +556,17 @@ abstract class PPI_Model {
 	}
 
 	/**
+	 * Find a value by its field name. eg: username = paul
+	 *
+	 * @param string $field
+	 * @param string $value
+	 * @return array
+	 */
+	public function findByField($field, $value) {
+		return $this->fetch($field . ' = ' . $this->quote($value));
+	}
+
+	/**
 	 * Fetch a singular row from the getList()
 	 *
 	 * @see PPI_Model->getList()

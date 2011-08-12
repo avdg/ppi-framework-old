@@ -23,6 +23,11 @@ class PPI_DataSource_Mongo {
 		}
 		
 		$dsn = 'mongodb://' . "{$config['username']}:{$config['password']}@{$config['hostname']}";
+		
+		if(isset($config['port'])) {
+			$dsn .= ":{$config['port']}";
+		}
+		
 		if(isset($config['database'])) {
 			$dsn .= "/{$config['database']}";
 		}
@@ -31,7 +36,7 @@ class PPI_DataSource_Mongo {
 			$config['options'] = array();
 		}
 
-        return new Mongo($uri, $config['options']);
+        return new Mongo($dsn, $config['options']);
     }
 
 }

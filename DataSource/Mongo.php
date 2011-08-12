@@ -1,6 +1,12 @@
 <?php
-
+/**
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/mit-license.php MIT
+ * @package   DataSource
+ * @link      www.ppiframework.com
+ */
 class PPI_DataSource_Mongo {
+	
     protected $conn = array();
 
 	function __construct() {
@@ -8,30 +14,24 @@ class PPI_DataSource_Mongo {
 	}
 
 	function getDriver(array $config) {
-        if (!class_exists('Mongo')) {
-            throw new PPI_Exception('Mongo extension is missing');
-        }
+		if (!class_exists('Mongo')) {
+			throw new PPI_Exception('Mongo extension is missing');
+		}
 
-        $uri =  'mongodb://'
-            .((isset($config['user'])) ?
-                $config['user'] . ((isset($config['pass'])) ? ':' . $config['pass'] : '') .'@'
-                : '')
-            .((isset($config['host'])) ? $config['host'] : 'localhost')
-            .((isset($config['port'])) ? ':' . $config['port'] : '');
+		if(!isset($config['username'], $config['password'], $config['hostname'])) {
+			throw new PPI_Exception('Missing connection properties. Make sure you enter a username, password and hostname');
+		}
+		
+		$dsn = 'mongodb://' . "{$config['username']}:{$config['password']}@{$config['hostname']}";
+		if(isset($config['database'])) {
+			$dsn .= "/{$config['database']}";
+		}
+		
+		if(!isset($config['options'])) {
+			$config['options'] = array();
+		}
 
-        if (empty($this->conn[$uri])) {
-
-            if (empty($config['options'])) {
-                $config['options'] = array();
-            }
-
-            $this->conn[$uri] = new Mongo($uri, $config['options']);
-        }
-        
-        if (!empty($config['database'])) {
-            return $this->conn[$uri]->selectDB($config['database']);
-        } 
-        return $this->conn[$uri];
+        return new Mongo($uri, $config['options']);
     }
 
 }
